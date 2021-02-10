@@ -8,11 +8,36 @@ namespace SkaapBoek.Core
 {
     public class Child
     {
-        [Key]
-        public int SheepId { get; set; }
-        public Sheep Sheep { get; set; }
+        public int Id { get; set; }
 
-        public ICollection<Relationship> ChildRelationships { get; set; }
-        public ICollection<Relationship> ParentRelationships { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string TagNumber { get; set; }
+
+        public int ColorId { get; set; }
+        public Color Color { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime BirthDate { get; set; }
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal SalePrice { get; set; }
+
+        public int SheepStatusId { get; set; }
+        public SheepStatus SheepStatus { get; set; }
+
+        [Required]
+        public int GenderId { get; set; }
+        public Gender Gender { get; set; }
+
+        [Required]
+        public float Weight { get; set; }
+
+        public int? FeedId { get; set; }
+        public Feed CurrentFeed { get; set; }
+
+        public ICollection<ChildGroup> ChildGroups { get; set; }
+        public ICollection<Relationship> Relationships { get; set; }
+        public ICollection<TaskInstance> TaskInstances { get; set; }
     }
 }

@@ -41,6 +41,10 @@ namespace SkaapBoek.Core
         public int? SheepId { get; set; }
         public Sheep Sheep { get; set; }
 
+        [Display(Name = "Child")]
+        public int? ChildId { get; set; }
+        public Child Child { get; set; }
+
         [Display(Name = "Group")]
         public int? GroupId { get; set; }
         public Group Group { get; set; }

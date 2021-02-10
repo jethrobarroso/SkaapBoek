@@ -43,8 +43,7 @@ namespace SkaapBoek.Core
         public Feed CurrentFeed { get; set; }
 
         public ICollection<SheepGroup> SheepGroups { get; set; }
-        public ICollection<Relationship> Parents { get; set; }
-        public ICollection<Relationship> Children { get; set; }
+        public ICollection<Relationship> Relationships { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
     }
 }

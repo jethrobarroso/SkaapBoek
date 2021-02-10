@@ -105,11 +105,15 @@ export function preventDoubleSubmit(form, input) {
     }
 }
 
-export function initDt() {
+/**
+ * 
+ * @param {string} tableId
+ */
+export function initDt(tableId) {
     // Setup - add a text input to each footer cell
     let i = 0;
-    let colCount = $('#datatable thead tr th').length;
-    $('#datatable thead th').each(function () {
+    let colCount = $(`#${tableId} thead tr th`).length;
+    $(`#${tableId} thead th`).each(function () {
         if (i !== (colCount - 1)) {
             var title = $(this).children().first().text()
             $(this).append('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />');
@@ -118,7 +122,7 @@ export function initDt() {
     });
 
     // DataTable
-    var dt = $('#datatable').DataTable({
+    var dt = $(`#${tableId}`).DataTable({
         columnDefs: [
             { targets: [colCount - 1], searchable: false, orderable: false }
         ],

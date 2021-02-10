@@ -37,7 +37,7 @@ namespace SkaapBoek.Web
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
+            }).AddRazorRuntimeCompilation();
 
             services.AddDbContext<AppDbContext>(options =>
             {
@@ -55,6 +55,7 @@ namespace SkaapBoek.Web
             });
 
             services.AddScoped<ISheepService, SheepService>();
+            services.AddScoped<IChildService, ChildService>();
             services.AddScoped<IFeedService, FeedService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -83,7 +84,7 @@ namespace SkaapBoek.Web
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Demo API");
             });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
 

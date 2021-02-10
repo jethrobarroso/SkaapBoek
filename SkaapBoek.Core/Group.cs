@@ -17,5 +17,6 @@ namespace SkaapBoek.Core
 
         public ICollection<SheepGroup> SheepGroups { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
+        public ICollection<ChildGroup> ChildGroups { get; set; }
     }
 }

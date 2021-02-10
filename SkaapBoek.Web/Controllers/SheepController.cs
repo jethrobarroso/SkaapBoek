@@ -20,18 +20,24 @@ namespace SkaapBoek.Web.Controllers
     public class SheepController : AppController
     {
         private readonly ILogger<SheepController> _logger;
-        private readonly ISheepService _service;
+        private readonly ISheepService _sheepService;
+        private readonly IChildService _childService;
 
-        public SheepController(ILogger<SheepController> logger, ISheepService service)
+        public SheepController(ILogger<SheepController> logger, ISheepService service, IChildService childService)
         {
             _logger = logger;
-            _service = service;
+            _sheepService = service;
+            _childService = childService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var model = await _service.GetFullNoTrack();
+            var model = new SheepIndexViewModel
+            {
+                HerdSheep = await _sheepService.GetFullNoTrack(),
+                FeedlotSheep = await _childService.GetFullNoTrack(),
+            };
             return View(model);
         }
 
@@ -40,9 +46,9 @@ namespace SkaapBoek.Web.Controllers
         {
             var model = new SheepCreateViewModel
             {
-                Genders = (await _service.GetGenders()).ToList(),
-                Colors = new SelectList(await _service.GetColors(), "Id", "Name"),
-                StatusList = new SelectList(await _service.GetSheepStates(), "Id", "Name")
+                Genders = (await _sheepService.GetGenders()).ToList(),
+                Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name"),
+                StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name")
             };
 
             return View(model);
@@ -68,7 +74,7 @@ namespace SkaapBoek.Web.Controllers
 
                 try
                 {
-                    await _service.Add(sheep);
+                    await _sheepService.Add(sheep);
                 }
                 catch (DbUpdateException ex)
                 {
@@ -81,16 +87,16 @@ namespace SkaapBoek.Web.Controllers
                 return RedirectToAction(nameof(Index));
 
             }
-            model.Genders = (await _service.GetGenders()).ToList();
-            model.Colors = new SelectList(await _service.GetColors(), "Id", "Name");
-            model.StatusList = new SelectList(await _service.GetSheepStates(), "Id", "Name");
+            model.Genders = (await _sheepService.GetGenders()).ToList();
+            model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
+            model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var sheep = await _service.GetById(id);
+            var sheep = await _sheepService.GetById(id);
 
             if (SheepNullCheckWith404(sheep, id))
                 return View("NotFound");
@@ -99,16 +105,16 @@ namespace SkaapBoek.Web.Controllers
             {
                 AcquireDate = sheep.AcquireDate,
                 BirthDate = sheep.BirthDate,
-                Genders = (await _service.GetGenders()).ToList(),
+                Genders = (await _sheepService.GetGenders()).ToList(),
                 GenderId = sheep.GenderId,
                 CostPrice = sheep.CostPrice,
                 SalePrice = sheep.SalePrice,
                 TagNumber = sheep.TagNumber,
                 Weight = sheep.Weight,
                 ColorId = sheep.Color.Id,
-                Colors = new SelectList(await _service.GetColors(), "Id", "Name"),
+                Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name"),
                 SheepStatusId = sheep.SheepStatusId,
-                StatusList = new SelectList(await _service.GetSheepStates(), "Id", "Name")
+                StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name")
             };
 
             return View(model);
@@ -119,7 +125,7 @@ namespace SkaapBoek.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var sheep = await _service.GetById(id);
+                var sheep = await _sheepService.GetById(id);
                 sheep.AcquireDate = model.AcquireDate;
                 sheep.BirthDate = model.BirthDate;
                 sheep.GenderId = model.GenderId;
@@ -130,26 +136,26 @@ namespace SkaapBoek.Web.Controllers
                 sheep.Weight = model.Weight;
                 sheep.ColorId = model.ColorId;
 
-                await _service.Update(sheep);
+                await _sheepService.Update(sheep);
                 TempData["Success"] = $"Successfully updated sheep with tag {sheep.TagNumber}";
                 return RedirectToAction(nameof(Index));
             }
 
-            model.Genders = (await _service.GetGenders()).ToList();
-            model.Colors = new SelectList(await _service.GetColors(), "Id", "Name");
-            model.StatusList = new SelectList(await _service.GetSheepStates(), "Id", "Name");
+            model.Genders = (await _sheepService.GetGenders()).ToList();
+            model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
+            model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var sheep = await _service.GetById(id);
+            var sheep = await _sheepService.GetById(id);
 
             if (SheepNullCheckWith404(sheep, id))
                 return View("NotFound");
 
-            await _service.Delete(id);
+            await _sheepService.Delete(id);
             TempData["Success"] = $"Successfully deleted {sheep.TagNumber}";
             return RedirectToAction(nameof(Index));
         }
@@ -157,7 +163,7 @@ namespace SkaapBoek.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var sheep = await _service.GetById(id);
+            var sheep = await _sheepService.GetById(id);
 
             if (SheepNullCheckWith404(sheep, id))
                 return View("NotFound");

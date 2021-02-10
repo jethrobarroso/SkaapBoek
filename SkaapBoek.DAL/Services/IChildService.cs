@@ -8,32 +8,32 @@ using System.Linq;
 
 namespace SkaapBoek.DAL.Services
 {
-    public interface ISheepService : IDataService<Sheep>
+    public interface IChildService : IDataService<Child>
     {
         Task<IEnumerable<SheepStatus>> GetSheepStates();
-        Task<Sheep> GetById(int id);
+        Task<Child> GetById(int id);
         Task<IEnumerable<Gender>> GetGenders();
-        Task<IEnumerable<Sheep>> GetFullNoTrack();
+        Task<IEnumerable<Child>> GetFullNoTrack();
         //Task<IEnumerable<Sheep>> GetAvailableSheep(Sheep currentSheep, Func<Sheep, IEnumerable<Relationship>> relationship);
         //Task<IEnumerable<Sheep>> GetSelectedSheep(Sheep currentSheep, Func<Relationship, Sheep> relationship);
     }
 
-    public class SheepService : BaseService<Sheep>, ISheepService
+    public class ChildService : BaseService<Child>, IChildService
     {
-        public SheepService(AppDbContext context) : base(context)
+        public ChildService(AppDbContext context) : base(context)
         {
 
         }
 
-        public async Task<Sheep> GetById(int id)
+        public async Task<Child> GetById(int id)
         {
-            var sheep = await Context.SheepSet
+            var child = await Context.ChildSet
                 .Include(s => s.Gender)
                 .Include(s => s.SheepStatus)
                 .Include(s => s.Color)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            return sheep;
+            return child;
         }
 
         public async Task<IEnumerable<Gender>> GetGenders() => 
@@ -43,7 +43,7 @@ namespace SkaapBoek.DAL.Services
         public async Task<IEnumerable<SheepStatus>> GetSheepStates() =>
             await Context.SheepStateSet.ToListAsync();
 
-        public async Task<IEnumerable<Sheep>> GetFullNoTrack()
+        public async Task<IEnumerable<Child>> GetFullNoTrack()
         {
             return await base.GetAll()
                 .Include(s => s.Gender)

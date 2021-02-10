@@ -4,12 +4,12 @@ using System.Text;
 
 namespace SkaapBoek.Core
 {
-    public class Relationship
+    public class ChildGroup
     {
-        public int SheepId { get; set; }
-        public Sheep Parent { get; set; }
-
         public int ChildId { get; set; }
         public Child Child { get; set; }
+
+        public int GroupId { get; set; }
+        public Group Group { get; set; }
     }
 }

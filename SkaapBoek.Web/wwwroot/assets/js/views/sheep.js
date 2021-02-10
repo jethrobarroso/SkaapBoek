@@ -17,7 +17,8 @@ export function list() {
 
     obj.fromTable(table);
 
-    common.initDt();
+    common.initDt("herdTable");
+    common.initDt("feedlotTable");
 }
 
 export function create() {

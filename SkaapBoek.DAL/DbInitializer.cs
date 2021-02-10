@@ -94,7 +94,7 @@ namespace SkaapBoek.DAL
             {
                 new Sheep 
                 { 
-                    TagNumber = "tag111", CostPrice = 1240.12M,
+                    TagNumber = "tagParent1", CostPrice = 1240.12M,
                     GenderId = genders.Single(i => i.Type == "Male").Id, 
                     SheepStatusId = states.Single(s => s.Name == "Healthy").Id,
                     FeedId = feed.Single(f => f.Name == "Feed 1").Id,
@@ -105,7 +105,7 @@ namespace SkaapBoek.DAL
                 },
                 new Sheep
                 {
-                    TagNumber = "tag112", CostPrice = 1230.61M,
+                    TagNumber = "tagParent2", CostPrice = 1230.61M,
                     GenderId = genders.Single(i => i.Type == "Female").Id,
                     SheepStatusId = states.Single(s => s.Name == "Inactive").Id,
                     FeedId = feed.Single(f => f.Name == "Feed 2").Id,
@@ -116,7 +116,7 @@ namespace SkaapBoek.DAL
                 },
                 new Sheep
                 {
-                    TagNumber = "tag233",
+                    TagNumber = "tagParent3",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
                     SheepStatusId = states.Single(s => s.Name == "Healthy").Id,
                     FeedId = feed.Single(f => f.Name == "Feed 3").Id,
@@ -127,7 +127,7 @@ namespace SkaapBoek.DAL
                 },
                 new Sheep
                 {
-                    TagNumber = "tag251",
+                    TagNumber = "tagParent4",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
                     SheepStatusId = states.Single(s => s.Name == "Healthy").Id,
                     FeedId = feed.Single(f => f.Name == "Feed 4").Id,
@@ -141,10 +141,75 @@ namespace SkaapBoek.DAL
             context.SheepSet.AddRange(sheep);
             context.SaveChanges();
 
+            var children = new Child[]
+            {
+                new Child
+                {
+                    TagNumber = "tagChild1",
+                    GenderId = genders.Single(i => i.Type == "Male").Id,
+                    SheepStatusId = states.Single(s => s.Name == "Healthy").Id,
+                    FeedId = feed.Single(f => f.Name == "Feed 4").Id,
+                    SalePrice = 2301.99M, Weight = 55,
+                    BirthDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id
+                },
+                new Child
+                {
+                    TagNumber = "tagChild2",
+                    GenderId = genders.Single(i => i.Type == "Male").Id,
+                    SheepStatusId = states.Single(s => s.Name == "Healthy").Id,
+                    FeedId = feed.Single(f => f.Name == "Feed 4").Id,
+                    SalePrice = 2301.99M, Weight = 44,
+                    BirthDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id
+                },
+                new Child
+                {
+                    TagNumber = "tagChild3",
+                    GenderId = genders.Single(i => i.Type == "Male").Id,
+                    SheepStatusId = states.Single(s => s.Name == "Healthy").Id,
+                    FeedId = feed.Single(f => f.Name == "Feed 4").Id,
+                    SalePrice = 2301.99M, Weight = 66,
+                    BirthDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id
+                },
+                new Child
+                {
+                    TagNumber = "tagChild4",
+                    GenderId = genders.Single(i => i.Type == "Male").Id,
+                    SheepStatusId = states.Single(s => s.Name == "Healthy").Id,
+                    FeedId = feed.Single(f => f.Name == "Feed 4").Id,
+                    SalePrice = 2301.99M, Weight = 62,
+                    BirthDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id
+                }
+            };
+
+            context.ChildSet.AddRange(children);
+            context.SaveChanges();
+
             var relationships = new Relationship[]
             {
-                new Relationship { ChildId = 4, ParentId = 1 },
-                new Relationship { ChildId = 3, ParentId = 1 }
+                new Relationship 
+                { 
+                    SheepId = sheep[1].Id,
+                    ChildId = children[0].Id
+                },
+                new Relationship
+                {
+                    SheepId = sheep[1].Id,
+                    ChildId = children[1].Id
+                },
+                new Relationship
+                {
+                    SheepId = sheep[1].Id,
+                    ChildId = children[2].Id
+                },
+                new Relationship
+                {
+                    SheepId = sheep[1].Id,
+                    ChildId = children[3].Id
+                },
             };
 
             context.RelationShipSet.AddRange(relationships);
