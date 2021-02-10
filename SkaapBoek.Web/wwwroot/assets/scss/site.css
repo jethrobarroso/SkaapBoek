@@ -1,0 +1,89 @@
+/**, *::before, *::after {
+    box-sizing: border-box;
+}*/
+
+.btn--fixed {
+    width: 75px;
+}
+
+.imageThumbnail {
+    height: 200px;
+    width: auto;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.footer {
+    margin-top: auto;
+    height: 60px;
+    line-height: 60px;
+    background-color: #f5f5f5;
+}
+
+.vertical-line {
+    display: inline;
+    border-left: 1px solid black;
+    opacity: 0.4;
+    height: auto;
+    margin: 0 0.5rem;
+}
+
+.img--noaccess {
+    width: 50%;
+}
+
+.home-link-arrow svg {
+    height: 1em;
+    width: 0.875rem;
+    fill: #007bff;
+    margin-right: 2px;
+}
+
+.home-link-arrow:hover {
+    fill: #0056b3;
+}
+
+.btn--xs {
+    height: 1rem;
+}
+
+.icon-button {
+    line-height: 0;
+}
+
+.icon-button--delete {
+    all: unset;
+    color: #dd0000;
+    line-height: 0;
+}
+
+.icon-button--delete:hover {
+    color: #b00;
+}
+
+.multi-btn-target {
+    display: flex;
+    vertical-align: middle;
+}
+
+.multi-btn-source {
+    display: flex;
+    vertical-align: middle;
+    transform: rotate(180deg);
+}
+
+.multilist-container {
+    height: 300px;
+}
+
+.multilist-container li {
+    cursor: pointer;
+}
+
+.multilist-container ul {
+    overflow: auto;
+}

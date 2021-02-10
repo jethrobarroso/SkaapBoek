@@ -1,0 +1,19 @@
+﻿@{
+  ViewBag.Title = "Not Found";
+}
+
+<div class="row text-light d-flex justify-content-center">
+  <div class="col-lg-6">
+    <div class="text-center mt-4">
+      <h1 class="display-1">404</h1>
+      <p class="lead">@ViewBag.ErrorMessage</p>
+
+      @*To make the svg object inherit an html parent's color, add fill=currentColor to the path property*@
+      <a asp-controller="Sheep" asp-action="Index" class="home-link-arrow d-inline-flex align-items-center">
+        <svg><use xlink:href="/images/main.svg#icon-arrow-left"></use></svg>
+
+        Return to home page
+      </a>
+    </div>
+  </div>
+</div>

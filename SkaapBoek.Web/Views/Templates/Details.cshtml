@@ -1,0 +1,33 @@
+﻿@model TaskTemplate
+@{
+  ViewBag.Title = "Temlate Details";
+}
+
+<div data-sb-tag="@Model.Name" class="card-header bg-secondary text-light">
+  <h3>Details - @Model.Name</h3>
+</div>
+<div class="card-body text-light text-break">
+  <div class="row mb-2">
+    <div class="col-sm-3 col">Description:</div>
+    <div class="col-sm-9 col">@Model.Description</div>
+  </div>
+</div>
+<div class="card-footer bg-secondary">
+  <div class="m-3">
+    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+    <a asp-action="Edit" class="btn btn-primary">Edit</a>
+  </div>
+</div>
+<a asp-action="Index" class=" m-3 home-link-arrow d-inline-flex align-items-center">
+  <svg><use xlink:href="/images/main.svg#icon-arrow-left"></use></svg>
+
+  Return to list
+</a>
+
+<partial name="_ModalDelete" />
+
+@section Scripts {
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => appns.templates.details());
+  </script>
+}

@@ -1,0 +1,51 @@
+﻿@model Feed
+
+@{
+  ViewBag.Title = "Feed Details";
+}
+
+
+<div class="card-header bg-secondary text-light">
+  <h1 class="display-4">Details - @Model.Name</h1>
+</div>
+<div class="card-body text-light text-break">
+  <div class="row mb-2">
+    <div class="col-sm-3 col">Name:</div>
+    <div class="col-sm-9 col">@Model.Name</div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-sm-3 col">Product Code:</div>
+    <div class="col-sm-9 col">@Model.ProductCode</div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-sm-3 col">Manufacturer:</div>
+    <div class="col-sm-9 col">@Model.Supplier</div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-sm-3 col">Cost:</div>
+    <div class="col-sm-9 col">@Model.CostPrice</div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-sm-3 col">Description:</div>
+    <div class="col-sm-9 col">@Model.Description</div>
+  </div>
+</div>
+<div class="card-footer bg-secondary">
+  <div class="m-3">
+    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+    <a asp-action="Edit" class="btn btn-primary" >Edit</a>
+  </div>
+</div>
+<a asp-action="Index" class=" m-3 home-link-arrow d-inline-flex align-items-center">
+  <svg><use xlink:href="/images/main.svg#icon-arrow-left"></use></svg>
+
+  Return to list
+</a>
+
+<partial name="_ModalDelete" />
+
+@section Scripts {
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => appns.feed.details());
+  </script>
+}

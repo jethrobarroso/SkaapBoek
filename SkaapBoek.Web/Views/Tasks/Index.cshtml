@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SkaapBoek.Core.TaskInstance>
+
+@{
+  ViewData["Title"] = "Index";
+}
+
+<h1 class="mb-3 text-light">Tasks</h1>
+
+<div class="table-responsive-md text-light">
+  <table id="datatable" class="table table-hover table-dark table-striped">
+    <thead>
+      <tr>
+        <th class="filterable">
+          <div>@Html.DisplayNameFor(model => model.Name)</div>
+        </th>
+        <th class="filterable">
+          <div>@Html.DisplayNameFor(model => model.DurationDays)</div>
+        </th>
+        <th class="filterable">
+          <div>@Html.DisplayNameFor(model => model.StartDate)</div>
+        </th>
+        <th class="filterable">
+          <div>@Html.DisplayNameFor(model => model.Priority)</div>
+        </th>
+        <th class="filterable">
+          <div>@Html.DisplayNameFor(model => model.Status)</div>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+          <td>
+            @Html.DisplayFor(modelItem => item.Name)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.DurationDays)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Priority.Name)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Status.Name)
+          </td>
+          <td>
+            <div class="d-flex align-content-center">
+              <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@item.Id"
+                 data-toggle="tooltip" data-placement="top" title="View">
+                <i class="material-icons">search</i>
+              </a>
+              <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@item.Id"
+                 data-toggle="tooltip" data-placement="top" title="Edit">
+                <i class="material-icons">edit</i>
+              </a>
+              <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
+                <button class="icon-button--delete" data-user-id="@item.Id"
+                        type="button" data-toggle="modal" data-target="#deleteModal">
+                  <i class="material-icons">delete</i>
+                </button>
+              </span>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<div class="mt-3">
+  <a class="btn btn-primary" asp-action="Create">Create New</a>
+</div>
+
+<partial name="_ModalDelete" />
+
+@section Scripts { 
+<script>
+  $(function () {
+    appns.tasks.list();
+  })
+</script>
+}

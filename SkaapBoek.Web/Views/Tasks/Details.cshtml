@@ -1,0 +1,65 @@
+﻿@model TaskInstance
+@{
+  ViewBag.Title = "Task Details";
+}
+
+<div class="col-lg-6">
+  <div class="card">
+    <div data-sb-tag="@Model.Name" class="card-header bg-secondary text-light">
+      <h3>Details - @Model.Name</h3>
+    </div>
+    <div class="card-body bg-dark text-light text-break">
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Description:</div>
+        <div class="col-sm-9 col">@Model.Description</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Start Date:</div>
+        <div class="col-sm-9 col">@Model.StartDate</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Duration (days):</div>
+        <div class="col-sm-9 col">@Model.DurationDays days</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Priority:</div>
+        <div class="col-sm-9 col">@Model.Priority.Name</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Status:</div>
+        <div class="col-sm-9 col">@Model.Status.Name</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Template:</div>
+        <div class="col-sm-9 col">@Model.TaskTemplate.Name</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Assigned sheep:</div>
+        <div class="col-sm-9 col">@Model.Sheep?.TagNumber</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-sm-3 col">Assigned Group:</div>
+        <div class="col-sm-9 col">@Model.Group?.Name</div>
+      </div>
+    </div>
+    <div class="card-footer bg-secondary">
+      <div class="m-3">
+        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+        <a asp-action="Edit" class="btn btn-primary">Edit</a>
+      </div>
+    </div>
+  </div>
+  <a asp-action="Index" class=" m-3 home-link-arrow d-inline-flex align-items-center">
+    <svg><use xlink:href="/images/main.svg#icon-arrow-left"></use></svg>
+
+    Return to list
+  </a>
+
+  <partial name="_ModalDelete" />
+</div>
+
+@section Scripts {
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => appns.projects.details());
+  </script>
+}
