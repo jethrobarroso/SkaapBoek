@@ -2,7 +2,7 @@
 
 export function index() {
     $(document).ready(function () {
-        
+
     });
 }
 
@@ -51,5 +51,23 @@ export function details() {
 
     deleteButton.addEventListener('click', () => {
         form.action = deletePath + id;
+    });
+}
+
+export function childDetails() {
+    
+}
+
+export function editChild() {
+    $('#FatherId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select father"
+    });
+
+    $('#MotherId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select mother"
     });
 }

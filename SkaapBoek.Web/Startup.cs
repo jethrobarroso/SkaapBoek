@@ -37,7 +37,8 @@ namespace SkaapBoek.Web
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            }).AddRazorRuntimeCompilation();
+            });
+                //.AddRazorRuntimeCompilation();
 
             services.AddDbContext<AppDbContext>(options =>
             {

@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+		<UserSecretsId>fc1dfa2e-f18c-4868-89df-421802883542</UserSecretsId>
 	</PropertyGroup>
 
 	<!--<Target Name="ParcelBeforePublish" BeforeTargets="PrepareForPublish">

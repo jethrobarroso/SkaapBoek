@@ -95,27 +95,27 @@ else
         </tr>
       </thead>
       <tbody>
-        @foreach (var sheep in Model.FeedlotSheep)
+        @foreach (var child in Model.FeedlotSheep)
         {
           <tr>
-            <td>@sheep.TagNumber</td>
-            <td>@sheep.Color.Name</td>
-            <td>@sheep.SheepStatus.Name</td>
-            <td>@sheep.Gender.Type</td>
-            <td>@sheep.Weight</td>
-            <td>@sheep.BirthDate.ToShortDateString()</td>
+            <td>@child.TagNumber</td>
+            <td>@child.Color.Name</td>
+            <td>@child.SheepStatus.Name</td>
+            <td>@child.Gender.Type</td>
+            <td>@child.Weight</td>
+            <td>@child.BirthDate.ToShortDateString()</td>
             <td>
               <div class="d-flex align-content-center">
-                <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@sheep.Id"
+                <a class="icon-button mr-1 ml-1" asp-action="ChildDetails" asp-route-id="@child.Id"
                    data-toggle="tooltip" data-placement="top" title="View">
                   <i class="material-icons">search</i>
                 </a>
-                <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@sheep.Id"
+                <a class="icon-button mr-1 ml-1" asp-action="EditChild" asp-route-id="@child.Id"
                    data-toggle="tooltip" data-placement="top" title="Edit">
                   <i class="material-icons">edit</i>
                 </a>
                 <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
-                  <button class="icon-button--delete" data-user-id="@sheep.Id"
+                  <button class="icon-button--delete" data-user-id="@child.Id"
                           type="button" data-toggle="modal" data-target="#deleteModal">
                     <i class="material-icons">delete</i>
                   </button>

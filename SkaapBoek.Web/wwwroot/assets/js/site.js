@@ -27,7 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
         sheep: {
             list: sheepViews.list,
             create: sheepViews.create,
-            details: sheepViews.details
+            details: sheepViews.details,
+            editChild: sheepViews.editChild,
+            childDetails: sheepViews.childDetails,
         },
         templates: {
             list: templateViews.list,
