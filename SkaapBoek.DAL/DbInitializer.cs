@@ -212,7 +212,7 @@ namespace SkaapBoek.DAL
                 },
             };
 
-            context.RelationShipSet.AddRange(relationships);
+            context.RelationshipSet.AddRange(relationships);
             context.SaveChanges();
         }
     }

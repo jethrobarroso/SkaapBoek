@@ -118,6 +118,9 @@ namespace SkaapBoek.Web.Controllers
                 StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name")
             };
 
+            model.AvailableChildren = await _sheepService.GetAvailableChildren(sheep);
+            model.SelectedChildren = await _sheepService.GetSelectedChildren(sheep);
+
             return View(model);
         }
 
@@ -137,6 +140,21 @@ namespace SkaapBoek.Web.Controllers
                 sheep.Weight = model.Weight;
                 sheep.ColorId = model.ColorId;
 
+                sheep.Relationships.Clear();
+                sheep.Relationships = new List<Relationship>();
+
+                if (model.SelectedChildIds != null)
+                {
+                    foreach (var i in model.SelectedChildIds)
+                    {
+                        sheep.Relationships.Add(new Relationship
+                        {
+                            SheepId = sheep.Id,
+                            ChildId = i
+                        });
+                    } 
+                }
+
                 await _sheepService.Update(sheep);
                 TempData["Success"] = $"Successfully updated sheep with tag {sheep.TagNumber}";
                 return RedirectToAction(nameof(Index));
@@ -145,6 +163,7 @@ namespace SkaapBoek.Web.Controllers
             model.Genders = (await _sheepService.GetGenders()).ToList();
             model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
             model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
+
             return View(model);
         }
 

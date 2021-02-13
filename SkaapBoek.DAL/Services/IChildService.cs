@@ -69,7 +69,7 @@ namespace SkaapBoek.DAL.Services
 
         public async Task<(Sheep mother, Sheep father)> GetParentsFromChild(int childId)
         {
-            var result = await Context.RelationShipSet
+            var result = await Context.RelationshipSet
                 .Include(r => r.Parent).ThenInclude(p => p.Gender)
                 .Include(r => r.Parent).ThenInclude(p => p.SheepStatus)
                 .Include(r => r.Parent).ThenInclude(p => p.Color)

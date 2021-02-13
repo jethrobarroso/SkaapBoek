@@ -78,7 +78,7 @@ else
   </div>
 }
 
-<h4 class="text-light mb-3 mt-3">Feedlot</h4>
+<h4 class="text-light mb-3 mt-3">Children</h4>
 @if (Model.FeedlotSheep.Any())
 {
   <div class="table-responsive-md text-light">
@@ -127,14 +127,14 @@ else
       </tbody>
     </table>
     <h2></h2>
-    <a class="mt-2 btn btn-primary" asp-action="CreateChild">Add feedlot sheep</a>
+    <a class="mt-2 btn btn-primary" asp-action="CreateChild">Add child sheep</a>
   </div>
 }
 else
 {
   <div class="alert alert-info">
     <p>No sheep are currently registered.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add feedlot sheep</a>
+    <a class="mt-2 btn btn-primary" asp-action="Create">Add child sheep</a>
   </div>
 }
 

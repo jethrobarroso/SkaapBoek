@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             details: sheepViews.details,
             editChild: sheepViews.editChild,
             childDetails: sheepViews.childDetails,
+            edit: sheepViews.edit,
         },
         templates: {
             list: templateViews.list,

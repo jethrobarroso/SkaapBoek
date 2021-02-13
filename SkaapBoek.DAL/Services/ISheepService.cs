@@ -17,8 +17,8 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<Sheep>> GetSheepPerGenderNoTrack(string genderName);
         Task<bool> ContainsSheep(int id);
         Task<Sheep> GetParentWithChildrenNoTrack(int id);
-        //Task<IEnumerable<Sheep>> GetAvailableSheep(Sheep currentSheep, Func<Sheep, IEnumerable<Relationship>> relationship);
-        //Task<IEnumerable<Sheep>> GetSelectedSheep(Sheep currentSheep, Func<Relationship, Sheep> relationship);
+        Task<List<Child>> GetAvailableChildren(Sheep currentSheep);
+        Task<List<Child>> GetSelectedChildren(Sheep currentSheep);
     }
 
     public class SheepService : BaseService<Sheep>, ISheepService
@@ -34,6 +34,7 @@ namespace SkaapBoek.DAL.Services
                 .Include(s => s.Gender)
                 .Include(s => s.SheepStatus)
                 .Include(s => s.Color)
+                .Include(s => s.Relationships)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             return sheep;
@@ -85,31 +86,24 @@ namespace SkaapBoek.DAL.Services
                     .ThenInclude(r => r.Child.Color)
                 .Include(s => s.Relationships)
                     .ThenInclude(r => r.Child.SheepStatus)
-                //.Include(s => s.Relationships.Select(r => r.Child.Gender))
-                //.Include(s => s.Relationships.Select(r => r.Child.SheepStatus))
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        //public async Task<IEnumerable<Sheep>> GetAvailableSheep(Sheep currentSheep,
-        //    Func<Sheep,IEnumerable<Relationship>> relationship)
-        //{
-        //    return await (from s in Context.SheepSet
-        //                  join r in Context.RelationShipSet
-        //                  on s.Id equals r.ChildId into jg
-        //                  from g in jg.DefaultIfEmpty()
-        //                  select s)
-        //                  .Distinct()
-        //                  .Where(s => relationship(currentSheep).Count() == 0 ||
-        //                  !s.Children.Any(r => r.ChildId == currentSheep.Id))
-        //                  .ToListAsync();
-        //}
+        public async Task<List<Child>> GetAvailableChildren(Sheep currentSheep)
+        {
+            var parentGender = currentSheep.Gender.Type;
+            return await (from c in Context.ChildSet
+                          where !c.Relationships.Any(r => r.Parent.Gender.Type == parentGender)
+                          select c).ToListAsync();
 
-        //public async Task<IEnumerable<Sheep>> GetSelectedSheep(Sheep currentSheep,
-        //    Func<Relationship,Sheep> relationship)
-        //{
-        //    return await Context.RelationShipSet
-        //        .Where(r => relationship(r).Id == currentSheep.Id)
-        //        .Select(r => relationship(r)).ToListAsync();
-        //}
+        }
+
+        public async Task<List<Child>> GetSelectedChildren(Sheep currentSheep)
+        {
+            return await Context.RelationshipSet
+                .Where(r => r.SheepId == currentSheep.Id)
+                .Select(r => r.Child).ToListAsync();
+        }
     }
 }

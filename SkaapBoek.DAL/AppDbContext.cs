@@ -15,7 +15,7 @@ namespace SkaapBoek.DAL
         public DbSet<Gender> GenderSet { get; set; }
         public DbSet<SheepStatus> SheepStateSet { get; set; }
         public DbSet<Feed> FeedSet { get; set; }
-        public DbSet<Relationship> RelationShipSet { get; set; }
+        public DbSet<Relationship> RelationshipSet { get; set; }
         public DbSet<Child> ChildSet { get; set; }
         public DbSet<Priority> PrioritySet { get; set; }
         public DbSet<Status> StatusSet { get; set; }

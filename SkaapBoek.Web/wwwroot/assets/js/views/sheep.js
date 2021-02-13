@@ -1,4 +1,5 @@
 ﻿import * as common from '../common.js';
+import { MultiList } from '../multilist.js'
 
 export function index() {
     $(document).ready(function () {
@@ -37,8 +38,15 @@ export function create() {
     });
 }
 
+export function edit() {
+    const multiList = document.querySelector('.multilist-container');
+    const multi = new MultiList(multiList, "SelectedChildIds");
+    multi.init();
+}
+
 export function details() {
-    const deleteModal = document.querySelector('.modal');
+    const body = document.body;
+    const deleteModal = body.querySelector('.modal');
     const urlPath = window.location.pathname;
     const deletePath = "/Sheep/Delete/";
     const id = urlPath.substring(urlPath.lastIndexOf('/') + 1);
@@ -49,13 +57,13 @@ export function details() {
     deleteModal.querySelector('.modal-title').innerHTML = `Delete sheep with tag ${tag}`;
     deleteModal.querySelector('.modal-body').innerHTML = "Are you sure you want to delete this sheep?"
 
+    if (body.querySelector('#childrenTable')) {
+        common.initDt("childrenTable");
+    }
+
     deleteButton.addEventListener('click', () => {
         form.action = deletePath + id;
     });
-}
-
-export function childDetails() {
-    
 }
 
 export function editChild() {

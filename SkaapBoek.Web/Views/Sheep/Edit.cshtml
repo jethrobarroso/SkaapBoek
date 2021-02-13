@@ -4,8 +4,11 @@
   ViewBag.Title = "Edit Sheep";
 }
 
+<div class="shadow rounded bg-secondary p-1 pl-3 mb-3">
+  <h1 class="text-light mb-3 display-4">Edit - @Model.TagNumber</h1>
+</div>
+
 <div class="col-lg-6">
-  <h1 class="text-light display-4">Edit @Model.TagNumber</h1>
   <form class="text-light" method="post" asp-action="Edit">
     <div class="mt-3">
       <h4>General Information</h4>
@@ -82,7 +85,7 @@
         </div>
       </div>
     </div>
-    @*<div class="mt-3">
+    <div class="mt-3">
       <h4>Relationships</h4>
       <div class="mt-3 mb-3">
         <div class="multilist-container d-flex justify-content-between">
@@ -96,11 +99,11 @@
               </div>
             </div>
             <ul class="list-group">
-              @foreach (var availableSheep in Model.AvailableSheep)
+              @foreach (var availableChild in Model.AvailableChildren)
               {
-                <li data-item-id="@availableSheep.Id"
+                <li data-item-id="@availableChild.Id"
                     class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@availableSheep.TagNumber</span>
+                  <span>@availableChild.TagNumber</span>
                 </li>
               }
             </ul>
@@ -129,19 +132,19 @@
               </div>
             </div>
             <ul class="list-group">
-              @for (int i = 0; i < Model.SelectedSheep.Count; i++)
+              @for (int i = 0; i < Model.SelectedChildren.Count(); i++)
               {
-                <li data-item-id="@Model.SelectedSheep[i].Id"
+                <li data-item-id="@Model.SelectedChildren[i].Id"
                     class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@Model.SelectedSheep[i].TagNumber</span>
-                  <input hidden name="SelectedSheepIds" value="@Model.SelectedSheep[i].Id" />
+                  <span>@Model.SelectedChildren[i].TagNumber</span>
+                  <input hidden name="@nameof(Model.SelectedChildIds)" value="@Model.SelectedChildren[i].Id" />
                 </li>
               }
             </ul>
           </div>
         </div>
       </div>
-    </div>*@
+    </div>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mt-3">
       <a asp-action="Index" class="btn btn-outline-secondary text-light">Cancel</a>
@@ -153,7 +156,7 @@
 @section Scripts{
   <script defer>
     $(function () {
-      appns.sheep.create();
+      appns.sheep.edit();
     });
   </script>
 }
