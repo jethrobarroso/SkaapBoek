@@ -50,23 +50,18 @@
                  data-toggle="dropdown" aria-expanded="false">Sheep</a>
               <ul class="dropdown-menu" aria-labelledby="sheepDropDown">
                 <li><a class="dropdown-item" asp-controller="Sheep" asp-action="Index">All Sheep</a></li>
-                <li><a class="dropdown-item" asp-controller="Sheep" asp-action="ListParents">Parents</a></li>
-                <li><a class="dropdown-item" asp-controller="Sheep" asp-action="ListChildren">Children</a></li>
                 <li><a class="dropdown-item" asp-controller="Sheep" asp-action="Performance">Performance</a></li>
                 <li><a class="dropdown-item" asp-controller="Groups" asp-action="Index">Groups</a></li>
               </ul>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="sheepDropDown" role="button"
-                 data-toggle="dropdown" aria-expanded="false">Activities</a>
-              <ul class="dropdown-menu" aria-labelledby="sheepDropDown">
-                <li><a class="dropdown-item" asp-controller="Projects" asp-action="Index">Projects</a></li>
-                <li><a class="dropdown-item" asp-controller="Templates" asp-action="Index">Task Templates</a></li>
-                <li><a class="dropdown-item" asp-controller="Tasks" asp-action="Index">Tasks</a></li>
-              </ul>
-            </li>
             <li class="nav-item">
               <a asp-controller="Feed" asp-action="Index" class="nav-link">Feed</a>
+            </li>
+            <li class="nav-item">
+              <a asp-controller="Feed" asp-action="Index" class="nav-link">Tasks</a>
+            </li>
+            <li class="nav-item">
+              <a asp-controller="Feed" asp-action="Index" class="nav-link">Corrals & Cages</a>
             </li>
             @if (signInManager.IsSignedIn(User) && (User.IsInRole("admin") || User.IsInRole("super admin") || User.IsInRole("sysadmin")))
             {

@@ -16,6 +16,7 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<Sheep>> GetFullNoTrack();
         Task<IEnumerable<Sheep>> GetSheepPerGenderNoTrack(string genderName);
         Task<bool> ContainsSheep(int id);
+        Task<Sheep> GetParentWithChildrenNoTrack(int id);
         //Task<IEnumerable<Sheep>> GetAvailableSheep(Sheep currentSheep, Func<Sheep, IEnumerable<Relationship>> relationship);
         //Task<IEnumerable<Sheep>> GetSelectedSheep(Sheep currentSheep, Func<Relationship, Sheep> relationship);
     }
@@ -70,6 +71,23 @@ namespace SkaapBoek.DAL.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
             return sheep != null;
+        }
+
+        public async Task<Sheep> GetParentWithChildrenNoTrack(int id)
+        {
+            return await Context.SheepSet
+                .Include(s => s.Gender)
+                .Include(s => s.SheepStatus)
+                .Include(s => s.Color)
+                .Include(s => s.Relationships)
+                    .ThenInclude(r => r.Child.Gender)
+                .Include(s => s.Relationships)
+                    .ThenInclude(r => r.Child.Color)
+                .Include(s => s.Relationships)
+                    .ThenInclude(r => r.Child.SheepStatus)
+                //.Include(s => s.Relationships.Select(r => r.Child.Gender))
+                //.Include(s => s.Relationships.Select(r => r.Child.SheepStatus))
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
 
         //public async Task<IEnumerable<Sheep>> GetAvailableSheep(Sheep currentSheep,

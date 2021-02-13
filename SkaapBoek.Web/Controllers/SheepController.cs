@@ -170,7 +170,7 @@ namespace SkaapBoek.Web.Controllers
                 return View(nameof(BadRequest));
             }
 
-            var sheep = await _sheepService.GetById(id.Value);
+            var sheep = await _sheepService.GetParentWithChildrenNoTrack(id.Value);
 
             if (SheepNullCheckWith404(sheep, id.Value))
                 return View(nameof(NotFound));
@@ -205,15 +205,15 @@ namespace SkaapBoek.Web.Controllers
             if(id is null)
             {
                 ViewBag.ErrorMessage = "No child sheep ID specified";
+                return View(nameof(BadRequest));
             }
 
-            var child = await _childService
-                .GetById(id.Value);
+            var child = await _childService.GetById(id.Value);
 
             var parents = await _childService.GetParentsFromChild(child.Id);
 
             if (SheepNullCheckWith404(child, id.Value))
-                return View("NotFound");
+                return View(nameof(NotFound));
 
             var model = new ChildEditViewModel
             {

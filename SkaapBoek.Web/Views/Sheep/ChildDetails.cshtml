@@ -24,6 +24,12 @@
   </div>
 }
 
+<a asp-action="Index" class=" m-3 home-link-arrow d-inline-flex align-items-center">
+  <svg><use xlink:href="/images/main.svg#icon-arrow-left"></use></svg>
+
+  Return to list
+</a>
+
 <div class="row">
   <div class="col-xl-6">
     <div data-sb-tag="@Model.Child.TagNumber"
@@ -51,7 +57,7 @@
       <div class="card-footer bg-secondary">
         <div class="m-3">
           <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
-          <a asp-action="EditChild" class="btn btn-primary">Edit</a>
+          <a asp-action="EditChild" asp-route-id="@Model.Child.Id" class="btn btn-primary">Edit</a>
         </div>
       </div>
     </div>
@@ -156,8 +162,8 @@
         if (sheeptype === 'child') {
           modalTitle.innerHTML = "Delete child";
           modalBody.innerHTML = `<div>Are you sure you want to delete this child sheep?</div>
-                                     <div><strong>NOTE:</strong> This will NOT delete the parents.
-                                     It will only unlink them from the deleted child.</div>`;
+                                       <div><strong>NOTE:</strong> This will NOT delete the parents.
+                                       It will only unlink them from the deleted child.</div>`;
           childId = card.getAttribute('data-sb-id');
           form.querySelector('.modal-footer button').innerHTML = "Delete";
           form.action = '/Sheep/DeleteChild/' + childId;
@@ -166,9 +172,9 @@
           const parentId = card.getAttribute('data-sb-id');
           modalTitle.innerHTML = "Unlink parent";
           modalBody.innerHTML = `Are you sure you want to unlink the parent from the child?
-                                 <div><strong>NOTE:</strong> This will NOT delete the parent 
-                                 from the system.
-                                 It will simply unlink them from the deleted child.</div>`;
+                                   <div><strong>NOTE:</strong> This will NOT delete the parent
+                                   from the system.
+                                   It will simply unlink them from the deleted child.</div>`;
           form.action = `/Sheep/RemoveParentFromChild?childId=${childId}&parentId=${parentId}`;
           form.querySelector('.modal-footer button').innerHTML = "Unlink";
         }
