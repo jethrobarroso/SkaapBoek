@@ -2,24 +2,20 @@
 import { MultiList } from '../multilist.js'
 
 export function index() {
-    $(document).ready(function () {
-
-    });
-}
-
-export function list() {
     const deleteModal = document.querySelector('.modal');
-    const table = document.querySelector('table');
+    const tables = document.querySelectorAll('table');
     const message = "Are you sure you want to delete sheep with tag ";
     const actionPath = "/Sheep/Delete/";
     const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
 
     obj.setBodyMessage = "Are you sure you want to delete this sheep?"
 
-    obj.fromTable(table);
+    for (const table of tables) {
+        obj.fromTable(table);
+    }
 
     common.initDt("herdTable");
-    common.initDt("feedlotTable");
+    common.initDt("childTable");
 }
 
 export function create() {
@@ -41,7 +37,6 @@ export function create() {
 export function edit() {
     const multiList = document.querySelector('.multilist-container');
     const multi = new MultiList(multiList, "SelectedChildIds");
-    multi.init();
 }
 
 export function details() {

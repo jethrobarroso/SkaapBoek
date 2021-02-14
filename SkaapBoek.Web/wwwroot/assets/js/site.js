@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             create: feedViews.create
         },
         sheep: {
-            list: sheepViews.list,
+            index: sheepViews.index,
             create: sheepViews.create,
             details: sheepViews.details,
             editChild: sheepViews.editChild,

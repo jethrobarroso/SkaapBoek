@@ -79,10 +79,10 @@ else
 }
 
 <h4 class="text-light mb-3 mt-3">Children</h4>
-@if (Model.FeedlotSheep.Any())
+@if (Model.Children.Any())
 {
   <div class="table-responsive-md text-light">
-    <table id="feedlotTable" class="table table-striped table-dark table-hover" style="width:100%">
+    <table id="childTable" class="table table-striped table-dark table-hover" style="width:100%">
       <thead>
         <tr>
           <th class="filterable"><div>Tag</div></th>
@@ -95,7 +95,7 @@ else
         </tr>
       </thead>
       <tbody>
-        @foreach (var child in Model.FeedlotSheep)
+        @foreach (var child in Model.Children)
         {
           <tr>
             <td>@child.TagNumber</td>
@@ -143,7 +143,7 @@ else
 @section Scripts {
   <script>
     $(document).ready(function () {
-      appns.sheep.list();
+      appns.sheep.index();
 
     });
   </script>

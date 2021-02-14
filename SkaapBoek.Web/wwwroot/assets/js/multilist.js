@@ -1,4 +1,17 @@
-﻿/**
+﻿/** @type {HTMLElement} _container */
+let _container;
+/** @type {HTMLElement} _inputNamePrefix */
+let _inputNamePrefix;
+/** @type {HTMLElement} _sourceSearchInput */
+let _sourceSearchInput;
+/** @type {HTMLElement} _targetSearchInput */
+let _targetSearchInput;
+/** @type {HTMLElement} _sourceList */
+let _sourceList;
+/** @type {HTMLElement} _targetList */
+let _targetList;
+
+/**
  * Creates the multi-select list from a UL element.
  * Each li element MUST contain a [data-item-id] attribute.
  * The latter attribute would be the ID of the object as recorded in the datastore.
@@ -6,30 +19,30 @@
  * @class
  */
 export class MultiList {
+    let 
+
     /**
      * 
      * @param {HTMLElement} container The UL element that contains the source items 
      * @param {string} inputNamePrefix The prefix used for the name attribute of the input elements 
      */
     constructor(container, inputNamePrefix) {
-        this.container = container;
-        this.inputNamePrefix = inputNamePrefix;
-        this.sourceSearchInput = container.querySelectorAll('[type="search"]')[0];
-        this.targetSearchInput = container.querySelectorAll('[type="search"]')[1];
-        this.sourceList = container.querySelectorAll('ul')[0];
-        this.targetList = container.querySelectorAll('ul')[1];
-    }
+        _container = this.container = container;
+        _inputNamePrefix = this.inputNamePrefix = inputNamePrefix;
+        _sourceSearchInput = this.container.querySelectorAll('[type="search"]')[0];
+        _targetSearchInput = this.container.querySelectorAll('[type="search"]')[1];
+        _sourceList = this.container.querySelectorAll('ul')[0];
+        _targetList = this.container.querySelectorAll('ul')[1];
 
-    init() {
-        InitializeLists(this.container, this.inputNamePrefix);
-        initButtons(this.container, this.inputNamePrefix);
-        initSearch(this.sourceSearchInput, this.sourceList, this.targetSearchInput, this.targetList);
+        initializeLists();
+        initButtons();
+        initSearch();
     }
 }
 
-function createListItem(inputNamePrefix, inputValue) {
+function createListItem(inputValue) {
     var input = document.createElement('input');
-    input.name = inputNamePrefix;
+    input.name = _inputNamePrefix;
     input.value = inputValue;
     input.hidden = true;
     return input;
@@ -38,41 +51,31 @@ function createListItem(inputNamePrefix, inputValue) {
 /**
  * 
  * @param {HTMLElement} selectedLi 
- * @param {string} inputNamePrefix 
- * @param {HTMLElement} targetList 
  */
-function moveToTargetList(selectedLi, targetList, inputNamePrefix) {
+function moveToTargetList(selectedLi) {
     if (selectedLi) {
         const id = selectedLi.getAttribute('data-item-id');
-        selectedLi.appendChild(createListItem(inputNamePrefix, id))
-        targetList.appendChild(selectedLi);
+        selectedLi.appendChild(createListItem(id))
+        _targetList.appendChild(selectedLi);
     }
 }
 
 /**
  * 
  * @param {HTMLElement} selectedLi 
- * @param {HTMLElement} sourceList 
  */
-function moveToSourceList(selectedLi, sourceList) {
+function moveToSourceList(selectedLi) {
     if (selectedLi) {
         const targetInput = selectedLi.querySelector('input');
         if (targetInput) {
             selectedLi.removeChild(targetInput);
         }
-        sourceList.appendChild(selectedLi);
+        _sourceList.appendChild(selectedLi);
     }
 }
 
-/**
- * 
- * @param {HTMLElement} container Wrapper containing the source and target UL's 
- * @param {string} inputNamePrefix The prefix used for the name attribute of the input elements
- */
-function InitializeLists(container, inputNamePrefix) {
-    const sourceList = container.querySelectorAll('ul')[0];
-    const targetList = container.querySelectorAll('ul')[1];
-    sourceList.addEventListener("click", (e) => {
+function initializeLists() {
+    _sourceList.addEventListener("click", (e) => {
         let selectedLi;
         for (let node of e.path) {
             if (node.tagName == "LI") {
@@ -81,10 +84,10 @@ function InitializeLists(container, inputNamePrefix) {
             }
         }
 
-        moveToTargetList(selectedLi, targetList, inputNamePrefix);
+        moveToTargetList(selectedLi);
     });
 
-    targetList.addEventListener("click", (e) => {
+    _targetList.addEventListener("click", (e) => {
         let selectedLi;
         for (let node of e.path) {
             if (node.tagName == "LI") {
@@ -93,55 +96,54 @@ function InitializeLists(container, inputNamePrefix) {
             }
         }
 
-        moveToSourceList(selectedLi, sourceList);
+        moveToSourceList(selectedLi);
     });
 }
 
-/**
- * 
- * @param {HTMLElement} toTargetButton 
- * @param {HTMLElement} toSourceButton 
- */
-function initButtons(container, inputNamePrefix) {
-    const toTargetButton = container.querySelector('.multi-btn-target');
-    const toSourceButton = container.querySelector('.multi-btn-source');
-    const sourceList = container.querySelectorAll('ul')[0];
-    const targetList = container.querySelectorAll('ul')[1];
+function initButtons() {
+    const toTargetButton = _container.querySelector('.multi-btn-target');
+    const toSourceButton = _container.querySelector('.multi-btn-source');
+    const sourceList = _container.querySelectorAll('ul')[0];
+    const targetList = _container.querySelectorAll('ul')[1];
 
 
     if (toTargetButton && toSourceButton) {
         toTargetButton.addEventListener('click', () => {
-            for (let li of sourceList.children) {
+            for (let li of _sourceList.children) {
                 const id = li.getAttribute('data-item-id');
-                li.appendChild(createListItem(inputNamePrefix, id));
+                li.appendChild(createListItem(id));
             }
-            targetList.append(...sourceList.childNodes);
+            _targetList.append(...sourceList.childNodes);
         })
 
         toSourceButton.addEventListener('click', () => {
-            for (let li of targetList.children) {
+            for (let li of _targetList.children) {
                 const targetInput = li.querySelector('input');
                 li.removeChild(targetInput);
             }
-            sourceList.append(...targetList.childNodes);
+            _sourceList.append(...targetList.childNodes);
         })
     }
 }
 
+function initSearch() {
+    configureSearch(container => container.querySelectorAll('.card')[0]);
+    configureSearch(container => container.querySelectorAll('.card')[1]);
+}
+
 /**
- * 
- * @param {HTMLElement} sourceSearch 
- * @param {HTMLElement} sourceList 
- * @param {HTMLElement} targetSearch 
- * @param {HTMLElement} targetList 
- */
-function initSearch(sourceSearch, sourceList, targetSearch, targetList) {
-    sourceSearch.addEventListener('keydown', (e) => {
+ * @param {function(HTMLElement):HTMLElement} selectList
+ * - Callback used to select the source or target list from multilist container.}
+ * */
+function configureSearch(selectList) {
+    const list = selectList(_container).querySelector('ul');
+    const searchInput = selectList(_container).querySelector('[type="search"]');
+    searchInput.addEventListener('keydown', (e) => {
         if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
-            const sourceSpans = sourceList.querySelectorAll('span');
+            const sourceSpans = list.querySelectorAll('span');
 
             for (let item of sourceSpans) {
-                if (item.innerText.indexOf(sourceSearch.value) > -1) {
+                if (item.innerText.toLowerCase().indexOf(searchInput.value.toLowerCase()) > -1) {
                     item.parentElement.style.display = "";
                 }
                 else {
@@ -152,20 +154,12 @@ function initSearch(sourceSearch, sourceList, targetSearch, targetList) {
         }
     });
 
-    targetSearch.addEventListener('keydown', (e) => {
-        if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
-            const targetSpans = targetList.querySelectorAll('span');
-            console.log('triggered');
-            for (let item of targetSpans) {
-                if (item.innerText.indexOf(targetSearch.value) > -1) {
-                    item.parentElement.style.display = "";
-                }
-                else {
-                    item.parentElement.style.display = 'none';
-                }
-            }
-            e.preventDefault();
+    searchInput.addEventListener('search', (e) => {
+        const sourceSpans = list.querySelectorAll('span');
+
+        for (let item of sourceSpans) {
+            item.parentElement.style.display = "";
         }
+        e.preventDefault();
     })
 }
-

@@ -37,7 +37,7 @@ namespace SkaapBoek.Web.Controllers
             var model = new SheepIndexViewModel
             {
                 HerdSheep = await _sheepService.GetFullNoTrack(),
-                FeedlotSheep = await _childService.GetFullNoTrack(),
+                Children = await _childService.GetFullNoTrack(),
             };
             return View(model);
         }
