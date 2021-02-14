@@ -11,7 +11,7 @@ namespace SkaapBoek.DAL
 
         }
 
-        public DbSet<Sheep> SheepSet { get; set; }
+        public DbSet<HerdMember> HerdMemberSet { get; set; }
         public DbSet<Gender> GenderSet { get; set; }
         public DbSet<SheepStatus> SheepStateSet { get; set; }
         public DbSet<Feed> FeedSet { get; set; }
@@ -20,11 +20,12 @@ namespace SkaapBoek.DAL
         public DbSet<Priority> PrioritySet { get; set; }
         public DbSet<Status> StatusSet { get; set; }
         public DbSet<Group> GroupSet { get; set; }
-        public DbSet<SheepGroup> SheepGroupSet { get; set; }
+        public DbSet<GroupedHerdMember> GroupedHerdMemberSet { get; set; }
         public DbSet<TaskInstance> TaskInstanceSet { get; set; }
         public DbSet<TaskTemplate> TaskTemplateSet { get; set; }
         public DbSet<Color> ColorSet { get; set; }
-        public DbSet<ChildGroup> ChildGroupSet { get; set; }
+        public DbSet<GroupedChild> GroupedChildSet { get; set; }
+        public DbSet<Cage> CageSet { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -38,17 +39,18 @@ namespace SkaapBoek.DAL
             builder.Entity<Feed>().ToTable("feed");
             builder.Entity<Gender>().ToTable("gender");
             builder.Entity<Relationship>().ToTable("relationship");
-            builder.Entity<Sheep>().ToTable("sheep");
+            builder.Entity<HerdMember>().ToTable("herd_member");
             builder.Entity<SheepStatus>().ToTable("state");
             builder.Entity<Child>().ToTable("child");
             builder.Entity<Group>().ToTable("group");
             builder.Entity<Priority>().ToTable("priority");
-            builder.Entity<SheepGroup>().ToTable("sheep_group");
+            builder.Entity<GroupedHerdMember>().ToTable("grouped_herd_member");
+            builder.Entity<GroupedChild>().ToTable("grouped_child");
             builder.Entity<Status>().ToTable("status");
             builder.Entity<TaskInstance>().ToTable("task_instance");
             builder.Entity<TaskTemplate>().ToTable("task_tamplate");
             builder.Entity<Color>().ToTable("color");
-            builder.Entity<ChildGroup>().ToTable("child_group");
+            builder.Entity<Cage>().ToTable("cage");
 
             builder.Entity<Relationship>()
                 .HasKey(r => new { r.SheepId, r.ChildId });
@@ -63,31 +65,44 @@ namespace SkaapBoek.DAL
                 .WithMany(c => c.Relationships)
                 .HasForeignKey(r => r.ChildId);
 
-            builder.Entity<SheepGroup>()
-                .HasKey(sg => new { sg.SheepId, sg.GroupId });
+            builder.Entity<GroupedHerdMember>()
+                .HasKey(sg => new { sg.HerdMemberId, sg.GroupId });
 
-            builder.Entity<SheepGroup>()
-                .HasOne(sg => sg.Sheep)
-                .WithMany(s => s.SheepGroups)
-                .HasForeignKey(sg => sg.SheepId);
+            builder.Entity<GroupedHerdMember>()
+                .HasOne(sg => sg.HerdMember)
+                .WithMany(s => s.GroupedHerdMembers)
+                .HasForeignKey(sg => sg.HerdMemberId);
 
-            builder.Entity<SheepGroup>()
+            builder.Entity<GroupedHerdMember>()
                 .HasOne(sg => sg.Group)
-                .WithMany(p => p.SheepGroups)
+                .WithMany(p => p.GroupedHerdMembers)
                 .HasForeignKey(sg => sg.GroupId);
 
-            builder.Entity<ChildGroup>()
+            builder.Entity<GroupedChild>()
                 .HasKey(cg => new { cg.ChildId, cg.GroupId });
 
-            builder.Entity<ChildGroup>()
+            builder.Entity<GroupedChild>()
                 .HasOne(cg => cg.Child)
-                .WithMany(c => c.ChildGroups)
+                .WithMany(c => c.GroupedChildren)
                 .HasForeignKey(cg => cg.ChildId);
 
-            builder.Entity<ChildGroup>()
+            builder.Entity<GroupedChild>()
                 .HasOne(cg => cg.Group)
-                .WithMany(g => g.ChildGroups)
+                .WithMany(g => g.GroupedChildren)
                 .HasForeignKey(cg => cg.GroupId);
+
+            builder.Entity<GroupedHerdMember>()
+                .HasKey(hg => new { hg.HerdMemberId, hg.GroupId });
+
+            builder.Entity<GroupedHerdMember>()
+                .HasOne(hg => hg.HerdMember)
+                .WithMany(c => c.GroupedHerdMembers)
+                .HasForeignKey(hg => hg.HerdMemberId);
+
+            builder.Entity<GroupedHerdMember>()
+                .HasOne(hg => hg.Group)
+                .WithMany(g => g.GroupedHerdMembers)
+                .HasForeignKey(hg => hg.GroupId);
         }
     }
 }

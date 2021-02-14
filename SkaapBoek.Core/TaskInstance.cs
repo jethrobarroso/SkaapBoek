@@ -39,7 +39,7 @@ namespace SkaapBoek.Core
 
         [Display(Name = "Sheep")]
         public int? SheepId { get; set; }
-        public Sheep Sheep { get; set; }
+        public HerdMember Sheep { get; set; }
 
         [Display(Name = "Child")]
         public int? ChildId { get; set; }

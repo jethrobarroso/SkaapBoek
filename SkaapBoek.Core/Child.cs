@@ -20,6 +20,8 @@ namespace SkaapBoek.Core
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
+        public bool FeedlotAssigned { get; set; }
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal SalePrice { get; set; }
 
@@ -36,7 +38,7 @@ namespace SkaapBoek.Core
         public int? FeedId { get; set; }
         public Feed CurrentFeed { get; set; }
 
-        public ICollection<ChildGroup> ChildGroups { get; set; }
+        public ICollection<GroupedChild> GroupedChildren { get; set; }
         public ICollection<Relationship> Relationships { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
     }

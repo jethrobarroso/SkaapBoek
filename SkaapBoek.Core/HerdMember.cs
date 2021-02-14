@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SkaapBoek.Core
 {
-    public class Sheep
+    public class HerdMember
     {
         public int Id { get; set; }
 
@@ -42,7 +42,7 @@ namespace SkaapBoek.Core
         public int? FeedId { get; set; }
         public Feed CurrentFeed { get; set; }
 
-        public ICollection<SheepGroup> SheepGroups { get; set; }
+        public ICollection<GroupedHerdMember> GroupedHerdMembers { get; set; }
         public ICollection<Relationship> Relationships { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
     }

@@ -90,9 +90,9 @@ namespace SkaapBoek.DAL
             context.PrioritySet.AddRange(priorities);
             context.SaveChanges();
 
-            var sheep = new Sheep[]
+            var sheep = new HerdMember[]
             {
-                new Sheep 
+                new HerdMember 
                 { 
                     TagNumber = "tagParent1", CostPrice = 1240.12M,
                     GenderId = genders.Single(i => i.Type == "Male").Id, 
@@ -103,7 +103,7 @@ namespace SkaapBoek.DAL
                     AcquireDate = new DateTime(2015,1,1),
                     ColorId = colors.Single(c => c.Name == "Red").Id
                 },
-                new Sheep
+                new HerdMember
                 {
                     TagNumber = "tagParent2", CostPrice = 1230.61M,
                     GenderId = genders.Single(i => i.Type == "Female").Id,
@@ -114,7 +114,7 @@ namespace SkaapBoek.DAL
                     AcquireDate = new DateTime(2015,1,1),
                     ColorId = colors.Single(c => c.Name == "Red").Id
                 },
-                new Sheep
+                new HerdMember
                 {
                     TagNumber = "tagParent3",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -125,7 +125,7 @@ namespace SkaapBoek.DAL
                     AcquireDate = new DateTime(2019,1,1),
                     ColorId = colors.Single(c => c.Name == "Yellow").Id
                 },
-                new Sheep
+                new HerdMember
                 {
                     TagNumber = "tagParent4",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -138,7 +138,7 @@ namespace SkaapBoek.DAL
                 },
             };
 
-            context.SheepSet.AddRange(sheep);
+            context.HerdMemberSet.AddRange(sheep);
             context.SaveChanges();
 
             var children = new Child[]

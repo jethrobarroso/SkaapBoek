@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SkaapBoek.Core
 {
-    public class ChildGroup
+    public class GroupedChild
     {
         public int ChildId { get; set; }
         public Child Child { get; set; }

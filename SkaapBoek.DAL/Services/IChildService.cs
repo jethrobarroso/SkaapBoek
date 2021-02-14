@@ -15,7 +15,7 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<Gender>> GetGenders();
         Task<IEnumerable<Child>> GetFullNoTrack();
         Task<Child> GetByIdNoTrack(int id);
-        Task<(Sheep mother, Sheep father)> GetParentsFromChild(int childId);
+        Task<(HerdMember mother, HerdMember father)> GetParentsFromChild(int childId);
     }
 
     public class ChildService : BaseService<Child>, IChildService
@@ -67,7 +67,7 @@ namespace SkaapBoek.DAL.Services
                 .ToListAsync();
         }
 
-        public async Task<(Sheep mother, Sheep father)> GetParentsFromChild(int childId)
+        public async Task<(HerdMember mother, HerdMember father)> GetParentsFromChild(int childId)
         {
             var result = await Context.RelationshipSet
                 .Include(r => r.Parent).ThenInclude(p => p.Gender)
@@ -78,7 +78,7 @@ namespace SkaapBoek.DAL.Services
                 .AsNoTracking()
                 .ToListAsync();
 
-            (Sheep mother, Sheep father) parents;
+            (HerdMember mother, HerdMember father) parents;
             parents.mother = result.SingleOrDefault(s => s.Gender.Type == "Female");
             parents.father = result.SingleOrDefault(s => s.Gender.Type == "Male");
 

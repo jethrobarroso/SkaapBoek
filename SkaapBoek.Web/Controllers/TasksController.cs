@@ -62,7 +62,7 @@ namespace SkaapBoek.Web.Controllers
         {
             ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name");
             ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name");
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber");
+            ViewData["SheepId"] = new SelectList(_context.HerdMemberSet, "Id", "TagNumber");
             ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name");
             ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name");
             return View();
@@ -83,7 +83,7 @@ namespace SkaapBoek.Web.Controllers
             }
             ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name", taskInstance.GroupId);
             ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name", taskInstance.PriorityId);
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber", taskInstance.SheepId);
+            ViewData["SheepId"] = new SelectList(_context.HerdMemberSet, "Id", "TagNumber", taskInstance.SheepId);
             ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name", taskInstance.TaskTemplateId);
             ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name", taskInstance.StatusId);
             return View(taskInstance);
@@ -104,7 +104,7 @@ namespace SkaapBoek.Web.Controllers
             }
             ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name", taskInstance.GroupId);
             ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name", taskInstance.PriorityId);
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber", taskInstance.SheepId);
+            ViewData["SheepId"] = new SelectList(_context.HerdMemberSet, "Id", "TagNumber", taskInstance.SheepId);
             ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name", taskInstance.TaskTemplateId);
             ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name", taskInstance.StatusId);
             return View(taskInstance);
@@ -144,7 +144,7 @@ namespace SkaapBoek.Web.Controllers
             }
             ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name", taskInstance.GroupId);
             ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name", taskInstance.PriorityId);
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber", taskInstance.SheepId);
+            ViewData["SheepId"] = new SelectList(_context.HerdMemberSet, "Id", "TagNumber", taskInstance.SheepId);
             ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name", taskInstance.TaskTemplateId);
             ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name", taskInstance.StatusId);
             return View(taskInstance);

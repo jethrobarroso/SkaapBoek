@@ -11,7 +11,7 @@ namespace SkaapBoek.Web.ViewModels
     public class ChildDetailsViewModel
     {
         public Child Child { get; set; }
-        public Sheep Mother { get; set; }
-        public Sheep Father { get; set; }
+        public HerdMember Mother { get; set; }
+        public HerdMember Father { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace SkaapBoek.Core
         [MaxLength(50)]
         public string Type { get; set; }
 
-        public List<Sheep> Sheep { get; set; }
+        public List<HerdMember> Sheep { get; set; }
     }
 }

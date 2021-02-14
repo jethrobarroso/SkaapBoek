@@ -41,7 +41,7 @@ namespace SkaapBoek.Web.Utilities
             return list;
         }
 
-        public static List<SelectListItem> ToListOfSelectListItem(this IEnumerable<Sheep> original)
+        public static List<SelectListItem> ToListOfSelectListItem(this IEnumerable<HerdMember> original)
         {
             var list = new List<SelectListItem>();
 

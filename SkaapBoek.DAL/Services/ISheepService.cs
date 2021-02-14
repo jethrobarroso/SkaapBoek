@@ -8,29 +8,29 @@ using System.Linq;
 
 namespace SkaapBoek.DAL.Services
 {
-    public interface ISheepService : IDataService<Sheep>
+    public interface ISheepService : IDataService<HerdMember>
     {
         Task<IEnumerable<SheepStatus>> GetSheepStates();
-        Task<Sheep> GetById(int id);
+        Task<HerdMember> GetById(int id);
         Task<IEnumerable<Gender>> GetGenders();
-        Task<IEnumerable<Sheep>> GetFullNoTrack();
-        Task<IEnumerable<Sheep>> GetSheepPerGenderNoTrack(string genderName);
+        Task<IEnumerable<HerdMember>> GetFullNoTrack();
+        Task<IEnumerable<HerdMember>> GetSheepPerGenderNoTrack(string genderName);
         Task<bool> ContainsSheep(int id);
-        Task<Sheep> GetParentWithChildrenNoTrack(int id);
-        Task<List<Child>> GetAvailableChildren(Sheep currentSheep);
-        Task<List<Child>> GetSelectedChildren(Sheep currentSheep);
+        Task<HerdMember> GetParentWithChildrenNoTrack(int id);
+        Task<List<Child>> GetAvailableChildren(HerdMember currentSheep);
+        Task<List<Child>> GetSelectedChildren(HerdMember currentSheep);
     }
 
-    public class SheepService : BaseService<Sheep>, ISheepService
+    public class SheepService : BaseService<HerdMember>, ISheepService
     {
         public SheepService(AppDbContext context) : base(context)
         {
 
         }
 
-        public async Task<Sheep> GetById(int id)
+        public async Task<HerdMember> GetById(int id)
         {
-            var sheep = await Context.SheepSet
+            var sheep = await Context.HerdMemberSet
                 .Include(s => s.Gender)
                 .Include(s => s.SheepStatus)
                 .Include(s => s.Color)
@@ -47,7 +47,7 @@ namespace SkaapBoek.DAL.Services
         public async Task<IEnumerable<SheepStatus>> GetSheepStates() =>
             await Context.SheepStateSet.ToListAsync();
 
-        public async Task<IEnumerable<Sheep>> GetFullNoTrack()
+        public async Task<IEnumerable<HerdMember>> GetFullNoTrack()
         {
             return await base.GetAll()
                 .Include(s => s.Gender)
@@ -57,9 +57,9 @@ namespace SkaapBoek.DAL.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Sheep>> GetSheepPerGenderNoTrack(string genderName)
+        public async Task<IEnumerable<HerdMember>> GetSheepPerGenderNoTrack(string genderName)
         {
-            return await Context.SheepSet
+            return await Context.HerdMemberSet
                 .Include(s => s.Gender)
                 .Where(s => s.Gender.Type == genderName)
                 .AsNoTracking()
@@ -68,15 +68,15 @@ namespace SkaapBoek.DAL.Services
 
         public async Task<bool> ContainsSheep(int id)
         {
-            var sheep = await Context.SheepSet
+            var sheep = await Context.HerdMemberSet
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
             return sheep != null;
         }
 
-        public async Task<Sheep> GetParentWithChildrenNoTrack(int id)
+        public async Task<HerdMember> GetParentWithChildrenNoTrack(int id)
         {
-            return await Context.SheepSet
+            return await Context.HerdMemberSet
                 .Include(s => s.Gender)
                 .Include(s => s.SheepStatus)
                 .Include(s => s.Color)
@@ -90,7 +90,7 @@ namespace SkaapBoek.DAL.Services
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<List<Child>> GetAvailableChildren(Sheep currentSheep)
+        public async Task<List<Child>> GetAvailableChildren(HerdMember currentSheep)
         {
             var parentGender = currentSheep.Gender.Type;
             return await (from c in Context.ChildSet
@@ -99,7 +99,7 @@ namespace SkaapBoek.DAL.Services
 
         }
 
-        public async Task<List<Child>> GetSelectedChildren(Sheep currentSheep)
+        public async Task<List<Child>> GetSelectedChildren(HerdMember currentSheep)
         {
             return await Context.RelationshipSet
                 .Where(r => r.SheepId == currentSheep.Id)

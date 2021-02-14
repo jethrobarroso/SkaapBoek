@@ -1,4 +1,4 @@
-﻿@model Sheep
+﻿@model HerdMember
 
 @{
   ViewBag.Title = "Sheep Details";
@@ -93,7 +93,7 @@ else
 {
   <div class="mt-4 alert alert-info">
     <p>This sheep does not have any children.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Edit parent relationships</a>
+    <a class="mt-2 btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit parent relationships</a>
   </div>
 }
 

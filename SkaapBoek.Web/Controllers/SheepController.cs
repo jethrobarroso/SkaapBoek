@@ -60,7 +60,7 @@ namespace SkaapBoek.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var sheep = new Sheep
+                var sheep = new HerdMember
                 {
                     AcquireDate = model.AcquireDate,
                     BirthDate = model.BirthDate,

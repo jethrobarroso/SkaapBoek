@@ -8,7 +8,7 @@ namespace SkaapBoek.Web.ViewModels
 {
     public class SheepDetailsViewModel
     {
-        public Sheep Sheep { get; set; }
+        public HerdMember Sheep { get; set; }
         public IEnumerable<Child> Children { get; set; }
     }
 }

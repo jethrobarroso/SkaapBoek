@@ -89,18 +89,18 @@ namespace SkaapBoek.Web.Controllers
                 Description = group.Description,
             };
 
-            vm.AvailableSheep = await (from s in _context.SheepSet
-                                       join sg in _context.SheepGroupSet
-                                       on s.Id equals sg.SheepId into jg
+            vm.AvailableSheep = await (from s in _context.HerdMemberSet
+                                       join sg in _context.GroupedHerdMemberSet
+                                       on s.Id equals sg.HerdMemberId into jg
                                        from g in jg.DefaultIfEmpty()
                                        select s).Distinct()
-                                       .Where(s => s.SheepGroups.Count() == 0 ||
-                                       !s.SheepGroups.Any(sg => sg.GroupId == group.Id))
+                                       .Where(s => s.GroupedHerdMembers.Count() == 0 ||
+                                       !s.GroupedHerdMembers.Any(sg => sg.GroupId == group.Id))
                                        .ToListAsync();
 
-            vm.SelectedSheep = await _context.SheepGroupSet
+            vm.SelectedSheep = await _context.GroupedHerdMemberSet
                 .Where(sg => sg.GroupId == id)
-                .Select(s => s.Sheep).ToListAsync();
+                .Select(s => s.HerdMember).ToListAsync();
 
             if (@group == null)
             {
@@ -116,7 +116,7 @@ namespace SkaapBoek.Web.Controllers
         public async Task<IActionResult> Edit(int id, GroupEditViewModel model, int[] selectedSheepIds)
         {
             var group = await _context.GroupSet
-                .Include(g => g.SheepGroups)
+                .Include(g => g.GroupedHerdMembers)
                     .ThenInclude(gs => gs.Group)
                 .FirstOrDefaultAsync(g => g.Id == id);
 
@@ -125,11 +125,11 @@ namespace SkaapBoek.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                group.SheepGroups.Clear();
-                group.SheepGroups = new List<SheepGroup>();
+                group.GroupedHerdMembers.Clear();
+                group.GroupedHerdMembers = new List<GroupedHerdMember>();
                 foreach (int i in selectedSheepIds)
                 {
-                    group.SheepGroups.Add(new SheepGroup { GroupId = id, SheepId = i });
+                    group.GroupedHerdMembers.Add(new GroupedHerdMember { GroupId = id, HerdMemberId = i });
                 }
 
                 try

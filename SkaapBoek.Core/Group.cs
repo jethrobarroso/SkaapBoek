@@ -15,8 +15,8 @@ namespace SkaapBoek.Core
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public ICollection<SheepGroup> SheepGroups { get; set; }
+        public ICollection<GroupedHerdMember> GroupedHerdMembers { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
-        public ICollection<ChildGroup> ChildGroups { get; set; }
+        public ICollection<GroupedChild> GroupedChildren { get; set; }
     }
 }

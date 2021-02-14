@@ -23,16 +23,16 @@ namespace SkaapBoek.Web.Controllers.Api
 
         // GET: api/TestSheepApi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sheep>>> GetSheepSet()
+        public async Task<ActionResult<IEnumerable<HerdMember>>> GetSheepSet()
         {
-            return await _context.SheepSet.ToListAsync();
+            return await _context.HerdMemberSet.ToListAsync();
         }
 
         // GET: api/TestSheepApi/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Sheep>> GetSheep(int id)
+        public async Task<ActionResult<HerdMember>> GetSheep(int id)
         {
-            var sheep = await _context.SheepSet.FindAsync(id);
+            var sheep = await _context.HerdMemberSet.FindAsync(id);
 
             if (sheep == null)
             {
@@ -46,7 +46,7 @@ namespace SkaapBoek.Web.Controllers.Api
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSheep(int id, Sheep sheep)
+        public async Task<IActionResult> PutSheep(int id, HerdMember sheep)
         {
             if (id != sheep.Id)
             {
@@ -78,9 +78,9 @@ namespace SkaapBoek.Web.Controllers.Api
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Sheep>> PostSheep(Sheep sheep)
+        public async Task<ActionResult<HerdMember>> PostSheep(HerdMember sheep)
         {
-            _context.SheepSet.Add(sheep);
+            _context.HerdMemberSet.Add(sheep);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSheep", new { id = sheep.Id }, sheep);
@@ -88,15 +88,15 @@ namespace SkaapBoek.Web.Controllers.Api
 
         // DELETE: api/TestSheepApi/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Sheep>> DeleteSheep(int id)
+        public async Task<ActionResult<HerdMember>> DeleteSheep(int id)
         {
-            var sheep = await _context.SheepSet.FindAsync(id);
+            var sheep = await _context.HerdMemberSet.FindAsync(id);
             if (sheep == null)
             {
                 return NotFound();
             }
 
-            _context.SheepSet.Remove(sheep);
+            _context.HerdMemberSet.Remove(sheep);
             await _context.SaveChangesAsync();
 
             return sheep;
@@ -104,7 +104,7 @@ namespace SkaapBoek.Web.Controllers.Api
 
         private bool SheepExists(int id)
         {
-            return _context.SheepSet.Any(e => e.Id == id);
+            return _context.HerdMemberSet.Any(e => e.Id == id);
         }
     }
 }

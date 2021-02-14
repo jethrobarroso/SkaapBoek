@@ -17,6 +17,6 @@ namespace SkaapBoek.Core
         [Column(TypeName ="char(6)")]
         public string HexValue { get; set; }
 
-        public ICollection<Sheep> Sheep { get; set; }
+        public ICollection<HerdMember> Sheep { get; set; }
     }
 }
