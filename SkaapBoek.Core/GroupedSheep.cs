@@ -1,9 +1,9 @@
 ﻿namespace SkaapBoek.Core
 {
-    public class ChildAssignment
+    public class GroupedSheep
     {
-        public int? ChildId { get; set; }
-        public Child Sheep { get; set; }
+        public int SheepId { get; set; }
+        public Sheep Sheep { get; set; }
 
         public int GroupId { get; set; }
         public Group Group { get; set; }

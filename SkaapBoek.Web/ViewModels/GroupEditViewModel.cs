@@ -11,7 +11,7 @@ namespace SkaapBoek.Web.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<HerdMember> AvailableSheep { get; set; }
-        public List<HerdMember> SelectedSheep { get; set; }
+        public List<Sheep> AvailableSheep { get; set; }
+        public List<Sheep> SelectedSheep { get; set; }
     }
 }

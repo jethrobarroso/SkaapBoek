@@ -8,42 +8,42 @@ using System.Linq;
 
 namespace SkaapBoek.DAL.Services
 {
-    public interface IChildService : IDataService<Child>
+    public interface IChildService : IDataService<Sheep>
     {
         Task<IEnumerable<SheepStatus>> GetSheepStates();
-        Task<Child> GetById(int id);
+        Task<Sheep> GetById(int id);
         Task<IEnumerable<Gender>> GetGenders();
-        Task<IEnumerable<Child>> GetFullNoTrack();
-        Task<Child> GetByIdNoTrack(int id);
-        Task<(HerdMember mother, HerdMember father)> GetParentsFromChild(int childId);
+        Task<IEnumerable<Sheep>> GetFullNoTrack();
+        Task<Sheep> GetByIdNoTrack(int id);
+        Task<(Sheep mother, Sheep father)> GetParentsFromChild(int childId);
     }
 
-    public class ChildService : BaseService<Child>, IChildService
+    public class ChildService : BaseService<Sheep>, IChildService
     {
         public ChildService(AppDbContext context) : base(context)
         {
 
         }
 
-        public async Task<Child> GetById(int id)
+        public async Task<Sheep> GetById(int id)
         {
-            var child = await Context.ChildSet
+            var child = await Context.SheepSet
                 .Include(c => c.Gender)
                 .Include(c => c.SheepStatus)
                 .Include(c => c.Color)
-                .Include(c => c.Relationships)
+                .Include(c => c.AsParentTo)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             return child;
         }
 
-        public async Task<Child> GetByIdNoTrack(int id)
+        public async Task<Sheep> GetByIdNoTrack(int id)
         {
-            var child = await Context.ChildSet
+            var child = await Context.SheepSet
                 .Include(c => c.Gender)
                 .Include(c => c.SheepStatus)
                 .Include(c => c.Color)
-                .Include(c => c.Relationships)
+                .Include(c => c.AsParentTo)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id);
 
@@ -57,17 +57,18 @@ namespace SkaapBoek.DAL.Services
         public async Task<IEnumerable<SheepStatus>> GetSheepStates() =>
             await Context.SheepStateSet.ToListAsync();
 
-        public async Task<IEnumerable<Child>> GetFullNoTrack()
+        public async Task<IEnumerable<Sheep>> GetFullNoTrack()
         {
             return await base.GetAll()
                 .Include(c => c.Gender)
                 .Include(c => c.SheepStatus)
                 .Include(c => c.Color)
+                .Include(c => c.AsChildTo)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<(HerdMember mother, HerdMember father)> GetParentsFromChild(int childId)
+        public async Task<(Sheep mother, Sheep father)> GetParentsFromChild(int childId)
         {
             var result = await Context.RelationshipSet
                 .Include(r => r.Parent).ThenInclude(p => p.Gender)
@@ -78,7 +79,7 @@ namespace SkaapBoek.DAL.Services
                 .AsNoTracking()
                 .ToListAsync();
 
-            (HerdMember mother, HerdMember father) parents;
+            (Sheep mother, Sheep father) parents;
             parents.mother = result.SingleOrDefault(s => s.Gender.Type == "Female");
             parents.father = result.SingleOrDefault(s => s.Gender.Type == "Male");
 

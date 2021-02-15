@@ -36,8 +36,8 @@ namespace SkaapBoek.Web.Controllers
         {
             var model = new SheepIndexViewModel
             {
-                HerdSheep = await _sheepService.GetFullNoTrack(),
-                Children = await _childService.GetFullNoTrack(),
+                HerdSheep = await _sheepService.GetHerdMembersNoTrack(),
+                FeedlotMembers = await _sheepService.GetFeedLotMembersNoTrack(),
             };
             return View(model);
         }
@@ -60,7 +60,7 @@ namespace SkaapBoek.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var sheep = new HerdMember
+                var sheep = new Sheep
                 {
                     AcquireDate = model.AcquireDate,
                     BirthDate = model.BirthDate,
@@ -140,19 +140,19 @@ namespace SkaapBoek.Web.Controllers
                 sheep.Weight = model.Weight;
                 sheep.ColorId = model.ColorId;
 
-                sheep.Relationships.Clear();
-                sheep.Relationships = new List<Relationship>();
+                sheep.AsParentTo.Clear();
+                sheep.AsParentTo = new List<Relationship>();
 
                 if (model.SelectedChildIds != null)
                 {
                     foreach (var i in model.SelectedChildIds)
                     {
-                        sheep.Relationships.Add(new Relationship
+                        sheep.AsParentTo.Add(new Relationship
                         {
                             SheepId = sheep.Id,
                             ChildId = i
                         });
-                    } 
+                    }
                 }
 
                 await _sheepService.Update(sheep);
@@ -190,11 +190,19 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var sheep = await _sheepService.GetParentWithChildrenNoTrack(id.Value);
-
             if (SheepNullCheckWith404(sheep, id.Value))
                 return View(nameof(NotFound));
+            
+            var parents = await _childService.GetParentsFromChild(sheep.Id);
+            var model = new SheepDetailsViewModel
+            {
+                Sheep = sheep,
+                Mother = parents.mother,
+                Father = parents.father,
+                Children = await _sheepService.GetAllChildrenNoTrack(sheep)
+            };
 
-            return View(sheep);
+            return View(model);
         }
         #endregion
 
@@ -221,7 +229,7 @@ namespace SkaapBoek.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditChild(int? id)
         {
-            if(id is null)
+            if (id is null)
             {
                 ViewBag.ErrorMessage = "No child sheep ID specified";
                 return View(nameof(BadRequest));
@@ -269,22 +277,23 @@ namespace SkaapBoek.Web.Controllers
                 child.Weight = model.Weight;
                 child.ColorId = model.ColorId;
 
-                child.Relationships.Clear();
-                child.Relationships = new List<Relationship>();
-                
-                if(model.FatherId != null && 
+                child.AsParentTo.Clear();
+                child.AsParentTo = new List<Relationship>();
+
+                if (model.FatherId != null &&
                     await _sheepService.ContainsSheep(model.FatherId.Value) == true)
                 {
-                    child.Relationships.Add(new Relationship 
-                    { 
-                        ChildId = child.Id, SheepId = model.FatherId.Value 
+                    child.AsParentTo.Add(new Relationship
+                    {
+                        ChildId = child.Id,
+                        SheepId = model.FatherId.Value
                     });
                 }
 
                 if (model.MotherId != null &&
                     await _sheepService.ContainsSheep(model.MotherId.Value) == true)
                 {
-                    child.Relationships.Add(new Relationship
+                    child.AsParentTo.Add(new Relationship
                     {
                         ChildId = child.Id,
                         SheepId = model.MotherId.Value
@@ -302,51 +311,25 @@ namespace SkaapBoek.Web.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ChildDetails(int? id)
-        {
-            if (id is null)
-            {
-                ViewBag.ErrorMessage = "No child sheep ID specified";
-                return View(nameof(BadRequest));
-            }
-
-            var child = await _childService.GetById(id.Value);
-
-            if (SheepNullCheckWith404(child, id.Value))
-                return View(nameof(NotFound));
-
-            var parents = await _childService.GetParentsFromChild(child.Id);
-
-            var model = new ChildDetailsViewModel()
-            {
-                Child = child,
-                Father = parents.father,
-                Mother = parents.mother,
-            };
-
-            return View(model);
-        }
-
         [HttpPost]
         public async Task<IActionResult> RemoveParentFromChild(int? childId, int? parentId)
         {
-            if(childId is null || parentId is null)
+            if (childId is null || parentId is null)
             {
                 ViewBag.ErrorMessage = "Not all identifiers were specified";
                 return View(nameof(BadRequest));
             }
 
             var child = await _childService.GetById(childId.Value);
-            var parent = child.Relationships.SingleOrDefault(r => r.SheepId == parentId);
-            
-            if(child == null || parent == null)
+            var parent = child.AsParentTo.SingleOrDefault(r => r.SheepId == parentId);
+
+            if (child == null || parent == null)
             {
                 ViewBag.ErrorMessage = $"Id parameters [childId={childId}] and [parentId={parentId} did not match related entries";
                 return View(nameof(NotFound));
             }
 
-            child.Relationships.Remove(parent);
+            child.AsParentTo.Remove(parent);
 
             try
             {
@@ -358,7 +341,7 @@ namespace SkaapBoek.Web.Controllers
             }
 
             TempData["Success"] = "Successfully unlinked parent sheep.";
-            return RedirectToAction(nameof(ChildDetails), new { id = childId });
+            return RedirectToAction(nameof(Details), new { id = childId });
         }
         #endregion
     }

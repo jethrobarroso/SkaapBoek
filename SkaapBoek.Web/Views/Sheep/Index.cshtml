@@ -67,19 +67,19 @@
       </tbody>
     </table>
     <h2></h2>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add herd sheep</a>
+    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
   </div>
 }
 else
 {
   <div class="alert alert-info">
-    <p>No sheep are currently registered.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add herd sheep</a>
+    <p>No sheep are currently registered in the herd category.</p>
+    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
   </div>
 }
 
 <h4 class="text-light mb-3 mt-3">Children</h4>
-@if (Model.Children.Any())
+@if (Model.FeedlotMembers.Any())
 {
   <div class="table-responsive-md text-light">
     <table id="childTable" class="table table-striped table-dark table-hover" style="width:100%">
@@ -95,27 +95,27 @@ else
         </tr>
       </thead>
       <tbody>
-        @foreach (var child in Model.Children)
+        @foreach (var sheep in Model.FeedlotMembers)
         {
           <tr>
-            <td>@child.TagNumber</td>
-            <td>@child.Color.Name</td>
-            <td>@child.SheepStatus.Name</td>
-            <td>@child.Gender.Type</td>
-            <td>@child.Weight</td>
-            <td>@child.BirthDate.ToShortDateString()</td>
+            <td>@sheep.TagNumber</td>
+            <td>@sheep.Color.Name</td>
+            <td>@sheep.SheepStatus.Name</td>
+            <td>@sheep.Gender.Type</td>
+            <td>@sheep.Weight</td>
+            <td>@sheep.BirthDate.ToShortDateString()</td>
             <td>
               <div class="d-flex align-content-center">
-                <a class="icon-button mr-1 ml-1" asp-action="ChildDetails" asp-route-id="@child.Id"
+                <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@sheep.Id"
                    data-toggle="tooltip" data-placement="top" title="View">
                   <i class="material-icons">search</i>
                 </a>
-                <a class="icon-button mr-1 ml-1" asp-action="EditChild" asp-route-id="@child.Id"
+                <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@sheep.Id"
                    data-toggle="tooltip" data-placement="top" title="Edit">
                   <i class="material-icons">edit</i>
                 </a>
                 <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
-                  <button class="icon-button--delete" data-user-id="@child.Id"
+                  <button class="icon-button--delete" data-user-id="@sheep.Id"
                           type="button" data-toggle="modal" data-target="#deleteModal">
                     <i class="material-icons">delete</i>
                   </button>
@@ -127,14 +127,14 @@ else
       </tbody>
     </table>
     <h2></h2>
-    <a class="mt-2 btn btn-primary" asp-action="CreateChild">Add child sheep</a>
+    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
   </div>
 }
 else
 {
   <div class="alert alert-info">
-    <p>No sheep are currently registered.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add child sheep</a>
+    <p>No sheep are currently registered in the feedlot category.</p>
+    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
   </div>
 }
 

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SkaapBoek.Core
 {
-    public class HerdMember
+    public class Sheep
     {
         public int Id { get; set; }
 
@@ -24,13 +24,16 @@ namespace SkaapBoek.Core
         public DateTime AcquireDate { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal CostPrice { get; set; }
+        public decimal? CostPrice { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal SalePrice { get; set; }
+        public decimal? SalePrice { get; set; }
 
         public int SheepStatusId { get; set; } = 3;
         public SheepStatus SheepStatus { get; set; }
+
+        public int SheepCategoryId { get; set; }
+        public SheepCategory Category { get; set; }
 
         [Required]
         public int GenderId { get; set; }
@@ -42,8 +45,12 @@ namespace SkaapBoek.Core
         public int? FeedId { get; set; }
         public Feed CurrentFeed { get; set; }
 
-        public ICollection<GroupedHerdMember> GroupedHerdMembers { get; set; }
-        public ICollection<Relationship> Relationships { get; set; }
+        public int? CageId { get; set; }
+        public Cage Cage { get; set; }
+
+        public ICollection<GroupedSheep> GroupedSheep { get; set; }
+        public ICollection<Relationship> AsParentTo { get; set; }
+        public ICollection<Relationship> AsChildTo { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
     }
 }

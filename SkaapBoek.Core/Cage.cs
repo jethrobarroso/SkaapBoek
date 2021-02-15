@@ -16,7 +16,7 @@ namespace SkaapBoek.Core
         public int FeedId { get; set; }
         public Feed Feed { get; set; }
 
-        public ICollection<HerdMember> NonGroupedSheep { get; set; }
-        public ICollection<Group> Groups { get; set; }
+        public ICollection<Sheep> CagedSheep { get; set; }
+        public ICollection<Group> GroupedSheep { get; set; }
     }
 }

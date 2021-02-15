@@ -26,6 +26,6 @@ namespace SkaapBoek.Core
         [Column(TypeName ="decimal(10,2)")]
         public decimal? CostPrice { get; set; }
 
-        public List<HerdMember> Sheep { get; set; }
+        public List<Sheep> Sheep { get; set; }
     }
 }

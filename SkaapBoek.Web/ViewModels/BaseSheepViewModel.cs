@@ -27,7 +27,7 @@ namespace SkaapBoek.Web.ViewModels
         public DateTime BirthDate { get; set; }
 
         [Display(Name = "Selling price")]
-        public decimal SalePrice { get; set; }
+        public decimal? SalePrice { get; set; }
 
         [Display(Name = "State")]
         public int SheepStatusId { get; set; }

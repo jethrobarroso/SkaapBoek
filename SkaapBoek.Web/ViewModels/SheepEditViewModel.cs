@@ -10,7 +10,7 @@ namespace SkaapBoek.Web.ViewModels
     public class SheepEditViewModel : SheepCreateViewModel
     {
         public int[] SelectedChildIds { get; set; }
-        public List<Child> SelectedChildren { get; set; }
-        public List<Child> AvailableChildren { get; set; }
+        public List<Sheep> SelectedChildren { get; set; }
+        public List<Sheep> AvailableChildren { get; set; }
     }
 }

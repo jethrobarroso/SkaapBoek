@@ -89,18 +89,18 @@ namespace SkaapBoek.Web.Controllers
                 Description = group.Description,
             };
 
-            vm.AvailableSheep = await (from s in _context.HerdMemberSet
+            vm.AvailableSheep = await (from s in _context.SheepSet
                                        join sg in _context.GroupedHerdMemberSet
-                                       on s.Id equals sg.HerdMemberId into jg
+                                       on s.Id equals sg.SheepId into jg
                                        from g in jg.DefaultIfEmpty()
                                        select s).Distinct()
-                                       .Where(s => s.GroupedHerdMembers.Count() == 0 ||
-                                       !s.GroupedHerdMembers.Any(sg => sg.GroupId == group.Id))
+                                       .Where(s => s.GroupedSheep.Count() == 0 ||
+                                       !s.GroupedSheep.Any(sg => sg.GroupId == group.Id))
                                        .ToListAsync();
 
             vm.SelectedSheep = await _context.GroupedHerdMemberSet
                 .Where(sg => sg.GroupId == id)
-                .Select(s => s.HerdMember).ToListAsync();
+                .Select(s => s.Sheep).ToListAsync();
 
             if (@group == null)
             {
@@ -126,10 +126,10 @@ namespace SkaapBoek.Web.Controllers
             if (ModelState.IsValid)
             {
                 group.GroupedHerdMembers.Clear();
-                group.GroupedHerdMembers = new List<GroupedHerdMember>();
+                group.GroupedHerdMembers = new List<GroupedSheep>();
                 foreach (int i in selectedSheepIds)
                 {
-                    group.GroupedHerdMembers.Add(new GroupedHerdMember { GroupId = id, HerdMemberId = i });
+                    group.GroupedHerdMembers.Add(new GroupedSheep { GroupId = id, SheepId = i });
                 }
 
                 try

@@ -66,6 +66,19 @@ namespace SkaapBoek.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "sheep_category",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sheep_category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "state",
                 columns: table => new
                 {
@@ -135,51 +148,6 @@ namespace SkaapBoek.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "child",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TagNumber = table.Column<string>(maxLength: 100, nullable: false),
-                    ColorId = table.Column<int>(nullable: false),
-                    BirthDate = table.Column<DateTime>(nullable: false),
-                    FeedlotAssigned = table.Column<bool>(nullable: false),
-                    SalePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    SheepStatusId = table.Column<int>(nullable: false),
-                    GenderId = table.Column<int>(nullable: false),
-                    Weight = table.Column<float>(nullable: false),
-                    FeedId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_child", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_child_color_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "color",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_child_feed_FeedId",
-                        column: x => x.FeedId,
-                        principalTable: "feed",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_child_gender_GenderId",
-                        column: x => x.GenderId,
-                        principalTable: "gender",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_child_state_SheepStatusId",
-                        column: x => x.SheepStatusId,
-                        principalTable: "state",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "group",
                 columns: table => new
                 {
@@ -201,7 +169,7 @@ namespace SkaapBoek.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "herd_member",
+                name: "sheep",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -210,9 +178,10 @@ namespace SkaapBoek.DAL.Migrations
                     ColorId = table.Column<int>(nullable: false),
                     BirthDate = table.Column<DateTime>(nullable: false),
                     AcquireDate = table.Column<DateTime>(nullable: false),
-                    CostPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    SalePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    CostPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    SalePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     SheepStatusId = table.Column<int>(nullable: false),
+                    SheepCategoryId = table.Column<int>(nullable: false),
                     GenderId = table.Column<int>(nullable: false),
                     Weight = table.Column<float>(nullable: false),
                     FeedId = table.Column<int>(nullable: true),
@@ -220,59 +189,41 @@ namespace SkaapBoek.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_herd_member", x => x.Id);
+                    table.PrimaryKey("PK_sheep", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_herd_member_cage_CageId",
+                        name: "FK_sheep_cage_CageId",
                         column: x => x.CageId,
                         principalTable: "cage",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_herd_member_color_ColorId",
+                        name: "FK_sheep_color_ColorId",
                         column: x => x.ColorId,
                         principalTable: "color",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_herd_member_feed_FeedId",
+                        name: "FK_sheep_feed_FeedId",
                         column: x => x.FeedId,
                         principalTable: "feed",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_herd_member_gender_GenderId",
+                        name: "FK_sheep_gender_GenderId",
                         column: x => x.GenderId,
                         principalTable: "gender",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_herd_member_state_SheepStatusId",
+                        name: "FK_sheep_sheep_category_SheepCategoryId",
+                        column: x => x.SheepCategoryId,
+                        principalTable: "sheep_category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_sheep_state_SheepStatusId",
                         column: x => x.SheepStatusId,
                         principalTable: "state",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "grouped_child",
-                columns: table => new
-                {
-                    ChildId = table.Column<int>(nullable: false),
-                    GroupId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_grouped_child", x => new { x.ChildId, x.GroupId });
-                    table.ForeignKey(
-                        name: "FK_grouped_child_child_ChildId",
-                        column: x => x.ChildId,
-                        principalTable: "child",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_grouped_child_group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "group",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -281,12 +232,12 @@ namespace SkaapBoek.DAL.Migrations
                 name: "grouped_herd_member",
                 columns: table => new
                 {
-                    HerdMemberId = table.Column<int>(nullable: false),
+                    SheepId = table.Column<int>(nullable: false),
                     GroupId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_grouped_herd_member", x => new { x.HerdMemberId, x.GroupId });
+                    table.PrimaryKey("PK_grouped_herd_member", x => new { x.SheepId, x.GroupId });
                     table.ForeignKey(
                         name: "FK_grouped_herd_member_group_GroupId",
                         column: x => x.GroupId,
@@ -294,9 +245,9 @@ namespace SkaapBoek.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_grouped_herd_member_herd_member_HerdMemberId",
-                        column: x => x.HerdMemberId,
-                        principalTable: "herd_member",
+                        name: "FK_grouped_herd_member_sheep_SheepId",
+                        column: x => x.SheepId,
+                        principalTable: "sheep",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -312,15 +263,15 @@ namespace SkaapBoek.DAL.Migrations
                 {
                     table.PrimaryKey("PK_relationship", x => new { x.SheepId, x.ChildId });
                     table.ForeignKey(
-                        name: "FK_relationship_child_ChildId",
+                        name: "FK_relationship_sheep_ChildId",
                         column: x => x.ChildId,
-                        principalTable: "child",
+                        principalTable: "sheep",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_relationship_herd_member_SheepId",
+                        name: "FK_relationship_sheep_SheepId",
                         column: x => x.SheepId,
-                        principalTable: "herd_member",
+                        principalTable: "sheep",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -339,18 +290,11 @@ namespace SkaapBoek.DAL.Migrations
                     StatusId = table.Column<int>(nullable: false),
                     TaskTemplateId = table.Column<int>(nullable: false),
                     SheepId = table.Column<int>(nullable: true),
-                    ChildId = table.Column<int>(nullable: true),
                     GroupId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_task_instance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_task_instance_child_ChildId",
-                        column: x => x.ChildId,
-                        principalTable: "child",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_task_instance_group_GroupId",
                         column: x => x.GroupId,
@@ -364,9 +308,9 @@ namespace SkaapBoek.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_task_instance_herd_member_SheepId",
+                        name: "FK_task_instance_sheep_SheepId",
                         column: x => x.SheepId,
-                        principalTable: "herd_member",
+                        principalTable: "sheep",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -394,34 +338,9 @@ namespace SkaapBoek.DAL.Migrations
                 column: "FeedId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_child_ColorId",
-                table: "child",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_child_FeedId",
-                table: "child",
-                column: "FeedId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_child_GenderId",
-                table: "child",
-                column: "GenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_child_SheepStatusId",
-                table: "child",
-                column: "SheepStatusId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_group_CageId",
                 table: "group",
                 column: "CageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_grouped_child_GroupId",
-                table: "grouped_child",
-                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_grouped_herd_member_GroupId",
@@ -429,39 +348,39 @@ namespace SkaapBoek.DAL.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_herd_member_CageId",
-                table: "herd_member",
-                column: "CageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_herd_member_ColorId",
-                table: "herd_member",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_herd_member_FeedId",
-                table: "herd_member",
-                column: "FeedId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_herd_member_GenderId",
-                table: "herd_member",
-                column: "GenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_herd_member_SheepStatusId",
-                table: "herd_member",
-                column: "SheepStatusId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_relationship_ChildId",
                 table: "relationship",
                 column: "ChildId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_task_instance_ChildId",
-                table: "task_instance",
-                column: "ChildId");
+                name: "IX_sheep_CageId",
+                table: "sheep",
+                column: "CageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sheep_ColorId",
+                table: "sheep",
+                column: "ColorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sheep_FeedId",
+                table: "sheep",
+                column: "FeedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sheep_GenderId",
+                table: "sheep",
+                column: "GenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sheep_SheepCategoryId",
+                table: "sheep",
+                column: "SheepCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sheep_SheepStatusId",
+                table: "sheep",
+                column: "SheepStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_task_instance_GroupId",
@@ -492,9 +411,6 @@ namespace SkaapBoek.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "grouped_child");
-
-            migrationBuilder.DropTable(
                 name: "grouped_herd_member");
 
             migrationBuilder.DropTable(
@@ -504,16 +420,13 @@ namespace SkaapBoek.DAL.Migrations
                 name: "task_instance");
 
             migrationBuilder.DropTable(
-                name: "child");
-
-            migrationBuilder.DropTable(
                 name: "group");
 
             migrationBuilder.DropTable(
                 name: "priority");
 
             migrationBuilder.DropTable(
-                name: "herd_member");
+                name: "sheep");
 
             migrationBuilder.DropTable(
                 name: "status");
@@ -526,6 +439,9 @@ namespace SkaapBoek.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "gender");
+
+            migrationBuilder.DropTable(
+                name: "sheep_category");
 
             migrationBuilder.DropTable(
                 name: "state");

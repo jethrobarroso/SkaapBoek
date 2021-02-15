@@ -15,6 +15,6 @@ namespace SkaapBoek.Web.ViewModels
         public DateTime AcquireDate { get; set; }
 
         [Display(Name = "Cost price")]
-        public decimal CostPrice { get; set; }
+        public decimal? CostPrice { get; set; }
     }
 }

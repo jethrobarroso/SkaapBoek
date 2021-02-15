@@ -30,6 +30,15 @@ namespace SkaapBoek.DAL
             context.ColorSet.AddRange(colors);
             context.SaveChanges();
 
+            var sheepCategories = new SheepCategory[]
+            {
+                new SheepCategory { Name = "Herd" },
+                new SheepCategory { Name = "Feedlot" }
+            };
+
+            context.SheepCategorySet.AddRange(sheepCategories);
+            context.SaveChanges();
+
             var genders = new Gender[]
             {
                 new Gender { Type = "Male"},
@@ -90,9 +99,9 @@ namespace SkaapBoek.DAL
             context.PrioritySet.AddRange(priorities);
             context.SaveChanges();
 
-            var sheep = new HerdMember[]
+            var sheep = new Sheep[]
             {
-                new HerdMember 
+                new Sheep 
                 { 
                     TagNumber = "tagParent1", CostPrice = 1240.12M,
                     GenderId = genders.Single(i => i.Type == "Male").Id, 
@@ -101,9 +110,10 @@ namespace SkaapBoek.DAL
                     SalePrice = 2201.99M, Weight = 1105.23f,
                     BirthDate = new DateTime(2011,5,4), 
                     AcquireDate = new DateTime(2015,1,1),
-                    ColorId = colors.Single(c => c.Name == "Red").Id
+                    ColorId = colors.Single(c => c.Name == "Red").Id,
+                    SheepCategoryId = sheepCategories[0].Id
                 },
-                new HerdMember
+                new Sheep
                 {
                     TagNumber = "tagParent2", CostPrice = 1230.61M,
                     GenderId = genders.Single(i => i.Type == "Female").Id,
@@ -112,9 +122,10 @@ namespace SkaapBoek.DAL
                     SalePrice = 2113M, Weight = 1105.23f,
                     BirthDate = new DateTime(2011,5,4),
                     AcquireDate = new DateTime(2015,1,1),
-                    ColorId = colors.Single(c => c.Name == "Red").Id
+                    ColorId = colors.Single(c => c.Name == "Red").Id,
+                    SheepCategoryId = sheepCategories[0].Id
                 },
-                new HerdMember
+                new Sheep
                 {
                     TagNumber = "tagParent3",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -123,9 +134,10 @@ namespace SkaapBoek.DAL
                     SalePrice = 2291.99M, Weight = 105.23f,
                     BirthDate = new DateTime(2017,5,4),
                     AcquireDate = new DateTime(2019,1,1),
-                    ColorId = colors.Single(c => c.Name == "Yellow").Id
+                    ColorId = colors.Single(c => c.Name == "Yellow").Id,
+                    SheepCategoryId = sheepCategories[0].Id
                 },
-                new HerdMember
+                new Sheep
                 {
                     TagNumber = "tagParent4",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -134,16 +146,17 @@ namespace SkaapBoek.DAL
                     SalePrice = 2301.99M, Weight = 105.23f,
                     BirthDate = new DateTime(2019,5,4),
                     AcquireDate = new DateTime(2019,1,1),
-                    ColorId = colors.Single(c => c.Name == "Black").Id
+                    ColorId = colors.Single(c => c.Name == "Black").Id,
+                    SheepCategoryId = sheepCategories[0].Id
                 },
             };
 
-            context.HerdMemberSet.AddRange(sheep);
+            context.SheepSet.AddRange(sheep);
             context.SaveChanges();
 
-            var children = new Child[]
+            var children = new Sheep[]
             {
-                new Child
+                new Sheep
                 {
                     TagNumber = "tagChild1",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -151,9 +164,11 @@ namespace SkaapBoek.DAL
                     FeedId = feed.Single(f => f.Name == "Feed 4").Id,
                     SalePrice = 2301.99M, Weight = 55,
                     BirthDate = new DateTime(2019,5,4),
-                    ColorId = colors.Single(c => c.Name == "Black").Id
+                    AcquireDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id,
+                    SheepCategoryId = sheepCategories[1].Id
                 },
-                new Child
+                new Sheep
                 {
                     TagNumber = "tagChild2",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -161,9 +176,11 @@ namespace SkaapBoek.DAL
                     FeedId = feed.Single(f => f.Name == "Feed 4").Id,
                     SalePrice = 2301.99M, Weight = 44,
                     BirthDate = new DateTime(2019,5,4),
-                    ColorId = colors.Single(c => c.Name == "Black").Id
+                    AcquireDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id,
+                    SheepCategoryId = sheepCategories[1].Id
                 },
-                new Child
+                new Sheep
                 {
                     TagNumber = "tagChild3",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -171,9 +188,11 @@ namespace SkaapBoek.DAL
                     FeedId = feed.Single(f => f.Name == "Feed 4").Id,
                     SalePrice = 2301.99M, Weight = 66,
                     BirthDate = new DateTime(2019,5,4),
-                    ColorId = colors.Single(c => c.Name == "Black").Id
+                    AcquireDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id,
+                    SheepCategoryId = sheepCategories[1].Id,
                 },
-                new Child
+                new Sheep
                 {
                     TagNumber = "tagChild4",
                     GenderId = genders.Single(i => i.Type == "Male").Id,
@@ -181,11 +200,13 @@ namespace SkaapBoek.DAL
                     FeedId = feed.Single(f => f.Name == "Feed 4").Id,
                     SalePrice = 2301.99M, Weight = 62,
                     BirthDate = new DateTime(2019,5,4),
-                    ColorId = colors.Single(c => c.Name == "Black").Id
+                    AcquireDate = new DateTime(2019,5,4),
+                    ColorId = colors.Single(c => c.Name == "Black").Id,
+                    SheepCategoryId = sheepCategories[1].Id
                 }
             };
 
-            context.ChildSet.AddRange(children);
+            context.SheepSet.AddRange(children);
             context.SaveChanges();
 
             var relationships = new Relationship[]
