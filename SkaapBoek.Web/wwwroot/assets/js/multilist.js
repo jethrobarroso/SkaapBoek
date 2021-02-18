@@ -1,17 +1,4 @@
-﻿/** @type {HTMLElement} _container */
-let _container;
-/** @type {HTMLElement} _inputNamePrefix */
-let _inputNamePrefix;
-/** @type {HTMLElement} _sourceSearchInput */
-let _sourceSearchInput;
-/** @type {HTMLElement} _targetSearchInput */
-let _targetSearchInput;
-/** @type {HTMLElement} _sourceList */
-let _sourceList;
-/** @type {HTMLElement} _targetList */
-let _targetList;
-
-/**
+﻿/**
  * Creates the multi-select list from a UL element.
  * Each li element MUST contain a [data-item-id] attribute.
  * The latter attribute would be the ID of the object as recorded in the datastore.
@@ -19,30 +6,28 @@ let _targetList;
  * @class
  */
 export class MultiList {
-    let 
-
     /**
      * 
      * @param {HTMLElement} container The UL element that contains the source items 
      * @param {string} inputNamePrefix The prefix used for the name attribute of the input elements 
      */
     constructor(container, inputNamePrefix) {
-        _container = this.container = container;
-        _inputNamePrefix = this.inputNamePrefix = inputNamePrefix;
-        _sourceSearchInput = this.container.querySelectorAll('[type="search"]')[0];
-        _targetSearchInput = this.container.querySelectorAll('[type="search"]')[1];
-        _sourceList = this.container.querySelectorAll('ul')[0];
-        _targetList = this.container.querySelectorAll('ul')[1];
+        this.container = container;
+        this.inputNamePrefix = inputNamePrefix;
+        this.sourceSearchInput = container.querySelectorAll('[type="search"]')[0];
+        this.targetSearchInput = container.querySelectorAll('[type="search"]')[1];
+        this.sourceList = container.querySelectorAll('ul')[0];
+        this.targetList = container.querySelectorAll('ul')[1];
 
-        initializeLists();
-        initButtons();
-        initSearch();
+        initializeLists(this);
+        initButtons(this);
+        initSearch(this);
     }
 }
 
-function createListItem(inputValue) {
+function createListItem(multilist, inputValue) {
     var input = document.createElement('input');
-    input.name = _inputNamePrefix;
+    input.name = multilist.inputNamePrefix;
     input.value = inputValue;
     input.hidden = true;
     return input;
@@ -52,11 +37,11 @@ function createListItem(inputValue) {
  * 
  * @param {HTMLElement} selectedLi 
  */
-function moveToTargetList(selectedLi) {
+function moveToTargetList(multilist, selectedLi) {
     if (selectedLi) {
         const id = selectedLi.getAttribute('data-item-id');
-        selectedLi.appendChild(createListItem(id))
-        _targetList.appendChild(selectedLi);
+        selectedLi.appendChild(createListItem(multilist, id))
+        multilist.targetList.appendChild(selectedLi);
     }
 }
 
@@ -64,18 +49,18 @@ function moveToTargetList(selectedLi) {
  * 
  * @param {HTMLElement} selectedLi 
  */
-function moveToSourceList(selectedLi) {
+function moveToSourceList(multilist, selectedLi) {
     if (selectedLi) {
         const targetInput = selectedLi.querySelector('input');
         if (targetInput) {
             selectedLi.removeChild(targetInput);
         }
-        _sourceList.appendChild(selectedLi);
+        multilist.sourceList.appendChild(selectedLi);
     }
 }
 
-function initializeLists() {
-    _sourceList.addEventListener("click", (e) => {
+function initializeLists(multilist) {
+    multilist.sourceList.addEventListener("click", (e) => {
         let selectedLi;
         for (let node of e.path) {
             if (node.tagName == "LI") {
@@ -84,10 +69,10 @@ function initializeLists() {
             }
         }
 
-        moveToTargetList(selectedLi);
+        moveToTargetList(multilist, selectedLi);
     });
 
-    _targetList.addEventListener("click", (e) => {
+    multilist.targetList.addEventListener("click", (e) => {
         let selectedLi;
         for (let node of e.path) {
             if (node.tagName == "LI") {
@@ -96,48 +81,48 @@ function initializeLists() {
             }
         }
 
-        moveToSourceList(selectedLi);
+        moveToSourceList(multilist, selectedLi);
     });
 }
 
-function initButtons() {
-    const toTargetButton = _container.querySelector('.multi-btn-target');
-    const toSourceButton = _container.querySelector('.multi-btn-source');
-    const sourceList = _container.querySelectorAll('ul')[0];
-    const targetList = _container.querySelectorAll('ul')[1];
+function initButtons(multilist) {
+    const toTargetButton = multilist.container.querySelector('.multi-btn-target');
+    const toSourceButton = multilist.container.querySelector('.multi-btn-source');
+    const sourceList = multilist.container.querySelectorAll('ul')[0];
+    const targetList = multilist.container.querySelectorAll('ul')[1];
 
 
     if (toTargetButton && toSourceButton) {
         toTargetButton.addEventListener('click', () => {
-            for (let li of _sourceList.children) {
+            for (let li of multilist.sourceList.children) {
                 const id = li.getAttribute('data-item-id');
-                li.appendChild(createListItem(id));
+                li.appendChild(createListItem(multilist, id));
             }
-            _targetList.append(...sourceList.childNodes);
+            multilist.targetList.append(...sourceList.childNodes);
         })
 
         toSourceButton.addEventListener('click', () => {
-            for (let li of _targetList.children) {
+            for (let li of multilist.targetList.children) {
                 const targetInput = li.querySelector('input');
                 li.removeChild(targetInput);
             }
-            _sourceList.append(...targetList.childNodes);
+            multilist.sourceList.append(...targetList.childNodes);
         })
     }
 }
 
-function initSearch() {
-    configureSearch(container => container.querySelectorAll('.card')[0]);
-    configureSearch(container => container.querySelectorAll('.card')[1]);
+function initSearch(multilist) {
+    configureSearch(multilist, container => container.querySelectorAll('.card')[0]);
+    configureSearch(multilist, container => container.querySelectorAll('.card')[1]);
 }
 
 /**
  * @param {function(HTMLElement):HTMLElement} selectList
  * - Callback used to select the source or target list from multilist container.}
  * */
-function configureSearch(selectList) {
-    const list = selectList(_container).querySelector('ul');
-    const searchInput = selectList(_container).querySelector('[type="search"]');
+function configureSearch(multilist, selectList) {
+    const list = selectList(multilist.container).querySelector('ul');
+    const searchInput = selectList(multilist.container).querySelector('[type="search"]');
     searchInput.addEventListener('keydown', (e) => {
         if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
             const sourceSpans = list.querySelectorAll('span');

@@ -61,7 +61,7 @@
               <a asp-controller="Feed" asp-action="Index" class="nav-link">Tasks</a>
             </li>
             <li class="nav-item">
-              <a asp-controller="Feed" asp-action="Index" class="nav-link">Corrals & Cages</a>
+              <a asp-controller="Enclosures" asp-action="Index" class="nav-link">Enclosures</a>
             </li>
             @if (signInManager.IsSignedIn(User) && (User.IsInRole("admin") || User.IsInRole("super admin") || User.IsInRole("sysadmin")))
             {

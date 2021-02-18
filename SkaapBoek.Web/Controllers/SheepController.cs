@@ -21,13 +21,13 @@ namespace SkaapBoek.Web.Controllers
     {
         private readonly ILogger<SheepController> _logger;
         private readonly ISheepService _sheepService;
-        private readonly IChildService _childService;
+        private readonly IEnclosureService _enclosureService;
 
-        public SheepController(ILogger<SheepController> logger, ISheepService service, IChildService childService)
+        public SheepController(ILogger<SheepController> logger, ISheepService service, IEnclosureService enclosureService)
         {
             _logger = logger;
             _sheepService = service;
-            _childService = childService;
+            _enclosureService = enclosureService;
         }
 
         #region Herd
@@ -95,15 +95,19 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            var sheep = await _sheepService.GetById(id);
+            if(id is null)
+            {
+                ViewBag.ErrorMessage = $"Bad request. Sheep ID not specified";
+                return View(nameof(BadRequest));
+            }
 
-            if (SheepNullCheckWith404(sheep, id))
-                return View("NotFound");
+            var sheep = await _sheepService.GetById(id.Value);
 
             var model = new SheepEditViewModel
             {
+                Id = sheep.Id,
                 AcquireDate = sheep.AcquireDate,
                 BirthDate = sheep.BirthDate,
                 Genders = (await _sheepService.GetGenders()).ToList(),
@@ -115,11 +119,20 @@ namespace SkaapBoek.Web.Controllers
                 ColorId = sheep.Color.Id,
                 Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name"),
                 SheepStatusId = sheep.SheepStatusId,
-                StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name")
+                StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name"),
+                EnclosureId = sheep.EnclosureId,
+                Enclosures = new SelectList(await _enclosureService.GetAllNoTrack(), "Id", "Number"),
+                AvailableChildren = await _sheepService.GetAvailableChildren(sheep),
+                SelectedChildren = await _sheepService.GetSelectedChildren(sheep),
+                SheepCategoryId = sheep.SheepCategoryId,
+                Categories = new SelectList(await _sheepService.GetCategories(), "Id", "Name"),
+                FeedId = sheep.FeedId,
+                FeedList = new SelectList(await _sheepService.GetAllFeed(), "Id", "Name"),
+                //FatherId = parents.father?.Id,
+                //MotherId = parents.mother?.Id,
+                //Rams = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Male"), "Id", "TagNumber", parents.father?.Id),
+                //Ewes = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Female"), "Id", "TagNumber", parents.mother?.Id)
             };
-
-            model.AvailableChildren = await _sheepService.GetAvailableChildren(sheep);
-            model.SelectedChildren = await _sheepService.GetSelectedChildren(sheep);
 
             return View(model);
         }
@@ -127,44 +140,30 @@ namespace SkaapBoek.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(SheepEditViewModel model, int id)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var sheep = await _sheepService.GetById(id);
-                sheep.AcquireDate = model.AcquireDate;
-                sheep.BirthDate = model.BirthDate;
-                sheep.GenderId = model.GenderId;
-                sheep.CostPrice = model.CostPrice;
-                sheep.SalePrice = model.SalePrice;
-                sheep.SheepStatusId = model.SheepStatusId;
-                sheep.TagNumber = model.TagNumber;
-                sheep.Weight = model.Weight;
-                sheep.ColorId = model.ColorId;
-
-                sheep.AsParentTo.Clear();
-                sheep.AsParentTo = new List<Relationship>();
-
-                if (model.SelectedChildIds != null)
-                {
-                    foreach (var i in model.SelectedChildIds)
-                    {
-                        sheep.AsParentTo.Add(new Relationship
-                        {
-                            SheepId = sheep.Id,
-                            ChildId = i
-                        });
-                    }
-                }
-
-                await _sheepService.Update(sheep);
-                TempData["Success"] = $"Successfully updated sheep with tag {sheep.TagNumber}";
-                return RedirectToAction(nameof(Index));
+                model.Genders = (await _sheepService.GetGenders()).ToList();
+                model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
+                model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
+                return View(model);
             }
 
-            model.Genders = (await _sheepService.GetGenders()).ToList();
-            model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
-            model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
+            var sheep = await _sheepService.GetById(id);
+            sheep.AcquireDate = model.AcquireDate;
+            sheep.BirthDate = model.BirthDate;
+            sheep.GenderId = model.GenderId;
+            sheep.CostPrice = model.CostPrice;
+            sheep.SalePrice = model.SalePrice;
+            sheep.SheepStatusId = model.SheepStatusId;
+            sheep.TagNumber = model.TagNumber;
+            sheep.Weight = model.Weight;
+            sheep.ColorId = model.ColorId;
+            sheep.SheepCategoryId = model.SheepCategoryId;
+            sheep.FeedId = model.FeedId;
 
-            return View(model);
+            await _sheepService.Update(sheep);
+            TempData["Success"] = $"Successfully updated sheep with tag {sheep.TagNumber}";
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -189,159 +188,19 @@ namespace SkaapBoek.Web.Controllers
                 return View(nameof(BadRequest));
             }
 
-            var sheep = await _sheepService.GetParentWithChildrenNoTrack(id.Value);
+            var sheep = await _sheepService.GetById(id.Value);
             if (SheepNullCheckWith404(sheep, id.Value))
                 return View(nameof(NotFound));
             
-            var parents = await _childService.GetParentsFromChild(sheep.Id);
             var model = new SheepDetailsViewModel
             {
                 Sheep = sheep,
-                Mother = parents.mother,
-                Father = parents.father,
+                Mother = sheep.Mother,
+                Father = sheep.Father,
                 Children = await _sheepService.GetAllChildrenNoTrack(sheep)
             };
 
             return View(model);
-        }
-        #endregion
-
-        #region Child
-        [HttpPost]
-        public async Task<IActionResult> DeleteChild(int? id)
-        {
-            if (id is null)
-            {
-                ViewBag.ErrorMessage = "No sheep ID specified";
-                return View(nameof(BadRequest));
-            }
-
-            var child = await _childService.GetById(id.Value);
-
-            if (SheepNullCheckWith404(child, id.Value))
-                return View("NotFound");
-
-            await _childService.Delete(id.Value);
-            TempData["Success"] = $"Successfully deleted {child.TagNumber}";
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> EditChild(int? id)
-        {
-            if (id is null)
-            {
-                ViewBag.ErrorMessage = "No child sheep ID specified";
-                return View(nameof(BadRequest));
-            }
-
-            var child = await _childService.GetById(id.Value);
-
-            var parents = await _childService.GetParentsFromChild(child.Id);
-
-            if (SheepNullCheckWith404(child, id.Value))
-                return View(nameof(NotFound));
-
-            var model = new ChildEditViewModel
-            {
-                BirthDate = child.BirthDate,
-                Genders = (await _sheepService.GetGenders()).ToList(),
-                GenderId = child.GenderId,
-                SalePrice = child.SalePrice,
-                TagNumber = child.TagNumber,
-                Weight = child.Weight,
-                ColorId = child.Color.Id,
-                Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name"),
-                SheepStatusId = child.SheepStatusId,
-                StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name"),
-                FatherId = parents.father?.Id,
-                MotherId = parents.mother?.Id,
-                Males = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Male"), "Id", "TagNumber", parents.father?.Id),
-                Females = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Female"), "Id", "TagNumber", parents.mother?.Id)
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EditChild(ChildEditViewModel model, int id)
-        {
-            if (ModelState.IsValid)
-            {
-                var child = await _childService.GetById(id);
-                child.BirthDate = model.BirthDate;
-                child.GenderId = model.GenderId;
-                child.SalePrice = model.SalePrice;
-                child.SheepStatusId = model.SheepStatusId;
-                child.TagNumber = model.TagNumber;
-                child.Weight = model.Weight;
-                child.ColorId = model.ColorId;
-
-                child.AsParentTo.Clear();
-                child.AsParentTo = new List<Relationship>();
-
-                if (model.FatherId != null &&
-                    await _sheepService.ContainsSheep(model.FatherId.Value) == true)
-                {
-                    child.AsParentTo.Add(new Relationship
-                    {
-                        ChildId = child.Id,
-                        SheepId = model.FatherId.Value
-                    });
-                }
-
-                if (model.MotherId != null &&
-                    await _sheepService.ContainsSheep(model.MotherId.Value) == true)
-                {
-                    child.AsParentTo.Add(new Relationship
-                    {
-                        ChildId = child.Id,
-                        SheepId = model.MotherId.Value
-                    });
-                }
-
-                await _childService.Update(child);
-                TempData["Success"] = $"Successfully updated sheep with tag {child.TagNumber}";
-                return RedirectToAction(nameof(Index));
-            }
-
-            model.Genders = (await _sheepService.GetGenders()).ToList();
-            model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
-            model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RemoveParentFromChild(int? childId, int? parentId)
-        {
-            if (childId is null || parentId is null)
-            {
-                ViewBag.ErrorMessage = "Not all identifiers were specified";
-                return View(nameof(BadRequest));
-            }
-
-            var child = await _childService.GetById(childId.Value);
-            var parent = child.AsParentTo.SingleOrDefault(r => r.SheepId == parentId);
-
-            if (child == null || parent == null)
-            {
-                ViewBag.ErrorMessage = $"Id parameters [childId={childId}] and [parentId={parentId} did not match related entries";
-                return View(nameof(NotFound));
-            }
-
-            child.AsParentTo.Remove(parent);
-
-            try
-            {
-                await _childService.Update(child);
-            }
-            catch (DbUpdateException)
-            {
-                TempData["Failure"] = "Something went wrong when trying to unlink the parent. Refresh the page and try again";
-            }
-
-            TempData["Success"] = "Successfully unlinked parent sheep.";
-            return RedirectToAction(nameof(Details), new { id = childId });
         }
         #endregion
     }

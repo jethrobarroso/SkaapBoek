@@ -10,6 +10,8 @@ namespace SkaapBoek.Web.ViewModels
 {
     public abstract class BaseSheepViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [MaxLength(100, ErrorMessage = "Tag cannot exceed 100 characters")]
         [Display(Name = "Tag number")]
@@ -35,6 +37,20 @@ namespace SkaapBoek.Web.ViewModels
 
         [Required]
         [Display(Name = "Weight")]
+        [Range(0, 1000)]
         public float Weight { get; set; }
+
+        [Required]
+        [Display(Name = "Category")]
+        public int SheepCategoryId { get; set; }
+        public SelectList Categories { get; set; }
+
+        [Display(Name = "Pen number")]
+        public int? EnclosureId { get; set; }
+        public SelectList Enclosures { get; set; }
+
+        [Display(Name ="Feed")]
+        public int? FeedId { get; set; }
+        public SelectList FeedList { get; set; }
     }
 }

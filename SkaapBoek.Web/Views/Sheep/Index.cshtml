@@ -31,38 +31,42 @@
           <th class="filterable"><div>Gender</div></th>
           <th class="filterable"><div>Weight (kg)</div></th>
           <th class="filterable"><div>Birth Date</div></th>
+          <th class="filterable"><div>Mother</div></th>
+          <th class="filterable"><div>Father</div></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         @foreach (var sheep in Model.HerdSheep)
         {
-          <tr>
-            <td>@sheep.TagNumber</td>
-            <td>@sheep.Color.Name</td>
-            <td>@sheep.SheepStatus.Name</td>
-            <td>@sheep.Gender.Type</td>
-            <td>@sheep.Weight</td>
-            <td>@sheep.BirthDate.ToShortDateString()</td>
-            <td>
-              <div class="d-flex align-content-center">
-                <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@sheep.Id"
-                   data-toggle="tooltip" data-placement="top" title="View">
-                  <i class="material-icons">search</i>
-                </a>
-                <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@sheep.Id"
-                   data-toggle="tooltip" data-placement="top" title="Edit">
-                  <i class="material-icons">edit</i>
-                </a>
-                <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
-                  <button class="icon-button--delete" data-user-id="@sheep.Id"
-                          type="button" data-toggle="modal" data-target="#deleteModal">
-                    <i class="material-icons">delete</i>
-                  </button>
-                </span>
-              </div>
-            </td>
-          </tr>
+        <tr>
+          <td>@sheep.TagNumber</td>
+          <td>@sheep.Color.Name</td>
+          <td>@sheep.SheepStatus.Name</td>
+          <td>@sheep.Gender.Type</td>
+          <td>@sheep.Weight</td>
+          <td>@sheep.BirthDate.ToShortDateString()</td>
+          <td>@(sheep.Mother?.TagNumber ?? "None")</td>
+          <td>@(sheep.Father?.TagNumber ?? "None")</td>
+          <td>
+            <div class="d-flex align-content-center">
+              <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@sheep.Id"
+                 data-toggle="tooltip" data-placement="top" title="View">
+                <i class="material-icons">search</i>
+              </a>
+              <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@sheep.Id"
+                 data-toggle="tooltip" data-placement="top" title="Edit">
+                <i class="material-icons">edit</i>
+              </a>
+              <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
+                <button class="icon-button--delete" data-user-id="@sheep.Id"
+                        type="button" data-toggle="modal" data-target="#deleteModal">
+                  <i class="material-icons">delete</i>
+                </button>
+              </span>
+            </div>
+          </td>
+        </tr>
         }
       </tbody>
     </table>
@@ -74,66 +78,6 @@ else
 {
   <div class="alert alert-info">
     <p>No sheep are currently registered in the herd category.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
-  </div>
-}
-
-<h4 class="text-light mb-3 mt-3">Children</h4>
-@if (Model.FeedlotMembers.Any())
-{
-  <div class="table-responsive-md text-light">
-    <table id="childTable" class="table table-striped table-dark table-hover" style="width:100%">
-      <thead>
-        <tr>
-          <th class="filterable"><div>Tag</div></th>
-          <th class="filterable"><div>Tag Color</div></th>
-          <th class="filterable"><div>State</div></th>
-          <th class="filterable"><div>Gender</div></th>
-          <th class="filterable"><div>Weight (kg)</div></th>
-          <th class="filterable"><div>Birth Date</div></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach (var sheep in Model.FeedlotMembers)
-        {
-          <tr>
-            <td>@sheep.TagNumber</td>
-            <td>@sheep.Color.Name</td>
-            <td>@sheep.SheepStatus.Name</td>
-            <td>@sheep.Gender.Type</td>
-            <td>@sheep.Weight</td>
-            <td>@sheep.BirthDate.ToShortDateString()</td>
-            <td>
-              <div class="d-flex align-content-center">
-                <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@sheep.Id"
-                   data-toggle="tooltip" data-placement="top" title="View">
-                  <i class="material-icons">search</i>
-                </a>
-                <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@sheep.Id"
-                   data-toggle="tooltip" data-placement="top" title="Edit">
-                  <i class="material-icons">edit</i>
-                </a>
-                <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
-                  <button class="icon-button--delete" data-user-id="@sheep.Id"
-                          type="button" data-toggle="modal" data-target="#deleteModal">
-                    <i class="material-icons">delete</i>
-                  </button>
-                </span>
-              </div>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-    <h2></h2>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
-  </div>
-}
-else
-{
-  <div class="alert alert-info">
-    <p>No sheep are currently registered in the feedlot category.</p>
     <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
   </div>
 }

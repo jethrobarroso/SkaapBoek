@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkaapBoek.DAL", "SkaapBoek.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkaapBoek.Core", "SkaapBoek.Core\SkaapBoek.Core.csproj", "{B7DA8FCD-8F49-4C0E-9F6E-4B583341F298}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkaapBoek.Tests", "SkaapBoek.Tests\SkaapBoek.Tests.csproj", "{AD3D192B-E0A5-4A50-ABA5-63BCD9DBA433}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B7DA8FCD-8F49-4C0E-9F6E-4B583341F298}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7DA8FCD-8F49-4C0E-9F6E-4B583341F298}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7DA8FCD-8F49-4C0E-9F6E-4B583341F298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3D192B-E0A5-4A50-ABA5-63BCD9DBA433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3D192B-E0A5-4A50-ABA5-63BCD9DBA433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3D192B-E0A5-4A50-ABA5-63BCD9DBA433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3D192B-E0A5-4A50-ABA5-63BCD9DBA433}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

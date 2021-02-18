@@ -4,6 +4,7 @@ import * as templateViews from './views/templates.js'
 import * as projectViews from './views/projects.js'
 import * as groupViews from './views/groups.js'
 import * as taskViews from './views/tasks.js'
+import * as enclosureViews from './views/enclosures.js'
 
 document.addEventListener("DOMContentLoaded", () => {
     $('[data-toggle="tooltip"]').tooltip();
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //    listroles: adminListRoles
         //}
         feed: {
-            list: feedViews.list,
+            index: feedViews.list,
             details: feedViews.details,
             create: feedViews.create
         },
@@ -33,21 +34,28 @@ document.addEventListener("DOMContentLoaded", () => {
             edit: sheepViews.edit,
         },
         templates: {
-            list: templateViews.list,
+            index: templateViews.list,
             details: templateViews.details,
         },
         projects: {
-            list: projectViews.list,
+            index: projectViews.list,
             details: projectViews.details,
             edit: projectViews.edit,
         },
         groups: {
-            list: groupViews.list,
+            index: groupViews.list,
             details: groupViews.details,
             edit: groupViews.edit,
+            create: groupViews.create,
+        },
+        enclosures: {
+            index: enclosureViews.index,
+            details: enclosureViews.details,
+            edit: enclosureViews.edit,
+            create: enclosureViews.edit,
         },
         tasks: {
-            list: taskViews.list,
+            index: taskViews.list,
             details: taskViews.details,
         }
     }

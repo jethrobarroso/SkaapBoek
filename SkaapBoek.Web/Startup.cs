@@ -37,8 +37,7 @@ namespace SkaapBoek.Web
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
-                //.AddRazorRuntimeCompilation();
+            }).AddRazorRuntimeCompilation();
 
             services.AddDbContext<AppDbContext>(options =>
             {
@@ -56,9 +55,10 @@ namespace SkaapBoek.Web
             });
 
             services.AddScoped<ISheepService, SheepService>();
-            services.AddScoped<IChildService, ChildService>();
             services.AddScoped<IFeedService, FeedService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IEnclosureService, EnclosureService>();
+            services.AddScoped<IGroupService, GroupService>();
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 //options.Password.RequiredLength = 10;

@@ -10,7 +10,7 @@ using SkaapBoek.DAL;
 namespace SkaapBoek.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210214152506_Init")]
+    [Migration("20210218113553_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,34 +20,6 @@ namespace SkaapBoek.DAL.Migrations
                 .HasAnnotation("ProductVersion", "3.1.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("SkaapBoek.Core.Cage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FeedId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
-
-                    b.HasIndex("FeedId");
-
-                    b.ToTable("cage");
-                });
 
             modelBuilder.Entity("SkaapBoek.Core.Color", b =>
                 {
@@ -67,6 +39,49 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("color");
+                });
+
+            modelBuilder.Entity("SkaapBoek.Core.Enclosure", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EnclosureTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FeedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnclosureTypeId");
+
+                    b.HasIndex("FeedId");
+
+                    b.ToTable("enclosure");
+                });
+
+            modelBuilder.Entity("SkaapBoek.Core.EnclosureType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("enclosure_type");
                 });
 
             modelBuilder.Entity("SkaapBoek.Core.Feed", b =>
@@ -125,12 +140,12 @@ namespace SkaapBoek.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CageId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
+
+                    b.Property<int?>("EnclosureId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -138,7 +153,7 @@ namespace SkaapBoek.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CageId");
+                    b.HasIndex("EnclosureId");
 
                     b.ToTable("group");
                 });
@@ -178,21 +193,6 @@ namespace SkaapBoek.DAL.Migrations
                     b.ToTable("priority");
                 });
 
-            modelBuilder.Entity("SkaapBoek.Core.Relationship", b =>
-                {
-                    b.Property<int>("SheepId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ChildId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SheepId", "ChildId");
-
-                    b.HasIndex("ChildId");
-
-                    b.ToTable("relationship");
-                });
-
             modelBuilder.Entity("SkaapBoek.Core.Sheep", b =>
                 {
                     b.Property<int>("Id")
@@ -206,19 +206,25 @@ namespace SkaapBoek.DAL.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CageId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ColorId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("CostPrice")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<int?>("EnclosureId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FatherId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("FeedId")
                         .HasColumnType("int");
 
                     b.Property<int>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MotherId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("SalePrice")
@@ -240,13 +246,21 @@ namespace SkaapBoek.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CageId");
-
                     b.HasIndex("ColorId");
+
+                    b.HasIndex("EnclosureId");
+
+                    b.HasIndex("FatherId")
+                        .IsUnique()
+                        .HasFilter("[FatherId] IS NOT NULL");
 
                     b.HasIndex("FeedId");
 
                     b.HasIndex("GenderId");
+
+                    b.HasIndex("MotherId")
+                        .IsUnique()
+                        .HasFilter("[MotherId] IS NOT NULL");
 
                     b.HasIndex("SheepCategoryId");
 
@@ -381,33 +395,32 @@ namespace SkaapBoek.DAL.Migrations
                     b.ToTable("task_tamplate");
                 });
 
-            modelBuilder.Entity("SkaapBoek.Core.Cage", b =>
+            modelBuilder.Entity("SkaapBoek.Core.Enclosure", b =>
                 {
-                    b.HasOne("SkaapBoek.Core.Color", "Color")
-                        .WithMany()
-                        .HasForeignKey("ColorId")
+                    b.HasOne("SkaapBoek.Core.EnclosureType", "Type")
+                        .WithMany("Enclosures")
+                        .HasForeignKey("EnclosureTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SkaapBoek.Core.Feed", "Feed")
                         .WithMany()
                         .HasForeignKey("FeedId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SkaapBoek.Core.Group", b =>
                 {
-                    b.HasOne("SkaapBoek.Core.Cage", null)
-                        .WithMany("GroupedSheep")
-                        .HasForeignKey("CageId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("SkaapBoek.Core.Enclosure", "Enclosure")
+                        .WithMany("ContainedGroups")
+                        .HasForeignKey("EnclosureId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("SkaapBoek.Core.GroupedSheep", b =>
                 {
                     b.HasOne("SkaapBoek.Core.Group", "Group")
-                        .WithMany("GroupedHerdMembers")
+                        .WithMany("GroupedSheep")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -419,44 +432,38 @@ namespace SkaapBoek.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SkaapBoek.Core.Relationship", b =>
-                {
-                    b.HasOne("SkaapBoek.Core.Sheep", "Child")
-                        .WithMany("RelatedToChildren")
-                        .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SkaapBoek.Core.Sheep", "Parent")
-                        .WithMany("RelatedToParents")
-                        .HasForeignKey("SheepId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SkaapBoek.Core.Sheep", b =>
                 {
-                    b.HasOne("SkaapBoek.Core.Cage", "Cage")
-                        .WithMany("CagedSheep")
-                        .HasForeignKey("CageId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("SkaapBoek.Core.Color", "Color")
                         .WithMany("Sheep")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("SkaapBoek.Core.Enclosure", "Enclosure")
+                        .WithMany("ContainedSheep")
+                        .HasForeignKey("EnclosureId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("SkaapBoek.Core.Sheep", "Father")
+                        .WithOne()
+                        .HasForeignKey("SkaapBoek.Core.Sheep", "FatherId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("SkaapBoek.Core.Feed", "CurrentFeed")
                         .WithMany("Sheep")
                         .HasForeignKey("FeedId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("SkaapBoek.Core.Gender", "Gender")
                         .WithMany("Sheep")
                         .HasForeignKey("GenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("SkaapBoek.Core.Sheep", "Mother")
+                        .WithOne()
+                        .HasForeignKey("SkaapBoek.Core.Sheep", "MotherId");
 
                     b.HasOne("SkaapBoek.Core.SheepCategory", "Category")
                         .WithMany("Sheep")

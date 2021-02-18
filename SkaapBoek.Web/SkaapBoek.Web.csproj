@@ -6,6 +6,10 @@
 		<UserSecretsId>fc1dfa2e-f18c-4868-89df-421802883542</UserSecretsId>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Content Remove="wwwroot\assets\js\views\enclosures.js" />
+	</ItemGroup>
+
 	<!--<Target Name="ParcelBeforePublish" BeforeTargets="PrepareForPublish">
 		<Exec Command="npm run build" />
 	</Target>-->
@@ -20,6 +24,7 @@
 	  <None Include="wwwroot\assets\js\multilist.js" />
 	  <None Include="wwwroot\assets\js\site.js" />
 	  <None Include="wwwroot\assets\js\views\feed.js" />
+	  <None Include="wwwroot\assets\js\views\enclosures.js" />
 	  <None Include="wwwroot\assets\js\views\groups.js" />
 	  <None Include="wwwroot\assets\js\views\projects.js" />
 	  <None Include="wwwroot\assets\js\views\sheep.js" />

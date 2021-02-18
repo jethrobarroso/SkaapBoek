@@ -36,7 +36,25 @@ export function create() {
 
 export function edit() {
     const multiList = document.querySelector('.multilist-container');
-    const multi = new MultiList(multiList, "SelectedChildIds");
+    new MultiList(multiList, "SelectedChildIds");
+
+    $('#FeedId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select feed"
+    });
+
+    $('#FatherId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select father"
+    });
+
+    $('#MotherId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select mother"
+    });
 }
 
 export function details() {

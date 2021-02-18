@@ -53,7 +53,12 @@ export class ModalDeletePrompt {
      * @param {HTMLElement} table The table element 
      */
     fromTable(table) {
+        if (!table) {
+            return;
+            
+        }
         const buttons = table.querySelectorAll('button');
+
         if (buttons.length !== 0 && helper.meetsModalRequirements(this.modal)) {
             for (const btn of buttons) {
                 let row = btn.closest('tr');

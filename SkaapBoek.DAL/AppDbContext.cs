@@ -15,15 +15,15 @@ namespace SkaapBoek.DAL
         public DbSet<Gender> GenderSet { get; set; }
         public DbSet<SheepStatus> SheepStateSet { get; set; }
         public DbSet<Feed> FeedSet { get; set; }
-        public DbSet<Relationship> RelationshipSet { get; set; }
         public DbSet<Priority> PrioritySet { get; set; }
         public DbSet<Status> StatusSet { get; set; }
         public DbSet<Group> GroupSet { get; set; }
-        public DbSet<GroupedSheep> GroupedHerdMemberSet { get; set; }
+        public DbSet<GroupedSheep> GroupedSheepSet { get; set; }
         public DbSet<TaskInstance> TaskInstanceSet { get; set; }
         public DbSet<TaskTemplate> TaskTemplateSet { get; set; }
         public DbSet<Color> ColorSet { get; set; }
-        public DbSet<Cage> CageSet { get; set; }
+        public DbSet<Enclosure> EnclosureSet { get; set; }
+        public DbSet<EnclosureType> EnclosureTypeSet { get; set; }
         public DbSet<SheepCategory> SheepCategorySet { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -37,32 +37,18 @@ namespace SkaapBoek.DAL
 
             builder.Entity<Feed>().ToTable("feed");
             builder.Entity<Gender>().ToTable("gender");
-            builder.Entity<Relationship>().ToTable("relationship");
+            builder.Entity<Status>().ToTable("status");
             builder.Entity<Sheep>().ToTable("sheep");
+            builder.Entity<SheepCategory>().ToTable("sheep_category");
             builder.Entity<SheepStatus>().ToTable("state");
             builder.Entity<Group>().ToTable("group");
-            builder.Entity<Priority>().ToTable("priority");
             builder.Entity<GroupedSheep>().ToTable("grouped_herd_member");
-            builder.Entity<Status>().ToTable("status");
+            builder.Entity<Priority>().ToTable("priority");
             builder.Entity<TaskInstance>().ToTable("task_instance");
             builder.Entity<TaskTemplate>().ToTable("task_tamplate");
             builder.Entity<Color>().ToTable("color");
-            builder.Entity<Cage>().ToTable("cage");
-            builder.Entity<SheepCategory>().ToTable("sheep_category");
-
-            builder.Entity<Relationship>()
-                .HasKey(r => new { r.SheepId, r.ChildId });
-
-            builder.Entity<Relationship>()
-                .HasOne(r => r.Parent)
-                .WithMany(s => s.AsParentTo)
-                .HasForeignKey(r => r.SheepId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Relationship>()
-                .HasOne(r => r.Child)
-                .WithMany(c => c.AsChildTo)
-                .HasForeignKey(r => r.ChildId);
+            builder.Entity<Enclosure>().ToTable("enclosure");
+            builder.Entity<EnclosureType>().ToTable("enclosure_type");
 
             builder.Entity<GroupedSheep>()
                 .HasKey(sg => new { sg.SheepId, sg.GroupId });
@@ -74,7 +60,7 @@ namespace SkaapBoek.DAL
 
             builder.Entity<GroupedSheep>()
                 .HasOne(sg => sg.Group)
-                .WithMany(p => p.GroupedHerdMembers)
+                .WithMany(p => p.GroupedSheep)
                 .HasForeignKey(sg => sg.GroupId);
 
             builder.Entity<GroupedSheep>()
@@ -87,8 +73,30 @@ namespace SkaapBoek.DAL
 
             builder.Entity<GroupedSheep>()
                 .HasOne(hg => hg.Group)
-                .WithMany(g => g.GroupedHerdMembers)
+                .WithMany(g => g.GroupedSheep)
                 .HasForeignKey(hg => hg.GroupId);
+
+            builder.Entity<Sheep>(builder =>
+            {
+                builder.HasOne(s => s.Enclosure)
+                .WithMany(s => s.ContainedSheep)
+                .OnDelete(DeleteBehavior.SetNull);
+
+                builder.HasOne(s => s.CurrentFeed)
+                .WithMany(f => f.Sheep)
+                .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            builder.Entity<Group>()
+                .HasOne(g => g.Enclosure)
+                .WithMany(e => e.ContainedGroups)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Sheep>(builder =>
+            {
+                builder.HasOne(s => s.Father).WithOne().HasForeignKey<Sheep>(s => s.FatherId);
+                builder.HasOne(s => s.Mother).WithOne().HasForeignKey<Sheep>(s => s.MotherId);
+            });
         }
     }
 }

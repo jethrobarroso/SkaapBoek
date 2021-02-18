@@ -45,12 +45,16 @@ namespace SkaapBoek.Core
         public int? FeedId { get; set; }
         public Feed CurrentFeed { get; set; }
 
-        public int? CageId { get; set; }
-        public Cage Cage { get; set; }
+        public int? EnclosureId { get; set; }
+        public Enclosure Enclosure { get; set; }
+
+        public int? MotherId { get; set; }
+        public Sheep Mother { get; set; }
+
+        public int? FatherId { get; set; }
+        public Sheep Father { get; set; }
 
         public ICollection<GroupedSheep> GroupedSheep { get; set; }
-        public ICollection<Relationship> AsParentTo { get; set; }
-        public ICollection<Relationship> AsChildTo { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
     }
 }

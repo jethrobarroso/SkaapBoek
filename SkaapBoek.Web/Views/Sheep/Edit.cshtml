@@ -4,6 +4,26 @@
   ViewBag.Title = "Edit Sheep";
 }
 
+@if (TempData["Success"] != null)
+{
+  <div class="alert alert-success alert-dismissible fade show">
+    @TempData["Success"]
+    <button type="button" class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+  </div>
+}
+
+@if (TempData["Failure"] != null)
+{
+  <div class="alert alert-danger alert-dismissible fade show">
+    @TempData["Failure"]
+    <button type="button" class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+  </div>
+}
+
 <div class="shadow rounded bg-secondary p-1 pl-3 mb-3">
   <h1 class="text-light mb-3 display-4">Edit - @Model.TagNumber</h1>
 </div>
@@ -23,6 +43,33 @@
           <select asp-for="ColorId" class="form-control" asp-items="Model.Colors"></select>
           <span asp-validation-for="ColorId" class="text-danger"></span>
         </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-3 mb-3">
+          <label class="w-100" asp-for="GenderId">Gender</label>
+          @foreach (var gender in Model.Genders)
+          {
+            <div class="form-check">
+              <input class="form-check-input" id="Gender[@gender.Id]" asp-for="GenderId" type="radio" value="@gender.Id" />
+              <label class="form-check-label" for="Gender[@gender.Id]">@gender.Type</label>
+            </div>
+          }
+          <span class="text-danger" asp-validation-for="GenderId"></span>
+        </div>
+        <div class="col-md-3 mb-3">
+          <label asp-for="SheepStatusId"></label>
+          <select asp-for="SheepStatusId" class="custom-select" asp-items="Model.StatusList"></select>
+          <span asp-validation-for="SheepStatusId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label asp-for="SheepCategoryId"></label>
+          <select asp-for="SheepCategoryId" class="form-control" asp-items="@Model.Categories">
+            <option value="" selected hidden disabled></option>
+          </select>
+          <span asp-validation-for="SheepCategoryId" class="text-danger"></span>
+        </div>
+      </div>
+      <div class="form-row">
         <div class="col-md-6 mb-3">
           <label asp-for="Weight"></label>
           <div class="input-group">
@@ -32,6 +79,14 @@
             </div>
           </div>
           <span asp-validation-for="Weight" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label asp-for="FeedId"></label>
+          <select asp-for="FeedId" class="form-control" asp-items="@Model.FeedList"
+                  style="width: 100%;">
+            <option value="" selected hidden disabled></option>
+          </select>
+          <span asp-validation-for="FeedId" class="text-danger"></span>
         </div>
       </div>
       <div class="form-row">
@@ -57,23 +112,7 @@
         </div>
       </div>
       <div class="form-row">
-        <div class="col-md-3 mb-3">
-          <label class="w-100" asp-for="GenderId">Gender</label>
-          @foreach (var gender in Model.Genders)
-          {
-            <div class="form-check">
-              <input class="form-check-input" id="Gender[@gender.Id]" asp-for="GenderId" type="radio" value="@gender.Id" />
-              <label class="form-check-label" for="Gender[@gender.Id]">@gender.Type</label>
-            </div>
-          }
-          <span class="text-danger" asp-validation-for="GenderId"></span>
-        </div>
-        <div class="col-md-3 mb-3">
-          <label asp-for="SheepStatusId"></label>
-          <select asp-for="SheepStatusId" class="custom-select" asp-items="Model.StatusList"></select>
-          <span asp-validation-for="SheepStatusId" class="text-danger"></span>
-        </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6 offset-md-6 mb-3">
           <label asp-for="SalePrice"></label>
           <div class="input-group">
             <div class="input-group-prepend">
@@ -85,85 +124,116 @@
         </div>
       </div>
     </div>
-    <div class="mt-3">
-      <h4>Relationships</h4>
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#children" role="tab" aria-controls="home" aria-selected="true">Home</a>
-        </li>
-        <li class="nav-item" role="presentation">
-          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#parents" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-        </li>
-      </ul>
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
-      </div>
-      <div class="mt-3 mb-3">
-        <div class="multilist-container d-flex justify-content-between">
-          <div class="flex-grow-1 card bg-secondary sheep-source">
-            <div class="card-header text-light">
-              <strong>Available sheep</strong>
-            </div>
-            <div class="form-group m-1">
-              <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" />
-              </div>
-            </div>
-            <ul class="list-group">
-              @foreach (var availableChild in Model.AvailableChildren)
-              {
-                <li data-item-id="@availableChild.Id"
-                    class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@availableChild.TagNumber</span>
-                </li>
-              }
-            </ul>
-          </div>
-          <div class="align-self-center">
-            <div class="m-2">
-              <div>
-                <div class="multi-btn-target btn btn-info mt-1 mb-1">
-                  <i class="material-icons align-items-center">double_arrow</i>
-                </div>
-              </div>
-              <div>
-                <div class="multi-btn-source btn btn-info mt-1 mb-1">
-                  <i class="material-icons align-items-center">double_arrow</i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex-grow-1 card bg-secondary sheep-target">
-            <div class="card-header text-light">
-              <strong>Selected sheep</strong>
-            </div>
-            <div class="form-group m-1">
-              <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" />
-              </div>
-            </div>
-            <ul class="list-group">
-              @for (int i = 0; i < Model.SelectedChildren.Count(); i++)
-              {
-                <li data-item-id="@Model.SelectedChildren[i].Id"
-                    class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@Model.SelectedChildren[i].TagNumber</span>
-                  <input hidden name="@nameof(Model.SelectedChildIds)" value="@Model.SelectedChildren[i].Id" />
-                </li>
-              }
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mt-3">
       <a asp-action="Index" class="btn btn-outline-secondary text-light">Cancel</a>
       <input type="submit" class="btn btn-primary" value="Update" />
     </div>
   </form>
+</div>
+
+<div class="col-lg-6">
+  <h4 class="mt-4 mb-4 text-light">Relationships</h4>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#children" role="tab" aria-controls="home" aria-selected="true">Children</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#parents" role="tab" aria-controls="profile" aria-selected="false">Parents</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="children" role="tabpanel" aria-labelledby="children-tab">
+        <div class="mt-3 mb-3">
+          @*Children Tab*@
+          <form method="post" asp-action="EditChildren" asp-route-id="@Model.Id">
+            <div class="multilist-container d-flex justify-content-between">
+              <div class="flex-grow-1 card bg-secondary sheep-source">
+                <div class="card-header text-light">
+                  <strong>Available sheep</strong>
+                </div>
+                <div class="form-group m-1">
+                  <div class="input-group">
+                    <input type="search" class="form-control" placeholder="Search" />
+                  </div>
+                </div>
+                <ul class="list-group">
+                  @foreach (var availableChild in Model.AvailableChildren)
+                  {
+                    <li data-item-id="@availableChild.Id"
+                        class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
+                      <span>@availableChild.TagNumber</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+              <div class="align-self-center">
+                <div class="m-2">
+                  <div>
+                    <div class="multi-btn-target btn btn-info mt-1 mb-1">
+                      <i class="material-icons align-items-center">double_arrow</i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="multi-btn-source btn btn-info mt-1 mb-1">
+                      <i class="material-icons align-items-center">double_arrow</i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-grow-1 card bg-secondary sheep-target">
+                <div class="card-header text-light">
+                  <strong>Selected sheep</strong>
+                </div>
+                <div class="form-group m-1">
+                  <div class="input-group">
+                    <input type="search" class="form-control" placeholder="Search" />
+                  </div>
+                </div>
+                <ul class="list-group">
+                  @for (int i = 0; i < Model.SelectedChildren.Count(); i++)
+                  {
+                    <li data-item-id="@Model.SelectedChildren[i].Id"
+                        class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
+                      <span>@Model.SelectedChildren[i].TagNumber</span>
+                      <input hidden name="@nameof(Model.SelectedChildIds)" value="@Model.SelectedChildren[i].Id" />
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+            <div class="mt-3">
+              <input type="submit" class="btn btn-primary" value="Update relationship" />
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
+        <form method="post" asp-action="EditParents" asp-route-id="@Model.Id">
+          <div class="form-row text-light mt-3">
+            <div class="col-md-6 mb-3">
+              <label asp-for="MotherId"></label>
+              <select asp-for="MotherId" class="form-control" asp-items="@Model.Ewes"
+                      style="width: 100%;">
+                <option value="" selected hidden disabled></option>
+              </select>
+              <span asp-validation-for="MotherId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label asp-for="FatherId"></label>
+              <select asp-for="FatherId" class="form-control" asp-items="@Model.Rams"
+                      style="width: 100%;">
+                <option value="" selected hidden disabled></option>
+              </select>
+              <span asp-validation-for="FatherId" class="text-danger"></span>
+            </div>
+            <div class="mt-3">
+              <input type="submit" class="btn btn-primary" value="Update relationship" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 </div>
 
 @section Scripts{

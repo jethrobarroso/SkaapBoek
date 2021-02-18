@@ -10,20 +10,28 @@
   <form class="text-light" asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @*<input type="hidden" asp-for="Id" />*@
-    <div class="form-row">
-      <div class="col-4 mb-3">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-      </div>
+  <div class="form-row">
+    <div class="col-6 mb-3">
+      <label asp-for="Name" class="control-label"></label>
+      <input asp-for="Name" class="form-control" />
+      <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <div class="form-row mb-3">
+    <div class="col-6 mb-3">
+      <label asp-for="EnclosureId" class="control-label"></label>
+      <select asp-for="EnclosureId" class="form-control" asp-items="@Model.Enclosures">
+        <option value="0" hidden disabled selected></option>
+      </select>
+      <span asp-validation-for="EnclosureId" class="text-danger"></span>
+    </div>
+  </div>
+    <div class="form-row mb-4">
       <div class="col-12">
         <label asp-for="Description" class="control-label"></label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
       </div>
     </div>
+    <h4 class="h4 text-light mb-4">Assignments</h4>
     <div class="multilist-container d-flex justify-content-between">
       <div class="flex-grow-1 card bg-secondary sheep-source">
         <div class="card-header text-light">

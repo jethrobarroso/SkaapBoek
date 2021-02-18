@@ -16,12 +16,12 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<Sheep>> GetFullNoTrack();
         Task<IEnumerable<Sheep>> GetSheepPerGenderNoTrack(string genderName);
         Task<bool> ContainsSheep(int id);
-        Task<Sheep> GetParentWithChildrenNoTrack(int id);
         Task<List<Sheep>> GetAvailableChildren(Sheep currentSheep);
         Task<List<Sheep>> GetSelectedChildren(Sheep currentSheep);
         Task<IEnumerable<Sheep>> GetHerdMembersNoTrack();
         Task<IEnumerable<Sheep>> GetFeedLotMembersNoTrack();
         Task<List<Sheep>> GetAllChildrenNoTrack(Sheep currentSheep);
+        Task<ICollection<Sheep>> GetSheepByIds(int[] ids);
     }
 
     public class SheepService : BaseService<Sheep>, ISheepService
@@ -37,7 +37,6 @@ namespace SkaapBoek.DAL.Services
                 .Include(s => s.Gender)
                 .Include(s => s.SheepStatus)
                 .Include(s => s.Color)
-                .Include(s => s.AsParentTo)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             return sheep;
@@ -101,49 +100,29 @@ namespace SkaapBoek.DAL.Services
             return sheep != null;
         }
 
-        public async Task<Sheep> GetParentWithChildrenNoTrack(int id)
+        public async Task<ICollection<Sheep>> GetSheepByIds(int[] ids)
         {
+            if (ids is null)
+                return new List<Sheep>();
+
             return await Context.SheepSet
-                .Include(s => s.Gender)
-                .Include(s => s.SheepStatus)
-                .Include(s => s.Color)
-                .Include(s => s.AsParentTo)
-                    .ThenInclude(r => r.Child.Gender)
-                .Include(s => s.AsParentTo)
-                    .ThenInclude(r => r.Child.Color)
-                .Include(s => s.AsParentTo)
-                    .ThenInclude(r => r.Child.SheepStatus)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.Id == id);
-        }
-
-        public async Task<List<Sheep>> GetAvailableChildren(Sheep currentSheep)
-        {
-            var parentGender = currentSheep.Gender.Type;
-            return await (from c in Context.SheepSet
-                          where !c.AsParentTo.Any(r => r.Parent.Gender.Type == parentGender)
-                          select c).ToListAsync();
-
-        }
-
-        public async Task<List<Sheep>> GetSelectedChildren(Sheep currentSheep)
-        {
-            return await Context.RelationshipSet
-                .Where(r => r.SheepId == currentSheep.Id)
-                .Select(r => r.Child).ToListAsync();
-        }
-
-        public async Task<List<Sheep>> GetAllChildrenNoTrack(Sheep currentSheep)
-        {
-            return await Context.RelationshipSet
-                .Where(r => r.SheepId == currentSheep.Id)
-                .Include(r => r.Child.Color)
-                .Include(r => r.Child.Gender)
-                .Include(r => r.Child.Category)
-                .Include(r => r.Child.SheepStatus)
-                .Select(r => r.Child)
-                .AsNoTracking()
+                .Where(s => ids.Contains(s.Id))
                 .ToListAsync();
+        }
+
+        public Task<List<Sheep>> GetAvailableChildren(Sheep currentSheep)
+        {
+            return null;
+        }
+
+        public Task<List<Sheep>> GetSelectedChildren(Sheep currentSheep)
+        {
+            return null;
+        }
+
+        public Task<List<Sheep>> GetAllChildrenNoTrack(Sheep currentSheep)
+        {
+            return null;
         }
     }
 }

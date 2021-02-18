@@ -35,8 +35,15 @@ namespace SkaapBoek.DAL
                 new SheepCategory { Name = "Herd" },
                 new SheepCategory { Name = "Feedlot" }
             };
-
             context.SheepCategorySet.AddRange(sheepCategories);
+            context.SaveChanges();
+
+            var enclosureTypes = new EnclosureType[]
+            {
+                new EnclosureType{ Name = "Cage" },
+                new EnclosureType{ Name = "Corral" }
+            };
+            context.EnclosureTypeSet.AddRange(enclosureTypes);
             context.SaveChanges();
 
             var genders = new Gender[]
@@ -147,7 +154,8 @@ namespace SkaapBoek.DAL
                     BirthDate = new DateTime(2019,5,4),
                     AcquireDate = new DateTime(2019,1,1),
                     ColorId = colors.Single(c => c.Name == "Black").Id,
-                    SheepCategoryId = sheepCategories[0].Id
+                    SheepCategoryId = sheepCategories[0].Id,
+                    
                 },
             };
 
@@ -207,33 +215,6 @@ namespace SkaapBoek.DAL
             };
 
             context.SheepSet.AddRange(children);
-            context.SaveChanges();
-
-            var relationships = new Relationship[]
-            {
-                new Relationship 
-                { 
-                    SheepId = sheep[1].Id,
-                    ChildId = children[0].Id
-                },
-                new Relationship
-                {
-                    SheepId = sheep[1].Id,
-                    ChildId = children[1].Id
-                },
-                new Relationship
-                {
-                    SheepId = sheep[1].Id,
-                    ChildId = children[2].Id
-                },
-                new Relationship
-                {
-                    SheepId = sheep[1].Id,
-                    ChildId = children[3].Id
-                },
-            };
-
-            context.RelationshipSet.AddRange(relationships);
             context.SaveChanges();
         }
     }
