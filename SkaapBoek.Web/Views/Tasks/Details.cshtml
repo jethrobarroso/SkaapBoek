@@ -8,40 +8,22 @@
     <div data-sb-tag="@Model.Name" class="card-header bg-secondary text-light">
       <h3>Details - @Model.Name</h3>
     </div>
-    <div class="card-body bg-dark text-light text-break">
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Description:</div>
-        <div class="col-sm-9 col">@Model.Description</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Start Date:</div>
-        <div class="col-sm-9 col">@Model.StartDate</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Duration (days):</div>
-        <div class="col-sm-9 col">@Model.DurationDays days</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Priority:</div>
-        <div class="col-sm-9 col">@Model.Priority.Name</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Status:</div>
-        <div class="col-sm-9 col">@Model.Status.Name</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Template:</div>
-        <div class="col-sm-9 col">@Model.TaskTemplate.Name</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Assigned sheep:</div>
-        <div class="col-sm-9 col">@Model.Sheep?.TagNumber</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-sm-3 col">Assigned Group:</div>
-        <div class="col-sm-9 col">@Model.Group?.Name</div>
-      </div>
-    </div>
+    <dl class="card-body bg-dark text-light text-break">
+      <dt class="col-sm-3">Description:</dt>
+      <dd class="col-sm-9">@Model.Description</dd>
+      <dt class="col-sm-3">Start Date:</dt>
+      <dd class="col-sm-9">@Model.StartDate</dd>
+      <dt class="col-sm-3">Duration (days):</dt>
+      <dd class="col-sm-9">@Model.DurationDays days</dd>
+      <dt class="col-sm-3">Priority:</dt>
+      <dd class="col-sm-9">@Model.Priority.Name</dd>
+      <dt class="col-sm-3">Status:</dt>
+      <dd class="col-sm-9">@Model.Status.Name</dd>
+      <dt class="col-sm-3">Assigned sheep:</dt>
+      <dd class="col-sm-9">@Model.Sheep?.TagNumber</dd>
+      <dt class="col-sm-3">Assigned Group:</dt>
+      <dd class="col-sm-9">@Model.Group?.Name</dd>
+    </dl>
     <div class="card-footer bg-secondary">
       <div class="m-3">
         <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>

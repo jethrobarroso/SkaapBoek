@@ -20,7 +20,6 @@ namespace SkaapBoek.DAL
         public DbSet<Group> GroupSet { get; set; }
         public DbSet<GroupedSheep> GroupedSheepSet { get; set; }
         public DbSet<TaskInstance> TaskInstanceSet { get; set; }
-        public DbSet<TaskTemplate> TaskTemplateSet { get; set; }
         public DbSet<Color> ColorSet { get; set; }
         public DbSet<Enclosure> EnclosureSet { get; set; }
         public DbSet<SheepCategory> SheepCategorySet { get; set; }
@@ -44,7 +43,6 @@ namespace SkaapBoek.DAL
             builder.Entity<GroupedSheep>().ToTable("grouped_herd_member");
             builder.Entity<Priority>().ToTable("priority");
             builder.Entity<TaskInstance>().ToTable("task_instance");
-            builder.Entity<TaskTemplate>().ToTable("task_tamplate");
             builder.Entity<Color>().ToTable("color");
             builder.Entity<Enclosure>().ToTable("enclosure");
 

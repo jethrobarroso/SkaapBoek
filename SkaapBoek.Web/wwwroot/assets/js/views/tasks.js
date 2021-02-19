@@ -1,6 +1,6 @@
 ﻿import * as common from '../common.js';
 
-export function list() {
+export function index() {
     const deleteModal = document.querySelector('.modal');
     const table = document.querySelector('table');
     const message = "Are you sure you want to delete template";
@@ -9,7 +9,7 @@ export function list() {
 
     obj.fromTable(table);
 
-    common.initDt();
+    common.initDt("taskTable");
 }
 
 export function details() {
@@ -22,5 +22,19 @@ export function details() {
 
     deleteButton.addEventListener('click', () => {
         form.action = deletePath + id;
+    });
+}
+
+export function create() {
+    $('#GroupId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select group"
+    });
+
+    $('#SheepId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select sheep"
     });
 }

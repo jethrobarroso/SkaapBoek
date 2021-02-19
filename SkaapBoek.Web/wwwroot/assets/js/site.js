@@ -55,8 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
             create: enclosureViews.edit,
         },
         tasks: {
-            index: taskViews.list,
+            index: taskViews.index,
             details: taskViews.details,
+            create: taskViews.create,
         }
     }
 })
