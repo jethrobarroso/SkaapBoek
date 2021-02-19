@@ -23,7 +23,6 @@ namespace SkaapBoek.DAL
         public DbSet<TaskTemplate> TaskTemplateSet { get; set; }
         public DbSet<Color> ColorSet { get; set; }
         public DbSet<Enclosure> EnclosureSet { get; set; }
-        public DbSet<EnclosureType> EnclosureTypeSet { get; set; }
         public DbSet<SheepCategory> SheepCategorySet { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -48,7 +47,6 @@ namespace SkaapBoek.DAL
             builder.Entity<TaskTemplate>().ToTable("task_tamplate");
             builder.Entity<Color>().ToTable("color");
             builder.Entity<Enclosure>().ToTable("enclosure");
-            builder.Entity<EnclosureType>().ToTable("enclosure_type");
 
             builder.Entity<GroupedSheep>()
                 .HasKey(sg => new { sg.SheepId, sg.GroupId });
@@ -94,8 +92,8 @@ namespace SkaapBoek.DAL
 
             builder.Entity<Sheep>(builder =>
             {
-                builder.HasOne(s => s.Father).WithOne().HasForeignKey<Sheep>(s => s.FatherId);
-                builder.HasOne(s => s.Mother).WithOne().HasForeignKey<Sheep>(s => s.MotherId);
+                builder.HasOne(s => s.Father).WithMany(s => s.ChildrenOfFather).HasForeignKey(s => s.FatherId);
+                builder.HasOne(s => s.Mother).WithMany(s => s.ChildrenOfMother).HasForeignKey(s => s.MotherId);
             });
         }
     }

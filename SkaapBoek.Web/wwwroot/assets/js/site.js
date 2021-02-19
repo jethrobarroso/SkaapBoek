@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             edit: projectViews.edit,
         },
         groups: {
-            index: groupViews.list,
+            index: groupViews.index,
             details: groupViews.details,
             edit: groupViews.edit,
             create: groupViews.create,

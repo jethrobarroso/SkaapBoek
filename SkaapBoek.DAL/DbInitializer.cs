@@ -38,14 +38,6 @@ namespace SkaapBoek.DAL
             context.SheepCategorySet.AddRange(sheepCategories);
             context.SaveChanges();
 
-            var enclosureTypes = new EnclosureType[]
-            {
-                new EnclosureType{ Name = "Cage" },
-                new EnclosureType{ Name = "Corral" }
-            };
-            context.EnclosureTypeSet.AddRange(enclosureTypes);
-            context.SaveChanges();
-
             var genders = new Gender[]
             {
                 new Gender { Type = "Male"},

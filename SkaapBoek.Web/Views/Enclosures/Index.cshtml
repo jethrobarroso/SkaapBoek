@@ -18,12 +18,11 @@
 
 @if (Model.Any())
 {
-  <div class="table-responsive-md">
+  <div class="table-responsive-md text-light">
     <table id="enclosuresTable" class="table table-striped table-dark table-hover">
       <thead>
         <tr>
           <th class="filterable">#</th>
-          <th class="filterable">Type</th>
           <th class="filterable">Feed</th>
           <th>Action</th>
         </tr>
@@ -33,7 +32,6 @@
         {
           <tr>
             <td>@enc.Number</td>
-            <td>@enc.Type.Name</td>
             <td>@(enc.Feed?.Name ?? "None")</td>
             <td>
               <div class="d-flex align-content-center">

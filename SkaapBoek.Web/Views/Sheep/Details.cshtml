@@ -4,25 +4,7 @@
   ViewBag.Title = "Sheep Details";
 }
 
-@if (TempData["Success"] != null)
-{
-  <div class="alert alert-success alert-dismissible fade show">
-    @TempData["Success"]
-    <button type="button" class="close" data-dismiss="alert">
-      <span>&times;</span>
-    </button>
-  </div>
-}
-
-@if (TempData["Failure"] != null)
-{
-  <div class="alert alert-danger alert-dismissible fade show">
-    @TempData["Failure"]
-    <button type="button" class="close" data-dismiss="alert">
-      <span>&times;</span>
-    </button>
-  </div>
-}
+<partial name="_UpdateMessage" />
 
 <a asp-action="Index" class=" m-3 home-link-arrow d-inline-flex align-items-center">
   <svg><use xlink:href="/images/main.svg#icon-arrow-left"></use></svg>
@@ -113,7 +95,7 @@
            data-sb-id="@Model.Mother.Id"
            data-sb-type="mother" class="card">
         <div class="card-header bg-secondary text-light">
-          <h3>Father - @Model.Mother.TagNumber</h3>
+          <h3>Mother - @Model.Mother.TagNumber</h3>
         </div>
         <div class="card-body bg-dark text-light">
           <dl class="row">

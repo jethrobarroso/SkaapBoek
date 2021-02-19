@@ -32,12 +32,21 @@ export function create() {
             closeOnSelect: !$(this).attr('multiple'),
         });
     });
+
+    $('#FatherId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select father"
+    });
+
+    $('#MotherId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select mother"
+    });
 }
 
 export function edit() {
-    const multiList = document.querySelector('.multilist-container');
-    new MultiList(multiList, "SelectedChildIds");
-
     $('#FeedId').select2({
         theme: 'bootstrap4',
         allowClear: true,

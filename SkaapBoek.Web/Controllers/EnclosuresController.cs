@@ -42,7 +42,6 @@ namespace SkaapBoek.Web.Controllers
             var model = new EnclosureEditViewModel
             {
                 Feed = new SelectList(await _enclosureService.GetAllFeed(), "Id", "Name"),
-                Types = new SelectList(await _enclosureService.GetTypes(), "Id", "Name"),
                 SelectedGroups = new List<Group>(),
                 SelectedSheep = new List<Sheep>(),
                 AvailableGroups = await _enclosureService.GetAvailableGroups(),
@@ -62,7 +61,6 @@ namespace SkaapBoek.Web.Controllers
                     Number = model.Number,
                     Description = model.Description,
                     FeedId = model.FeedId,
-                    EnclosureTypeId = model.EnclosureTypeId,
                     ContainedGroups = await _groupService.GetGroupsByIds(model.GroupIds),
                     ContainedSheep = await _sheepService.GetSheepByIds(model.SheepIds),
                 };
@@ -98,8 +96,6 @@ namespace SkaapBoek.Web.Controllers
                 Description = enc.Description,
                 FeedId = enc.FeedId,
                 Feed = new SelectList(await _enclosureService.GetAllFeed(), "Id", "Name"),
-                EnclosureTypeId = enc.EnclosureTypeId,
-                Types = new SelectList(await _enclosureService.GetTypes(), "Id", "Name"),
                 AvailableGroups = await _enclosureService.GetAvailableGroups(),
                 AvailableSheep = await _enclosureService.GetAvailableSheep(),
                 SelectedGroups = enc.ContainedGroups.ToList(),
@@ -131,7 +127,6 @@ namespace SkaapBoek.Web.Controllers
                 enc.Number = model.Number;
                 enc.Description = model.Description;
                 enc.FeedId = model.FeedId;
-                enc.EnclosureTypeId = model.EnclosureTypeId;
                 enc.ContainedGroups = await _groupService.GetGroupsByIds(model.GroupIds);
                 enc.ContainedSheep = await _sheepService.GetSheepByIds(model.SheepIds);
 

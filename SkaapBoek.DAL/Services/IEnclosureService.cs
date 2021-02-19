@@ -15,7 +15,6 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<Sheep>> GetAvailableSheep();
         Task<Enclosure> GetById(int id);
         Task<Enclosure> GetByIdFullNoTrack(int id);
-        Task<IEnumerable<EnclosureType>> GetTypes();
     }
 
     public class EnclosureService : BaseService<Enclosure>, IEnclosureService
@@ -26,7 +25,6 @@ namespace SkaapBoek.DAL.Services
         {
             return await base.GetAll()
                 .Include(c => c.Feed)
-                .Include(c => c.Type)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -37,7 +35,6 @@ namespace SkaapBoek.DAL.Services
                 .Include(e => e.ContainedSheep)
                 .Include(e => e.ContainedGroups)
                 .Include(e => e.Feed)
-                .Include(e => e.Type)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
@@ -54,16 +51,8 @@ namespace SkaapBoek.DAL.Services
                     .ThenInclude(s => s.Category)
                 .Include(e => e.ContainedGroups)
                 .Include(e => e.Feed)
-                .Include(e => e.Type)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == id);
-        }
-
-        public async Task<IEnumerable<EnclosureType>> GetTypes()
-        {
-            return await Context.EnclosureTypeSet
-                .AsNoTracking()
-                .ToListAsync();
         }
 
         public async Task<IEnumerable<Group>> GetAvailableGroups()

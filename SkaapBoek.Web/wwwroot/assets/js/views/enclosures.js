@@ -9,8 +9,7 @@ export function index() {
     const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
 
     obj.fromTable(table);
-
-    common.initDt('groupTable');
+    common.initDt('enclosuresTable');
 }
 
 export function edit() {

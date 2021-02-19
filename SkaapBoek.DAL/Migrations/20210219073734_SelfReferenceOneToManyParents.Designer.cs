@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkaapBoek.DAL;
 
 namespace SkaapBoek.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210219073734_SelfReferenceOneToManyParents")]
+    partial class SelfReferenceOneToManyParents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,6 +51,9 @@ namespace SkaapBoek.DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EnclosureTypeId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("FeedId")
                         .HasColumnType("int");
 
@@ -57,9 +62,26 @@ namespace SkaapBoek.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EnclosureTypeId");
+
                     b.HasIndex("FeedId");
 
                     b.ToTable("enclosure");
+                });
+
+            modelBuilder.Entity("SkaapBoek.Core.EnclosureType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("enclosure_type");
                 });
 
             modelBuilder.Entity("SkaapBoek.Core.Feed", b =>
@@ -371,6 +393,12 @@ namespace SkaapBoek.DAL.Migrations
 
             modelBuilder.Entity("SkaapBoek.Core.Enclosure", b =>
                 {
+                    b.HasOne("SkaapBoek.Core.EnclosureType", "Type")
+                        .WithMany("Enclosures")
+                        .HasForeignKey("EnclosureTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("SkaapBoek.Core.Feed", "Feed")
                         .WithMany()
                         .HasForeignKey("FeedId")

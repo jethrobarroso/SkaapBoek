@@ -30,14 +30,12 @@ namespace SkaapBoek.Web.Controllers
             _enclosureService = enclosureService;
         }
 
-        #region Herd
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var model = new SheepIndexViewModel
             {
-                HerdSheep = await _sheepService.GetHerdMembersNoTrack(),
-                FeedlotMembers = await _sheepService.GetFeedLotMembersNoTrack(),
+                HerdSheep = await _sheepService.GetAllSheepWithRelated()
             };
             return View(model);
         }
@@ -45,106 +43,119 @@ namespace SkaapBoek.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var model = new SheepCreateViewModel
-            {
-                Genders = (await _sheepService.GetGenders()).ToList(),
-                Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name"),
-                StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name")
-            };
-
+            var model = new SheepCreateViewModel();
+            await PopulateSheepLists(model);
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(SheepCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var sheep = new Sheep
-                {
-                    AcquireDate = model.AcquireDate,
-                    BirthDate = model.BirthDate,
-                    GenderId = model.GenderId,
-                    TagNumber = model.TagNumber,
-                    Weight = model.Weight,
-                    CostPrice = model.CostPrice,
-                    SheepStatusId = model.SheepStatusId,
-                    SalePrice = model.SalePrice,
-                    ColorId = model.ColorId,
-                };
-
-                try
-                {
-                    await _sheepService.Add(sheep);
-                }
-                catch (DbUpdateException ex)
-                {
-                    _logger.LogError(ex.Message);
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                        "Try again, and if the problem persists, " +
-                        "please request assistance from support@crybit.co.za");
-                }
-                TempData["Success"] = $"Successfully created sheep with tag {sheep.TagNumber}.";
-                return RedirectToAction(nameof(Index));
-
+                await PopulateSheepLists(model);
+                return View(model);
             }
-            model.Genders = (await _sheepService.GetGenders()).ToList();
-            model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
-            model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
-            return View(model);
+            var sheep = new Sheep
+            {
+                AcquireDate = model.AcquireDate,
+                BirthDate = model.BirthDate,
+                GenderId = model.GenderId,
+                TagNumber = model.TagNumber,
+                Weight = model.Weight,
+                CostPrice = model.CostPrice,
+                SheepStatusId = model.SheepStatusId,
+                SalePrice = model.SalePrice,
+                ColorId = model.ColorId,
+                SheepCategoryId = model.SheepCategoryId,
+                EnclosureId = model.EnclosureId,
+                FeedId = model.FeedId,
+                FatherId = model.FatherId,
+                MotherId = model.MotherId
+            };
+
+            try
+            {
+                await _sheepService.Add(sheep);
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " +
+                    "Try again, and if the problem persists, " +
+                    "please request assistance from support@crybit.co.za");
+
+                await PopulateSheepLists(model);
+                return View(model);
+            }
+            TempData["Success"] = $"Successfully created sheep with tag {sheep.TagNumber}.";
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if(id is null)
+            if (id is null)
             {
-                ViewBag.ErrorMessage = $"Bad request. Sheep ID not specified";
+                ViewBag.ErrorMessage = "No sheep ID specified";
                 return View(nameof(BadRequest));
             }
 
             var sheep = await _sheepService.GetById(id.Value);
 
-            var model = new SheepEditViewModel
+            if (sheep is null)
+            {
+                ViewBag.ErrorMessage = $"Sheep with ID = {id} not found";
+                return View(nameof(NotFound));
+            }
+
+            var model = await PopulateSheepEditViewModel(sheep);
+
+            return View(model);
+        }
+
+        private async Task PopulateSheepLists(SheepCreateViewModel vm)
+        {
+            vm.Genders = (await _sheepService.GetGenders()).ToList();
+            vm.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
+            vm.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
+            vm.Enclosures = new SelectList(await _enclosureService.GetAllNoTrack(), "Id", "Number");
+            vm.Categories = new SelectList(await _sheepService.GetCategories(), "Id", "Name");
+            vm.FeedList = new SelectList(await _sheepService.GetAllFeed(), "Id", "Name");
+            vm.Rams = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Male"), "Id", "TagNumber");
+            vm.Ewes = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Female"), "Id", "TagNumber");
+        }
+
+        private async Task<SheepCreateViewModel> PopulateSheepEditViewModel(Sheep sheep)
+        {
+            var model = new SheepCreateViewModel
             {
                 Id = sheep.Id,
                 AcquireDate = sheep.AcquireDate,
                 BirthDate = sheep.BirthDate,
-                Genders = (await _sheepService.GetGenders()).ToList(),
                 GenderId = sheep.GenderId,
                 CostPrice = sheep.CostPrice,
                 SalePrice = sheep.SalePrice,
                 TagNumber = sheep.TagNumber,
                 Weight = sheep.Weight,
                 ColorId = sheep.Color.Id,
-                Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name"),
                 SheepStatusId = sheep.SheepStatusId,
-                StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name"),
                 EnclosureId = sheep.EnclosureId,
-                Enclosures = new SelectList(await _enclosureService.GetAllNoTrack(), "Id", "Number"),
-                AvailableChildren = await _sheepService.GetAvailableChildren(sheep),
-                SelectedChildren = await _sheepService.GetSelectedChildren(sheep),
                 SheepCategoryId = sheep.SheepCategoryId,
-                Categories = new SelectList(await _sheepService.GetCategories(), "Id", "Name"),
                 FeedId = sheep.FeedId,
-                FeedList = new SelectList(await _sheepService.GetAllFeed(), "Id", "Name"),
-                //FatherId = parents.father?.Id,
-                //MotherId = parents.mother?.Id,
-                //Rams = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Male"), "Id", "TagNumber", parents.father?.Id),
-                //Ewes = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Female"), "Id", "TagNumber", parents.mother?.Id)
+                FatherId = sheep.FatherId,
+                MotherId = sheep.MotherId,
             };
 
-            return View(model);
+            await PopulateSheepLists(model);
+            return model;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(SheepEditViewModel model, int id)
+        public async Task<IActionResult> Edit(SheepCreateViewModel model, int id)
         {
             if (!ModelState.IsValid)
             {
-                model.Genders = (await _sheepService.GetGenders()).ToList();
-                model.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
-                model.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
+                await PopulateSheepLists(model);
                 return View(model);
             }
 
@@ -160,6 +171,8 @@ namespace SkaapBoek.Web.Controllers
             sheep.ColorId = model.ColorId;
             sheep.SheepCategoryId = model.SheepCategoryId;
             sheep.FeedId = model.FeedId;
+            sheep.MotherId = model.MotherId;
+            sheep.FatherId = model.FatherId;
 
             await _sheepService.Update(sheep);
             TempData["Success"] = $"Successfully updated sheep with tag {sheep.TagNumber}";
@@ -189,19 +202,22 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var sheep = await _sheepService.GetById(id.Value);
-            if (SheepNullCheckWith404(sheep, id.Value))
+
+            if (sheep is null)
+            {
+                ViewBag.ErrorMessage = $"Sheep with ID = {id} not found";
                 return View(nameof(NotFound));
-            
+            }
+
             var model = new SheepDetailsViewModel
             {
                 Sheep = sheep,
-                Mother = sheep.Mother,
-                Father = sheep.Father,
-                Children = await _sheepService.GetAllChildrenNoTrack(sheep)
+                Mother = await _sheepService.GetById(sheep.FatherId.Value),
+                Father = await _sheepService.GetById(sheep.MotherId.Value),
+                Children = await _sheepService.GetParentChildren(sheep.Id)
             };
 
             return View(model);
         }
-        #endregion
     }
 }

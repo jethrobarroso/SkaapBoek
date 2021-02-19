@@ -14,11 +14,6 @@ namespace SkaapBoek.Web.ViewModels
         [Range(0,10000)]
         public int Number { get; set; }
 
-        [Required]
-        [Display(Name ="Type")]
-        public int EnclosureTypeId { get; set; }
-        public SelectList Types { get; set; }
-
         [Display(Name ="Assigned Feed")]
         public int? FeedId { get; set; }
         public SelectList Feed { get; set; }

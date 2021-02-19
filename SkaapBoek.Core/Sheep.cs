@@ -50,9 +50,11 @@ namespace SkaapBoek.Core
 
         public int? MotherId { get; set; }
         public Sheep Mother { get; set; }
+        public ICollection<Sheep> ChildrenOfMother { get; set; }
 
         public int? FatherId { get; set; }
         public Sheep Father { get; set; }
+        public ICollection<Sheep> ChildrenOfFather { get; set; }
 
         public ICollection<GroupedSheep> GroupedSheep { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }

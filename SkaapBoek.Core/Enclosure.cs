@@ -9,9 +9,6 @@ namespace SkaapBoek.Core
         public int Id { get; set; }
         public int Number { get; set; }
         public string Description { get; set; }
-
-        public int EnclosureTypeId { get; set; }
-        public EnclosureType Type { get; set; }
         
         public int? FeedId { get; set; }
         public Feed Feed { get; set; }
