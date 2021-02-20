@@ -21,13 +21,13 @@ namespace SkaapBoek.Web.Controllers
     {
         private readonly ILogger<SheepController> _logger;
         private readonly ISheepService _sheepService;
-        private readonly IEnclosureService _enclosureService;
+        private readonly IPenService _penService;
 
-        public SheepController(ILogger<SheepController> logger, ISheepService service, IEnclosureService enclosureService)
+        public SheepController(ILogger<SheepController> logger, ISheepService service, IPenService penService)
         {
             _logger = logger;
             _sheepService = service;
-            _enclosureService = enclosureService;
+            _penService = penService;
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@ namespace SkaapBoek.Web.Controllers
                 SalePrice = model.SalePrice,
                 ColorId = model.ColorId,
                 SheepCategoryId = model.SheepCategoryId,
-                EnclosureId = model.EnclosureId,
+                PenId = model.PenId,
                 FeedId = model.FeedId,
                 FatherId = model.FatherId,
                 MotherId = model.MotherId
@@ -118,7 +118,7 @@ namespace SkaapBoek.Web.Controllers
             vm.Genders = (await _sheepService.GetGenders()).ToList();
             vm.Colors = new SelectList(await _sheepService.GetColors(), "Id", "Name");
             vm.StatusList = new SelectList(await _sheepService.GetSheepStates(), "Id", "Name");
-            vm.Enclosures = new SelectList(await _enclosureService.GetAllNoTrack(), "Id", "Number");
+            vm.Pens = new SelectList(await _penService.GetAllNoTrack(), "Id", "Number");
             vm.Categories = new SelectList(await _sheepService.GetCategories(), "Id", "Name");
             vm.FeedList = new SelectList(await _sheepService.GetAllFeed(), "Id", "Name");
             vm.Rams = new SelectList(await _sheepService.GetSheepPerGenderNoTrack("Male"), "Id", "TagNumber");
@@ -139,7 +139,7 @@ namespace SkaapBoek.Web.Controllers
                 Weight = sheep.Weight,
                 ColorId = sheep.Color.Id,
                 SheepStatusId = sheep.SheepStatusId,
-                EnclosureId = sheep.EnclosureId,
+                PenId = sheep.PenId,
                 SheepCategoryId = sheep.SheepCategoryId,
                 FeedId = sheep.FeedId,
                 FatherId = sheep.FatherId,
@@ -212,8 +212,8 @@ namespace SkaapBoek.Web.Controllers
             var model = new SheepDetailsViewModel
             {
                 Sheep = sheep,
-                Mother = await _sheepService.GetById(sheep.FatherId.Value),
-                Father = await _sheepService.GetById(sheep.MotherId.Value),
+                Mother = await _sheepService.GetById(sheep.FatherId),
+                Father = await _sheepService.GetById(sheep.MotherId),
                 Children = await _sheepService.GetParentChildren(sheep.Id)
             };
 

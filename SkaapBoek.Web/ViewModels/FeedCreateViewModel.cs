@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkaapBoek.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace SkaapBoek.Web.ViewModels
 
         [MaxLength(500)]
         public string Description { get; set; }
+
+        public int? FeedId { get; set; }
+        public Feed Feed { get; set; }
 
         [MaxLength(50)]
         [Display(Name = "Product Code")]

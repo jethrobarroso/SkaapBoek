@@ -45,8 +45,8 @@ namespace SkaapBoek.Core
         public int? FeedId { get; set; }
         public Feed CurrentFeed { get; set; }
 
-        public int? EnclosureId { get; set; }
-        public Enclosure Enclosure { get; set; }
+        public int? PenId { get; set; }
+        public Pen Pen { get; set; }
 
         public int? MotherId { get; set; }
         public Sheep Mother { get; set; }

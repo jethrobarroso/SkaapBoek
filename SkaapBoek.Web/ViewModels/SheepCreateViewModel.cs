@@ -52,8 +52,8 @@ namespace SkaapBoek.Web.ViewModels
         public SelectList Categories { get; set; }
 
         [Display(Name = "Pen number")]
-        public int? EnclosureId { get; set; }
-        public SelectList Enclosures { get; set; }
+        public int? PenId { get; set; }
+        public SelectList Pens { get; set; }
 
         [Display(Name ="Feed")]
         public int? FeedId { get; set; }

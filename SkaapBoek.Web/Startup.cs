@@ -18,6 +18,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SkaapBoek.Web
 {
@@ -36,6 +38,12 @@ namespace SkaapBoek.Web
             services.AddControllers();
             services.AddControllersWithViews(options =>
             {
+                // Globally set required authentication
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).AddRazorRuntimeCompilation();
 
@@ -57,7 +65,7 @@ namespace SkaapBoek.Web
             services.AddScoped<ISheepService, SheepService>();
             services.AddScoped<IFeedService, FeedService>();
             services.AddScoped<ITaskService, TaskService>();
-            services.AddScoped<IEnclosureService, EnclosureService>();
+            services.AddScoped<IPenService, PenService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {

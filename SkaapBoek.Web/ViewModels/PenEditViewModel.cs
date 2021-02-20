@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SkaapBoek.Web.ViewModels
 {
-    public class EnclosureEditViewModel
+    public class PenEditViewModel
     {
         [Required]
         [Range(0,10000)]

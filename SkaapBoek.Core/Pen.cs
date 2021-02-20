@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SkaapBoek.Core
 {
-    public class Enclosure
+    public class Pen
     {
         public int Id { get; set; }
         public int Number { get; set; }

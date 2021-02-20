@@ -17,11 +17,11 @@
       <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="col-6 mb-3">
-      <label asp-for="EnclosureId" class="control-label"></label>
-      <select asp-for="EnclosureId" class="form-control" asp-items="@Model.Enclosures">
+      <label asp-for="PenId" class="control-label"></label>
+      <select asp-for="PenId" class="form-control" asp-items="@Model.Pens">
         <option value="" hidden disabled selected></option>
       </select>
-      <span asp-validation-for="EnclosureId" class="text-danger"></span>
+      <span asp-validation-for="PenId" class="text-danger"></span>
     </div>
   </div>
     <div class="form-row mb-4">

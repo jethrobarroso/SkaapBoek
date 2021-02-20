@@ -1,11 +1,11 @@
-﻿@model EnclosureEditViewModel
+﻿@model PenEditViewModel
 
 @{
   ViewData["Title"] = "Edit";
 }
 
 <div class="col-lg-6">
-  <h1 class="mb-3 text-light">Edit Enclosure</h1>
+  <h1 class="mb-3 text-light">Edit Pen</h1>
 
   <form class="text-light" asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -15,6 +15,11 @@
         <label asp-for="Number" class="control-label"></label>
         <input asp-for="Number" class="form-control" />
         <span asp-validation-for="Number" class="text-danger"></span>
+      </div>
+      <div class="col-6 mb-3">
+        <label asp-for="FeedId" class="control-label"></label>
+        <select style="width: 100%" asp-for="FeedId" class="form-control" asp-items="Model.Feed"></select>
+        <span asp-validation-for="FeedId" class="text-danger"></span>
       </div>
     </div>
     <div class="form-row mb-3">
@@ -168,7 +173,7 @@
 @section Scripts {
   <script defer>
     $(function () {
-      appns.enclosures.edit();
+      appns.pen.edit();
     });
   </script>
 }

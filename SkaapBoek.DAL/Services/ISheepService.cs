@@ -11,7 +11,7 @@ namespace SkaapBoek.DAL.Services
     public interface ISheepService : IDataService<Sheep>
     {
         Task<IEnumerable<SheepStatus>> GetSheepStates();
-        Task<Sheep> GetById(int id);
+        Task<Sheep> GetById(int? id);
         Task<IEnumerable<Gender>> GetGenders();
         Task<IEnumerable<Sheep>> GetSheepPerGenderNoTrack(string genderName);
         Task<bool> ContainsSheep(int id);
@@ -26,8 +26,8 @@ namespace SkaapBoek.DAL.Services
     public class SheepService : BaseService<Sheep>, ISheepService
     {
         public SheepService(AppDbContext context) : base(context) { }
-
-        public async Task<IEnumerable<Sheep>> GetAllSheepWithRelated(bool track = false)
+        public async Task<IEnumerable<Sheep>> GetAllSheepWithRelated(bool track =
+ false)
         {
             var result = Context.SheepSet
                 .Include(s => s.Gender)
@@ -43,7 +43,7 @@ namespace SkaapBoek.DAL.Services
             return await result.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Sheep> GetById(int id)
+        public async Task<Sheep> GetById(int? id)
         {
             var sheep = await Context.SheepSet
                 .Include(s => s.Gender)
@@ -111,24 +111,6 @@ namespace SkaapBoek.DAL.Services
                 .Where(s => ids.Contains(s.Id))
                 .ToListAsync();
         }
-
-        //public async Task<List<Sheep>> GetAvailableChildren(Sheep currentSheep, bool track = false)
-        //{
-        //    var sheepId = currentSheep.Id;
-        //    var fatherId = currentSheep.FatherId;
-        //    var motherId = currentSheep.MotherId;
-        //    var result = Context.SheepSet
-        //        .Where(s => s.Id != sheepId && (!s.MotherId.HasValue || !s.FatherId.HasValue))
-        //        .Include(s => s.Gender)
-        //        .Include(s => s.SheepStatus)
-        //        .Include(s => s.Color)
-        //        .Include(s => s.Category);
-
-        //    if (track)
-        //        return await result.ToListAsync();
-
-        //    return await result.AsNoTracking().ToListAsync();
-        //}
 
         public async Task<List<Sheep>> GetParentChildren(int parentId, bool track = false)
         {

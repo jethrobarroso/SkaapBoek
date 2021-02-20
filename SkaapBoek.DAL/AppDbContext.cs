@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SkaapBoek.Core;
 using System.Linq;
 
 namespace SkaapBoek.DAL
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -21,7 +23,7 @@ namespace SkaapBoek.DAL
         public DbSet<GroupedSheep> GroupedSheepSet { get; set; }
         public DbSet<TaskInstance> TaskInstanceSet { get; set; }
         public DbSet<Color> ColorSet { get; set; }
-        public DbSet<Enclosure> EnclosureSet { get; set; }
+        public DbSet<Pen> PenSet { get; set; }
         public DbSet<SheepCategory> SheepCategorySet { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -44,7 +46,7 @@ namespace SkaapBoek.DAL
             builder.Entity<Priority>().ToTable("priority");
             builder.Entity<TaskInstance>().ToTable("task_instance");
             builder.Entity<Color>().ToTable("color");
-            builder.Entity<Enclosure>().ToTable("enclosure");
+            builder.Entity<Pen>().ToTable("pen");
 
             builder.Entity<GroupedSheep>()
                 .HasKey(sg => new { sg.SheepId, sg.GroupId });
@@ -74,7 +76,7 @@ namespace SkaapBoek.DAL
 
             builder.Entity<Sheep>(builder =>
             {
-                builder.HasOne(s => s.Enclosure)
+                builder.HasOne(s => s.Pen)
                 .WithMany(s => s.ContainedSheep)
                 .OnDelete(DeleteBehavior.SetNull);
 
@@ -84,7 +86,7 @@ namespace SkaapBoek.DAL
             });
 
             builder.Entity<Group>()
-                .HasOne(g => g.Enclosure)
+                .HasOne(g => g.Pen)
                 .WithMany(e => e.ContainedGroups)
                 .OnDelete(DeleteBehavior.SetNull);
 

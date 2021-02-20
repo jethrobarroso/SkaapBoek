@@ -1,4 +1,4 @@
-﻿@model SkaapBoek.Core.Enclosure
+﻿@model SkaapBoek.Core.Pen
 
 @{
   ViewData["Title"] = "Details";
@@ -13,7 +13,7 @@
 <div class="mb-4 col-lg-6">
   <div class="card">
     <div data-sb-tag="@Model.Number" class="card-header bg-secondary text-light">
-      <h3>Enclosure details - #@Model.Number</h3>
+      <h3>Pen details - #@Model.Number</h3>
     </div>
 
     <div class="card-body text-light bg-dark">
@@ -31,7 +31,7 @@
     </div>
     <div class="card-footer bg-secondary">
       <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
-      <a asp-action="Edit" class="btn btn-primary">Edit</a>
+      <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
     </div>
   </div>
 </div>
@@ -41,11 +41,11 @@
 @if (Model.ContainedGroups.Any())
 {
   <div class="mb-4 table-responsive-md">
-    <table id="enclosuresTable" class="table table-striped table-dark table-hover">
+    <table id="penTable" class="table table-striped table-dark table-hover">
       <thead>
         <tr>
           <th class="filterable">Name</th>
-          <th class="filterable">Enclosure</th>
+          <th class="filterable">Pen</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -55,7 +55,7 @@
           <tr>
             <td>@group.Name</td>
             <td>@group.Description</td>
-            <td>@(group.Enclosure?.Number.ToString() ?? "None")</td>
+            <td>@(group.Pen?.Number.ToString() ?? "None")</td>
             <td>
               <div class="d-flex align-content-center">
                 <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@group.Id"
@@ -143,7 +143,7 @@ else
 @section Scripts {
   <script>
     $(function () {
-      appns.groups.details();
+      appns.pen.details();
     });
   </script>
 }

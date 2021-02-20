@@ -16,7 +16,7 @@ export function edit() {
     const multiList = document.querySelector('.multilist-container');
     new MultiList(multiList, "SelectedSheepIds");
 
-    $('#EnclosureId').select2({
+    $('#PenId').select2({
         theme: 'bootstrap4',
         allowClear: true,
         placeholder: "Select pen"

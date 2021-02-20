@@ -29,7 +29,7 @@ export function edit() {
     common.preventDoubleSubmit(form, button);
 }
 
-export function list() {
+export function index() {
     const deleteModal = document.querySelector('.modal');
     const table = document.querySelector('table');
     const message = "Are you sure you want to delete item";

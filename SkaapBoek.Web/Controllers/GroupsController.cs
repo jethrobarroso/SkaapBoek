@@ -20,14 +20,14 @@ namespace SkaapBoek.Web.Controllers
     {
         private readonly ILogger<GroupsController> _logger;
         private readonly IGroupService _groupService;
-        private readonly IEnclosureService _enclosureService;
+        private readonly IPenService _penService;
 
         public GroupsController(ILogger<GroupsController> logger, IGroupService groupService,
-            IEnclosureService enclosureService)
+            IPenService penService)
         {
             _logger = logger;
             _groupService = groupService;
-            _enclosureService = enclosureService;
+            _penService = penService;
         }
 
         // GET: Groups
@@ -60,7 +60,7 @@ namespace SkaapBoek.Web.Controllers
         {
             var vm = new GroupEditViewModel
             {
-                Enclosures = new SelectList(await _enclosureService.GetAllNoTrack(), "Id", "Number")
+                Pens = new SelectList(await _penService.GetAllNoTrack(), "Id", "Number")
             };
 
             return View(vm);
@@ -79,7 +79,7 @@ namespace SkaapBoek.Web.Controllers
             var group = new Group();
             group.Name = model.Name;
             group.Description = model.Description;
-            group.EnclosureId = model.EnclosureId;
+            group.PenId = model.PenId;
 
             await _groupService.Add(group);
             TempData["Success"] = $"Successfully updated group.";
@@ -107,8 +107,8 @@ namespace SkaapBoek.Web.Controllers
             {
                 Name = group.Name,
                 Description = group.Description,
-                EnclosureId = group.EnclosureId,
-                Enclosures = new SelectList(await _enclosureService.GetAllNoTrack(), "Id", "Number"),
+                PenId = group.PenId,
+                Pens = new SelectList(await _penService.GetAllNoTrack(), "Id", "Number"),
                 AvailableSheep = await _groupService.GetAvailableSheep(id.Value),
                 SelectedSheep = await _groupService.GetSelectedSheep(id.Value),
             };
@@ -135,7 +135,7 @@ namespace SkaapBoek.Web.Controllers
 
             group.Name = model.Name;
             group.Description = model.Description;
-            group.EnclosureId = model.EnclosureId;
+            group.PenId = model.PenId;
             group.GroupedSheep.Clear();
             group.GroupedSheep = new List<GroupedSheep>();
 

@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace SkaapBoek.DAL.Services
 {
-    public interface IEnclosureService : IDataService<Enclosure>
+    public interface IPenService : IDataService<Pen>
     {
-        Task<IEnumerable<Enclosure>> GetAllNoTrack();
+        Task<IEnumerable<Pen>> GetAllNoTrack();
         Task<IEnumerable<Group>> GetAvailableGroups();
         Task<IEnumerable<Sheep>> GetAvailableSheep();
-        Task<Enclosure> GetById(int id);
-        Task<Enclosure> GetByIdFullNoTrack(int id);
+        Task<Pen> GetById(int id);
+        Task<Pen> GetByIdFullNoTrack(int id);
     }
 
-    public class EnclosureService : BaseService<Enclosure>, IEnclosureService
+    public class PenService : BaseService<Pen>, IPenService
     {
-        public EnclosureService(AppDbContext context) : base(context) { }
+        public PenService(AppDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<Enclosure>> GetAllNoTrack()
+        public async Task<IEnumerable<Pen>> GetAllNoTrack()
         {
             return await base.GetAll()
                 .Include(c => c.Feed)
@@ -29,18 +29,18 @@ namespace SkaapBoek.DAL.Services
                 .ToListAsync();
         }
 
-        public async Task<Enclosure> GetById(int id)
+        public async Task<Pen> GetById(int id)
         {
-            return await Context.EnclosureSet
+            return await Context.PenSet
                 .Include(e => e.ContainedSheep)
                 .Include(e => e.ContainedGroups)
                 .Include(e => e.Feed)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<Enclosure> GetByIdFullNoTrack(int id)
+        public async Task<Pen> GetByIdFullNoTrack(int id)
         {
-            return await Context.EnclosureSet
+            return await Context.PenSet
                 .Include(e => e.ContainedSheep)
                     .ThenInclude(s => s.Color)
                 .Include(e => e.ContainedSheep)
@@ -58,7 +58,7 @@ namespace SkaapBoek.DAL.Services
         public async Task<IEnumerable<Group>> GetAvailableGroups()
         {
             var result = await Context.GroupSet
-                .Where(g => g.EnclosureId == null)
+                .Where(g => g.PenId == null)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -68,7 +68,7 @@ namespace SkaapBoek.DAL.Services
         public async Task<IEnumerable<Sheep>> GetAvailableSheep()
         {
             return await Context.SheepSet
-                .Where(s => s.EnclosureId == null)
+                .Where(s => s.PenId == null)
                 .AsNoTracking()
                 .ToListAsync();
         }

@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }*/
 
-.btn--fixed {
-    width: 75px;
-}
-
 .imageThumbnail {
     height: 200px;
     width: auto;

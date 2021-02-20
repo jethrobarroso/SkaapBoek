@@ -48,7 +48,7 @@ namespace SkaapBoek.DAL.Services
         public async Task<Group> GetByIdFull(int id, bool track = false)
         {
             var query = Context.GroupSet
-                .Include(g => g.Enclosure)
+                .Include(g => g.Pen)
                 .Include(g => g.GroupedSheep)
                     .ThenInclude(gs => gs.Sheep.Gender)
                 .Include(g => g.GroupedSheep)

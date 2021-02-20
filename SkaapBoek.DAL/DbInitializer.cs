@@ -1,4 +1,5 @@
-﻿using SkaapBoek.Core;
+﻿using Microsoft.AspNetCore.Identity;
+using SkaapBoek.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,47 @@ namespace SkaapBoek.DAL
 {
     public static class DbInitializer
     {
+        public static void SeedUserAndRoles(UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
+        {
+            SeedRoles(roleManager);
+            SeedUsers(userManager);
+        }
+
+        public static void SeedUsers(UserManager<IdentityUser> userManager)
+        {
+            if (userManager.FindByEmailAsync("jethro@crybit.co.za").Result == null)
+            {
+                var adminuser = new IdentityUser
+                {
+                    UserName = "sbadmin",
+                    Email = "jethro@crybit.co.za"
+                };
+
+                var result = userManager.CreateAsync(adminuser, "4nqrFWHKwx9$KtlJE").Result;
+                if (result.Succeeded)
+                {
+                    var addRoleResult = userManager.AddToRoleAsync(adminuser, "admin").Result;
+                }
+            }
+        }
+
+        public static void SeedRoles(RoleManager<IdentityRole> roleManager)
+        {
+            if (!roleManager.RoleExistsAsync("admin").Result)
+            {
+                IdentityRole role = new IdentityRole
+                {
+                    Name = "admin"
+                };
+
+                var result = roleManager.CreateAsync(role).Result;
+            }
+        }
+
         public static void Initialize(AppDbContext context)
         {
-            // Look for any sheep
+            // Look for any entries
             if (context.GenderSet.Any())
             {
                 return; // DB has been seeded

@@ -86,7 +86,7 @@ namespace SkaapBoek.Web.Controllers
 
             await _service.Delete(id);
             TempData["Success"] = $"Successfully deleted {feed.Name}";
-            return RedirectToAction("List");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]

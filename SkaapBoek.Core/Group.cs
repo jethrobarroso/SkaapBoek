@@ -15,8 +15,8 @@ namespace SkaapBoek.Core
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public int? EnclosureId { get; set; }
-        public Enclosure Enclosure { get; set; }
+        public int? PenId { get; set; }
+        public Pen Pen { get; set; }
 
         public ICollection<GroupedSheep> GroupedSheep { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }

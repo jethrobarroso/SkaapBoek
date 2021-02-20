@@ -16,7 +16,7 @@
           <div>@Html.DisplayNameFor(model => model.Name)</div>
         </th>
         <th class="filterable">
-          <div>Enclosure</div>
+          <div>Pen</div>
         </th>
         <th></th>
       </tr>
@@ -28,7 +28,7 @@
         <td>
           @Html.DisplayFor(modelItem => item.Name)
         </td>
-        <td>@(item.Enclosure?.Number.ToString() ?? "None")</td>
+        <td>@(item.Pen?.Number.ToString() ?? "None")</td>
         <td>
           <div class="d-flex align-content-center">
             <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@item.Id"

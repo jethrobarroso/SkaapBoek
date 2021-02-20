@@ -17,8 +17,8 @@ namespace SkaapBoek.Web.ViewModels
         public string Description { get; set; }
 
         [Display(Name = "Pen number")]
-        public int? EnclosureId { get; set; }
-        public SelectList Enclosures { get; set; }
+        public int? PenId { get; set; }
+        public SelectList Pens { get; set; }
 
         public int[] SelectedSheepIds { get; set; }
         public IList<Sheep> AvailableSheep { get; set; }

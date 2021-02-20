@@ -8,6 +8,45 @@ namespace SkaapBoek.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "color",
                 columns: table => new
                 {
@@ -19,19 +58,6 @@ namespace SkaapBoek.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_color", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "enclosure_type",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_enclosure_type", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,41 +145,126 @@ namespace SkaapBoek.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "task_tamplate",
+                name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: false)
+                    RoleId = table.Column<string>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_task_tamplate", x => x.Id);
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "enclosure",
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
+                    ProviderDisplayName = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "pen",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Number = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    EnclosureTypeId = table.Column<int>(nullable: false),
                     FeedId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_enclosure", x => x.Id);
+                    table.PrimaryKey("PK_pen", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_enclosure_enclosure_type_EnclosureTypeId",
-                        column: x => x.EnclosureTypeId,
-                        principalTable: "enclosure_type",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_enclosure_feed_FeedId",
+                        name: "FK_pen_feed_FeedId",
                         column: x => x.FeedId,
                         principalTable: "feed",
                         principalColumn: "Id",
@@ -168,15 +279,15 @@ namespace SkaapBoek.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
-                    EnclosureId = table.Column<int>(nullable: true)
+                    PenId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_group", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_group_enclosure_EnclosureId",
-                        column: x => x.EnclosureId,
-                        principalTable: "enclosure",
+                        name: "FK_group_pen_PenId",
+                        column: x => x.PenId,
+                        principalTable: "pen",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
@@ -198,7 +309,7 @@ namespace SkaapBoek.DAL.Migrations
                     GenderId = table.Column<int>(nullable: false),
                     Weight = table.Column<float>(nullable: false),
                     FeedId = table.Column<int>(nullable: true),
-                    EnclosureId = table.Column<int>(nullable: true),
+                    PenId = table.Column<int>(nullable: true),
                     MotherId = table.Column<int>(nullable: true),
                     FatherId = table.Column<int>(nullable: true)
                 },
@@ -211,12 +322,6 @@ namespace SkaapBoek.DAL.Migrations
                         principalTable: "color",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_sheep_enclosure_EnclosureId",
-                        column: x => x.EnclosureId,
-                        principalTable: "enclosure",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_sheep_sheep_FatherId",
                         column: x => x.FatherId,
@@ -241,6 +346,12 @@ namespace SkaapBoek.DAL.Migrations
                         principalTable: "sheep",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_sheep_pen_PenId",
+                        column: x => x.PenId,
+                        principalTable: "pen",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_sheep_sheep_category_SheepCategoryId",
                         column: x => x.SheepCategoryId,
@@ -287,11 +398,10 @@ namespace SkaapBoek.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
-                    DurationDays = table.Column<int>(nullable: false),
+                    DurationDays = table.Column<int>(nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
                     PriorityId = table.Column<int>(nullable: false),
                     StatusId = table.Column<int>(nullable: false),
-                    TaskTemplateId = table.Column<int>(nullable: false),
                     SheepId = table.Column<int>(nullable: true),
                     GroupId = table.Column<int>(nullable: true)
                 },
@@ -322,28 +432,51 @@ namespace SkaapBoek.DAL.Migrations
                         principalTable: "status",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_task_instance_task_tamplate_TaskTemplateId",
-                        column: x => x.TaskTemplateId,
-                        principalTable: "task_tamplate",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_enclosure_EnclosureTypeId",
-                table: "enclosure",
-                column: "EnclosureTypeId");
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_enclosure_FeedId",
-                table: "enclosure",
-                column: "FeedId");
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_group_EnclosureId",
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_group_PenId",
                 table: "group",
-                column: "EnclosureId");
+                column: "PenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_grouped_herd_member_GroupId",
@@ -351,21 +484,19 @@ namespace SkaapBoek.DAL.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_pen_FeedId",
+                table: "pen",
+                column: "FeedId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_sheep_ColorId",
                 table: "sheep",
                 column: "ColorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_sheep_EnclosureId",
-                table: "sheep",
-                column: "EnclosureId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_sheep_FatherId",
                 table: "sheep",
-                column: "FatherId",
-                unique: true,
-                filter: "[FatherId] IS NOT NULL");
+                column: "FatherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sheep_FeedId",
@@ -380,9 +511,12 @@ namespace SkaapBoek.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_sheep_MotherId",
                 table: "sheep",
-                column: "MotherId",
-                unique: true,
-                filter: "[MotherId] IS NOT NULL");
+                column: "MotherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sheep_PenId",
+                table: "sheep",
+                column: "PenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sheep_SheepCategoryId",
@@ -413,20 +547,36 @@ namespace SkaapBoek.DAL.Migrations
                 name: "IX_task_instance_StatusId",
                 table: "task_instance",
                 column: "StatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_task_instance_TaskTemplateId",
-                table: "task_instance",
-                column: "TaskTemplateId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
                 name: "grouped_herd_member");
 
             migrationBuilder.DropTable(
                 name: "task_instance");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "group");
@@ -441,25 +591,19 @@ namespace SkaapBoek.DAL.Migrations
                 name: "status");
 
             migrationBuilder.DropTable(
-                name: "task_tamplate");
-
-            migrationBuilder.DropTable(
                 name: "color");
 
             migrationBuilder.DropTable(
-                name: "enclosure");
+                name: "gender");
 
             migrationBuilder.DropTable(
-                name: "gender");
+                name: "pen");
 
             migrationBuilder.DropTable(
                 name: "sheep_category");
 
             migrationBuilder.DropTable(
                 name: "state");
-
-            migrationBuilder.DropTable(
-                name: "enclosure_type");
 
             migrationBuilder.DropTable(
                 name: "feed");
