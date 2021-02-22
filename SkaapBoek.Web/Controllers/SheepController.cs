@@ -43,6 +43,7 @@ namespace SkaapBoek.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            
             var model = new SheepCreateViewModel();
             await PopulateSheepLists(model);
             return View(model);
@@ -51,6 +52,7 @@ namespace SkaapBoek.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(SheepCreateViewModel model)
         {
+            var httpContext = HttpContext;
             if (!ModelState.IsValid)
             {
                 await PopulateSheepLists(model);

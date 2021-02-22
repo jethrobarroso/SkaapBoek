@@ -47,6 +47,8 @@ namespace SkaapBoek.Web
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).AddRazorRuntimeCompilation();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SkaapBoekDb"));
@@ -67,6 +69,7 @@ namespace SkaapBoek.Web
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IPenService, PenService>();
             services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IMilsService, MilsService>();
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 //options.Password.RequiredLength = 10;

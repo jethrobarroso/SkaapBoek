@@ -1,9 +1,6 @@
 ﻿import * as common from '../common.js'
 
 export function create() {
-    const form = document.querySelector('#feedCreateForm');
-    const input = form.querySelector('input[type="submit"]');
-    common.preventDoubleSubmit(form, input);
 }
 
 export function details() {
@@ -21,9 +18,6 @@ export function details() {
 }
 
 export function edit() {
-    const form = document.querySelector('#feedEditForm');
-    const input = form.querySelector('input[type="submit"]');
-    common.preventDoubleSubmit(form, input);
 }
 
 export function index() {

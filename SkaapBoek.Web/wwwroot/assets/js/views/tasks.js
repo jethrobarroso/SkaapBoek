@@ -26,11 +26,6 @@ export function details() {
 }
 
 export function create() {
-    const body = document.querySelector('body');
-    const form = body.querySelector('#penCreateForm');
-    const input = form.querySelector('input[type="submit"]');
-    common.preventDoubleSubmit(form, input);
-
     $('#GroupId').select2({
         theme: 'bootstrap4',
         allowClear: true,
@@ -45,11 +40,6 @@ export function create() {
 }
 
 export function edit() {
-    const body = document.querySelector('body');
-    const form = body.querySelector('#penEditForm');
-    const input = form.querySelector('input[type="submit"]');
-    common.preventDoubleSubmit(form, input);
-
     $('#GroupId').select2({
         theme: 'bootstrap4',
         allowClear: true,

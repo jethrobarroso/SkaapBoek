@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SkaapBoek.Core
+namespace SkaapBoek.Web.ViewModels
 {
-    public class MilsPhase
+    public class MilsPhaseCreateViewModel
     {
-        public int Id { get; set; }
-
         [Required]
         [Range(1, 1000)]
         public int PhaseOrder { get; set; }
@@ -18,14 +17,10 @@ namespace SkaapBoek.Core
         public string Activity { get; set; }
 
         [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime StartDate { get; set; } = DateTime.Today;
-        
-        [Required]
-        [Range(0,5000)]
-        public int Days { get; set; }
+        public DateTime StartDate { get; set; }
 
-        public ICollection<MilsTask> Tasks { get; set; }
-        public ICollection<Group> Groups { get; set; }
+        [Required]
+        [Range(0, 5000)]
+        public int Days { get; set; }
     }
 }

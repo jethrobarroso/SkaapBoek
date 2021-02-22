@@ -1,0 +1,46 @@
+﻿@model MilsPhaseCreateViewModel
+
+@{ 
+    ViewBag.Title = "Create Phase";
+}
+
+<div class="col-lg-6">
+  <h1 class="mb-3 text-light">Create M.I.L.S Phase</h1>
+
+  <form id="groupCreateForm" class="text-light" asp-action="CreatePhase">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+      <div class="col-6 mb-3">
+        <label asp-for="PhaseOrder" class="control-label"></label>
+        <input asp-for="PhaseOrder" class="form-control" />
+        <span asp-validation-for="PhaseOrder" class="text-danger"></span>
+      </div>
+      <div class="col-6 mb-3">
+        <label asp-for="StartDate" class="control-label"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-6 offset-6 mb-3">
+        <label asp-for="Days" class="control-label"></label>
+        <input asp-for="Days" class="form-control" />
+        <span asp-validation-for="Days" class="text-danger"></span>
+      </div>
+    </div>
+    <div class="form-row mb-3">
+      <div class="col-12">
+        <label asp-for="Activity" class="control-label"></label>
+        <textarea asp-for="Activity" class="form-control"></textarea>
+        <span asp-validation-for="Activity" class="text-danger"></span>
+      </div>
+    </div>
+    <div class="form-group mt-3">
+      <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+  </form>
+
+  <div class="mt-3">
+    <a asp-action="Index">Back to List</a>
+  </div>
+</div>

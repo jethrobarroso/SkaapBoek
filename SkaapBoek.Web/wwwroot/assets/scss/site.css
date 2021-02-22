@@ -84,3 +84,14 @@ body {
 .multilist-container ul {
     overflow: auto;
 }
+
+.fadable-button a {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.25s linear;
+}
+
+.fadable-button:hover a {
+    visibility: visible;
+    opacity: 1;
+}
