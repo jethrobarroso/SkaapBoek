@@ -13,6 +13,28 @@ export function index() {
 }
 
 export function edit() {
+    const body = document.querySelector('body');
+    const form = body.querySelector('#penEditForm');
+    const input = form.querySelector('input[type="submit"]');
+    common.preventDoubleSubmit(form, input);
+
+    const multiLists = document.querySelectorAll('.multilist-container');
+    new MultiList(multiLists[0], "GroupIds");
+    new MultiList(multiLists[1], "SheepIds");
+
+    $('#FeedId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select pen"
+    });
+}
+
+export function create() {
+    const body = document.querySelector('body');
+    const form = body.querySelector('#penCreateForm');
+    const input = form.querySelector('input[type="submit"]');
+    common.preventDoubleSubmit(form, input);
+
     const multiLists = document.querySelectorAll('.multilist-container');
     new MultiList(multiLists[0], "GroupIds");
     new MultiList(multiLists[1], "SheepIds");

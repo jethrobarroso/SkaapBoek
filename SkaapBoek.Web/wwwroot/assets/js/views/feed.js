@@ -1,19 +1,18 @@
 ﻿import * as common from '../common.js'
 
 export function create() {
-    const button = document.querySelector('#btnCreate');
-    const form = button.closest('form');
-    button.disabled = false;
-
-    common.preventDoubleSubmit(form, button);
+    const form = document.querySelector('#feedCreateForm');
+    const input = form.querySelector('input[type="submit"]');
+    common.preventDoubleSubmit(form, input);
 }
 
 export function details() {
-    const deleteModal = document.querySelector('.modal');
+    const body = document.querySelector('body');
+    const deleteModal = body.querySelector('.modal');
     const urlPath = window.location.pathname;
     const deletePath = "/Feed/Delete/";
     const id = urlPath.substring(urlPath.lastIndexOf('/') + 1);
-    const deleteButton = document.querySelector('.card-footer button');
+    const deleteButton = body.querySelector('.card-footer button');
     const form = deleteModal.querySelector('form');
 
     deleteButton.addEventListener('click', () => {
@@ -22,11 +21,9 @@ export function details() {
 }
 
 export function edit() {
-    const button = document.querySelector('#btnCreate');
-    const form = button.closest('form');
-    button.disabled = false;
-
-    common.preventDoubleSubmit(form, button);
+    const form = document.querySelector('#feedEditForm');
+    const input = form.querySelector('input[type="submit"]');
+    common.preventDoubleSubmit(form, input);
 }
 
 export function index() {

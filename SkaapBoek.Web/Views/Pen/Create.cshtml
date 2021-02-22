@@ -7,21 +7,21 @@
 <div class="col-lg-6">
   <h1 class="mb-3 text-light">Create Pen</h1>
 
-  <form class="text-light" asp-action="Create">
+  <form id="penCreateForm" class="text-light" asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @*<input type="hidden" asp-for="Id" />*@
-  <div class="form-row">
-    <div class="col-6 mb-3">
-      <label asp-for="Number" class="control-label"></label>
-      <input asp-for="Number" class="form-control" />
-      <span asp-validation-for="Number" class="text-danger"></span>
+    <div class="form-row">
+      <div class="col-6 mb-3">
+        <label asp-for="Number" class="control-label"></label>
+        <input asp-for="Number" class="form-control" />
+        <span asp-validation-for="Number" class="text-danger"></span>
+      </div>
+      <div class="col-6 mb-3">
+        <label asp-for="FeedId" class="control-label"></label>
+        <select style="width: 100%" asp-for="FeedId" class="form-control" asp-items="Model.Feed"></select>
+        <span asp-validation-for="FeedId" class="text-danger"></span>
+      </div>
     </div>
-    <div class="col-6 mb-3">
-      <label asp-for="FeedId" class="control-label"></label>
-      <select style="width: 100%" asp-for="FeedId" class="form-control" asp-items="Model.Feed"></select>
-      <span asp-validation-for="FeedId" class="text-danger"></span>
-    </div>
-  </div>
     <div class="form-row mb-3">
       <div class="col-12">
         <label asp-for="Description" class="control-label"></label>
@@ -33,11 +33,11 @@
     <h4 class="h4 mb-4 mt-4">Contains</h4>
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#groups" role="tab" 
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#groups" role="tab"
            aria-controls="home" aria-selected="true">Groups</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#sheep" role="tab" 
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#sheep" role="tab"
            aria-controls="profile" aria-selected="false">Individual sheep</a>
       </li>
     </ul>
@@ -159,7 +159,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="form-group mt-3">
       <input type="submit" value="Create" class="btn btn-primary" />
     </div>

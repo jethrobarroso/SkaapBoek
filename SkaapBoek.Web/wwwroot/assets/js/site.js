@@ -1,7 +1,5 @@
 import * as feedViews from './views/feed.js'
 import * as sheepViews from './views/sheep.js'
-import * as templateViews from './views/templates.js'
-import * as projectViews from './views/projects.js'
 import * as groupViews from './views/groups.js'
 import * as taskViews from './views/tasks.js'
 import * as penViews from './views/pen.js'
@@ -29,18 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             index: sheepViews.index,
             create: sheepViews.create,
             details: sheepViews.details,
-            editChild: sheepViews.editChild,
-            childDetails: sheepViews.childDetails,
             edit: sheepViews.edit,
-        },
-        templates: {
-            index: templateViews.list,
-            details: templateViews.details,
-        },
-        projects: {
-            index: projectViews.list,
-            details: projectViews.details,
-            edit: projectViews.edit,
         },
         groups: {
             index: groupViews.index,
@@ -52,12 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
             index: penViews.index,
             details: penViews.details,
             edit: penViews.edit,
-            create: penViews.edit,
+            create: penViews.create,
         },
         tasks: {
             index: taskViews.index,
             details: taskViews.details,
             create: taskViews.create,
+            edit: taskViews.edit,
         }
     }
 })

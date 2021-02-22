@@ -13,6 +13,11 @@ export function index() {
 }
 
 export function edit() {
+    const body = document.querySelector('body');
+    const form = body.querySelector('#groupEditForm');
+    const input = form.querySelector('input[type="submit"]');
+    common.preventDoubleSubmit(form, input);
+
     const multiList = document.querySelector('.multilist-container');
     new MultiList(multiList, "SelectedSheepIds");
 
@@ -24,6 +29,11 @@ export function edit() {
 }
 
 export function create() {
+    const body = document.querySelector('body');
+    const form = body.querySelector('#groupCreateForm');
+    const input = form.querySelector('input[type="submit"]');
+    common.preventDoubleSubmit(form, input);
+
     $('select').select2({
         theme: 'bootstrap4',
         allowClear: true,

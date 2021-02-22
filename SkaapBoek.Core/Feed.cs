@@ -27,6 +27,6 @@ namespace SkaapBoek.Core
         public decimal? CostPrice { get; set; }
 
         public ICollection<Sheep> Sheep { get; set; }
-        public ICollection<Pen> MyProperty { get; set; }
+        public ICollection<Pen> Pens { get; set; }
     }
 }

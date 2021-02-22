@@ -93,7 +93,7 @@ namespace SkaapBoek.Web
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Demo API");
             });
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
 

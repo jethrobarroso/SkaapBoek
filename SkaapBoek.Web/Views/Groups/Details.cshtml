@@ -88,8 +88,8 @@
 else
 {
   <div class="alert alert-info">
-    <p>No sheep are currently registered in the herd category.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
+    <p>No sheep are currently assigned to this group.</p>
+    <a class="mt-2 btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Add sheep</a>
   </div>
 }
 

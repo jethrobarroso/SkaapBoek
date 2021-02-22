@@ -26,11 +26,31 @@ namespace SkaapBoek.DAL
                     Email = "jethro@crybit.co.za"
                 };
 
-                var result = userManager.CreateAsync(adminuser, "4nqrFWHKwx9$KtlJE").Result;
-                if (result.Succeeded)
+                var rud = new IdentityUser
                 {
-                    var addRoleResult = userManager.AddToRoleAsync(adminuser, "admin").Result;
-                }
+                    UserName = "rudadmin",
+                    Email = "rudolf@a-i-solutions.co.za"
+                };
+
+                var result = userManager.CreateAsync(adminuser, "4nqrFWHKwx9$KtlJE").Result;
+                var result2 = userManager.CreateAsync(rud, "Rud&Jet123").Result;
+                if (result.Succeeded)
+                    _ = userManager.AddToRoleAsync(adminuser, "admin").Result;
+                if (result2.Succeeded)
+                    _ = userManager.AddToRoleAsync(adminuser, "admin").Result;
+            }
+
+            if (userManager.FindByEmailAsync("rudolf@a-i-solutions.co.za").Result == null)
+            {
+                var rud = new IdentityUser
+                {
+                    UserName = "rudadmin",
+                    Email = "rudolf@a-i-solutions.co.za"
+                };
+
+                var result2 = userManager.CreateAsync(rud, "Rud&Jet123").Result;
+                if (result2.Succeeded)
+                    _ = userManager.AddToRoleAsync(rud, "admin").Result;
             }
         }
 

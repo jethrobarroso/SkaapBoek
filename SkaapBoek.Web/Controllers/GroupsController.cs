@@ -176,6 +176,7 @@ namespace SkaapBoek.Web.Controllers
                 return View("Error");
             }
 
+            TempData["Success"] = $"Successfully deleted group.";
             return RedirectToAction(nameof(Index));
         }
     }

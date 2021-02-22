@@ -19,7 +19,7 @@ export function index() {
 }
 
 export function create() {
-    const form = document.querySelector('form');
+    const form = document.querySelector('#sheepCreateForm');
     const input = form.querySelector('input[type="submit"]');
     common.preventDoubleSubmit(form, input);
 
@@ -47,6 +47,10 @@ export function create() {
 }
 
 export function edit() {
+    const form = document.querySelector('#sheepEditForm');
+    const input = form.querySelector('input[type="submit"]');
+    common.preventDoubleSubmit(form, input);
+
     $('#FeedId').select2({
         theme: 'bootstrap4',
         allowClear: true,

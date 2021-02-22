@@ -1,3 +1,3 @@
 // Import styles and js
-import './scss/site.scss';
+import './scss/site.css';
 import './js/site';

@@ -26,10 +26,8 @@
 	  <None Include="wwwroot\assets\js\views\feed.js" />
 	  <None Include="wwwroot\assets\js\views\pen.js" />
 	  <None Include="wwwroot\assets\js\views\groups.js" />
-	  <None Include="wwwroot\assets\js\views\projects.js" />
 	  <None Include="wwwroot\assets\js\views\sheep.js" />
 	  <None Include="wwwroot\assets\js\views\tasks.js" />
-	  <None Include="wwwroot\assets\js\views\templates.js" />
 	  <None Include="wwwroot\assets\main.js" />
 	  <None Include="wwwroot\assets\scss\site.css" />
 	</ItemGroup>
