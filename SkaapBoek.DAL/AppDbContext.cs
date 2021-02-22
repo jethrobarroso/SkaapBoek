@@ -25,6 +25,8 @@ namespace SkaapBoek.DAL
         public DbSet<Color> ColorSet { get; set; }
         public DbSet<Pen> PenSet { get; set; }
         public DbSet<SheepCategory> SheepCategorySet { get; set; }
+        public DbSet<MilsPhase> MilsPhaseSet { get; set; }
+        public DbSet<MilsTask> MilsTaskSet { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -47,6 +49,8 @@ namespace SkaapBoek.DAL
             builder.Entity<TaskInstance>().ToTable("task_instance");
             builder.Entity<Color>().ToTable("color");
             builder.Entity<Pen>().ToTable("pen");
+            builder.Entity<MilsPhase>().ToTable("mils_phase");
+            builder.Entity<MilsTask>().ToTable("mils_task");
 
             builder.Entity<GroupedSheep>()
                 .HasKey(sg => new { sg.SheepId, sg.GroupId });
@@ -95,6 +99,9 @@ namespace SkaapBoek.DAL
                 builder.HasOne(s => s.Father).WithMany(s => s.ChildrenOfFather).HasForeignKey(s => s.FatherId);
                 builder.HasOne(s => s.Mother).WithMany(s => s.ChildrenOfMother).HasForeignKey(s => s.MotherId);
             });
+
+            builder.Entity<MilsPhase>()
+                .HasAlternateKey(m => m.PhaseOrder);
         }
     }
 }
