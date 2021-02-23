@@ -55,7 +55,6 @@ export class ModalDeletePrompt {
     fromTable(table) {
         if (!table) {
             return;
-            
         }
         const buttons = table.querySelectorAll('button');
 

@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\assets\js\views\mils.js" />
 	  <Content Remove="wwwroot\assets\js\views\pen.js" />
 	</ItemGroup>
 
@@ -27,6 +28,7 @@
 	  <None Include="wwwroot\assets\js\views\pen.js" />
 	  <None Include="wwwroot\assets\js\views\groups.js" />
 	  <None Include="wwwroot\assets\js\views\sheep.js" />
+	  <None Include="wwwroot\assets\js\views\mils.js" />
 	  <None Include="wwwroot\assets\js\views\tasks.js" />
 	  <None Include="wwwroot\assets\main.js" />
 	  <None Include="wwwroot\assets\scss\site.css" />

@@ -29,12 +29,15 @@ namespace SkaapBoek.Web.Controllers
                 case 404:
                     ViewBag.ErrorMessage = "Sorry, the resource you requested could not be found";
                     _logger.LogWarning($"404 Error - Path: {statusCodeReserved.OriginalPath} and QueryString = {statusCodeReserved.OriginalQueryString}");
-                    break;
+                    return View("NotFound");
+                case 400:
+                    ViewBag.ErrorMessage = "Bad request. No ID specified for the resource.";
+                    return View("BadRequest");
                 default:
                     ViewBag.ErrorMessage = "There was an issue processing your request. Please try again. If the issue persists, please contact us at support@crybit.co.za and detail out the actions that your performed";
                     break;
             }
-            return View("NotFound");
+            return View("Error");
         }
 
         [Route("Error")]

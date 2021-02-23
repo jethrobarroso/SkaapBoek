@@ -10,64 +10,87 @@
 
 @if (Model.Any())
 {
-<div class="accordion text-light" id="accordionExample">
-  @for (int i = 0; i < Model.Count(); i++)
-  {
-    <div id="phasesCard" class="card">
-      <div class="card-header bg-secondary fadable-button">
-        <div class="mb-0">
-          <div class="btn btn-block text-left text-light" type="button"
-                  data-toggle="collapse" data-target="#phase@(Model[i].PhaseOrder)">
-            <div class="row d-flex align-items-center">
-              <div class="col-10">
-                <div class="row">
-                  <div class="col-md-2">Phase: @Model[i].PhaseOrder</div>
-                  <div class="col-md-4">Starts: @Model[i].StartDate</div>
-                  <div class="col-md-4">Days: @Model[i].Days</div>
+  <div class="accordion text-light" id="accordionExample">
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+      <div id="phasesCard" class="card">
+        <div class="card-header bg-semidark fadable-buttons-container">
+          <div class="mb-0">
+            <div class="btn btn-block text-left text-light" type="button"
+                 data-toggle="collapse" data-target="#phase@(Model[i].PhaseOrder)">
+              <div class="row d-flex align-items-center">
+                <div class="col-10">
+                  <div class="row">
+                    <div class="col-md-2">Phase: @Model[i].PhaseOrder</div>
+                    <div class="col-md-4">Starts: @Model[i].StartDate</div>
+                    <div class="col-md-4">Days: @Model[i].Days</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">Activity: @Model[i].Activity</div>
+                  </div>
                 </div>
-                <div class="row">
-                  <div class="col-12">Activity: @Model[i].Activity</div>
+                <div class="col-2">
+                  <div class="d-flex align-content-center">
+                    <a class="icon-button mr-1 ml-1 fadable-button"
+                       asp-action="PhaseDetails" asp-route-id="@Model[i].Id"
+                       data-toggle="tooltip" data-placement="top" title="View">
+                      <i class="material-icons">search</i>
+                    </a>
+                    <a class="icon-button mr-1 ml-1 fadable-button" asp-action="EditPhase" asp-route-id="@Model[i].Id"
+                       data-toggle="tooltip" data-placement="top" title="Edit">
+                      <i class="material-icons">edit</i>
+                    </a>
+                    <button class="icon-button--delete fadable-button" data-user-id="@Model[i].Id"
+                            data-toggle="modal" data-target="#deleteModal">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div class="col-2">
-                <a class="btn btn-info" 
-                   asp-action="EditPhase" asp-route-id="@Model[i].Id">Edit</a>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div id="phase@(Model[i].PhaseOrder)" class="collapse bg-dark" aria-labelledby="headingOne" data-parent="#accordionExample">
-        <div class="card-body">
-          @if (Model[i].Tasks.Any())
-          {
-            foreach(var task in Model[i].Tasks)
+        <div id="phase@(Model[i].PhaseOrder)" class="collapse bg-dark" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            @if (Model[i].Tasks.Any())
             {
-              <dl class="row">
-                <dt class="col-sm-3">Instructions:</dt>
-                <dd class="col-sm-9">@task.Instructions</dd>
-              </dl>
+              foreach (var task in Model[i].Tasks)
+              {
+                <dl class="row">
+                  <dt class="col-sm-3">Instructions:</dt>
+                  <dd class="col-sm-9">@task.Instructions</dd>
+                </dl>
+              }
             }
-          }
-          else
-          {
-            <div class="alert alert-info">
-              <p>No tasks have been assigned to this phase.</p>
-              <a class="btn btn-primary" asp-action="CreateTask">Create task</a>
-            </div>
-          }
+            else
+            {
+              <div class="alert alert-info">
+                <p>No tasks have been assigned to this phase.</p>
+                <a class="btn btn-primary" asp-action="CreateTask">Create task</a>
+              </div>
+            }
+          </div>
         </div>
       </div>
-    </div>
-  }
-  <a class="mt-2 mb-4 btn btn-primary" asp-action="CreatePhase">Add new phase</a>
-</div>
+    }
+    <a class="mt-2 mb-4 btn btn-primary" asp-action="CreatePhase">Add new phase</a>
+  </div>
 }
 else
 {
-<div class="alert alert-info">
-  <p>No phases are currently allocated to the M.I.L.S process.</p>
-  <a class="mt-2 btn btn-primary" asp-action="CreatePhase">Add new phase</a>
-</div>
+  <div class="alert alert-info">
+    <p>No phases are currently allocated to the M.I.L.S process.</p>
+    <a class="mt-2 btn btn-primary" asp-action="CreatePhase">Add new phase</a>
+  </div>
+}
+
+<partial name="_ModalDelete" />
+
+@section Scripts {
+  <script defer>
+    $(function () {
+      appns.mils.index();
+    })
+  </script>
 }

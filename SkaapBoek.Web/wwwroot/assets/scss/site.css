@@ -58,9 +58,9 @@ body {
     line-height: 0;
 }
 
-.icon-button--delete:hover {
-    color: #b00;
-}
+    .icon-button--delete:hover {
+        color: #b00;
+    }
 
 .multi-btn-target {
     display: flex;
@@ -77,21 +77,33 @@ body {
     height: 300px;
 }
 
-.multilist-container li {
-    cursor: pointer;
-}
+    .multilist-container li {
+        cursor: pointer;
+    }
 
-.multilist-container ul {
-    overflow: auto;
-}
+    .multilist-container ul {
+        overflow: auto;
+    }
 
-.fadable-button a {
+.fadable-buttons-container .fadable-button {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0s, opacity 0.25s linear;
 }
 
-.fadable-button:hover a {
+.fadable-buttons-container:hover .fadable-button {
     visibility: visible;
     opacity: 1;
+}
+
+.card-button--blue {
+    color: #0056b3;
+}
+
+    .card-button--blue:hover {
+        color: #007bff;
+    }
+
+.bg-semidark {
+    background-color: #484d52;
 }

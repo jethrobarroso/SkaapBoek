@@ -1,0 +1,143 @@
+﻿@model MilsPhaseEditViewModel
+
+@{
+  ViewBag.Title = "Create Phase";
+}
+
+<div class="col-lg-6 text-light">
+  <h1 class="mb-3">Create M.I.L.S Phase</h1>
+
+  <form id="groupCreateForm" class="text-light" asp-action="CreatePhase">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+      <div class="col-6 mb-3">
+        <label asp-for="PhaseOrder" dis class="control-label"></label>
+        <input asp-for="PhaseOrder" class="form-control" disabled/>
+        <span asp-validation-for="PhaseOrder" class="text-danger"></span>
+      </div>
+      <div class="col-6 mb-3">
+        <label asp-for="StartDate" class="control-label"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-6 offset-6 mb-3">
+        <label asp-for="Days" class="control-label"></label>
+        <input asp-for="Days" class="form-control" />
+        <span asp-validation-for="Days" class="text-danger"></span>
+      </div>
+    </div>
+    <div class="form-row mb-3">
+      <div class="col-12">
+        <label asp-for="Activity" class="control-label"></label>
+        <textarea asp-for="Activity" class="form-control"></textarea>
+        <span asp-validation-for="Activity" class="text-danger"></span>
+      </div>
+    </div>
+    <div class="form-group mt-3 mb-4">
+      <a asp-action="Index" class="btn btn-outline-secondary text-light">Cancel</a>
+      <input type="submit" value="Update" class="btn btn-primary" />
+    </div>
+  </form>
+
+  <h4 class="h4 mb-4">Phase tasks</h4>
+  @if (Model.Tasks.Any())
+  {
+    <div class="table-responsive-md text-light">
+      <table id="phaseTaskTable" class="table table table-striped table-dark table-hover">
+        <thead>
+          <tr>
+            <th class="filterable">#</th>
+            <th class="filterable">Feed</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var task in Model.Tasks)
+          {
+            <tr>
+              <td>@task.TaskOrder</td>
+              <td>@(task.Instructions)</td>
+              <td>
+                <div class="d-flex align-content-center">
+                  <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@task.Id"
+                     data-toggle="tooltip" data-placement="top" title="View">
+                    <i class="material-icons">search</i>
+                  </a>
+                  <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@task.Id"
+                     data-toggle="tooltip" data-placement="top" title="Edit">
+                    <i class="material-icons">edit</i>
+                  </a>
+                  <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
+                    <button class="icon-button--delete" data-user-id="@task.Id"
+                            type="button" data-toggle="modal" data-target="#deleteModal">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <a class="mt-2 btn btn-primary" data-toggle="modal"
+         data-target="#addTaskModal">Add phase</a>
+    </div>
+  }
+  else
+  {
+    <div class="alert alert-info">
+      <p>No tasks are currently assigned to this phase.</p>
+      <a class="mt-2 btn btn-primary" data-toggle="modal"
+         data-target="#addTaskModal">Add phase</a>
+    </div>
+  }
+
+  <div class="mt-3">
+    <a asp-action="Index">Back to List</a>
+  </div>
+</div>
+
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create phase task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createTaskForm" method="post" asp-action="CreateTask">
+          <input hidden asp-for="MilsPhaseId" />
+          <div class="form-group">
+            <label asp-for="TaskOrder" class="control-label"></label>
+            <input asp-for="TaskOrder" class="form-control" />
+            <span asp-validation-for="TaskOrder" class="text-danger"></span>
+          </div>
+          <div class="form-group">
+            <label asp-for="Instructions" class="control-label"></label>
+            <textarea asp-for="Instructions" class="form-control"></textarea>
+            <span asp-validation-for="Instructions" class="text-danger"></span>
+          </div>
+          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Index" class="btn btn-outline-secondary text-light" data-dismiss="modal">Cancel</a>
+        <button type="submit" form="createTaskForm" class="btn btn-primary">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<partial name="_ModalDelete" />
+
+@section Scripts {
+<script defer>
+  $(function () {
+    appns.mils.editPhase();
+  });
+</script>
+}

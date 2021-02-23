@@ -99,9 +99,6 @@ namespace SkaapBoek.DAL
                 builder.HasOne(s => s.Father).WithMany(s => s.ChildrenOfFather).HasForeignKey(s => s.FatherId);
                 builder.HasOne(s => s.Mother).WithMany(s => s.ChildrenOfMother).HasForeignKey(s => s.MotherId);
             });
-
-            builder.Entity<MilsPhase>()
-                .HasAlternateKey(m => m.PhaseOrder);
         }
     }
 }

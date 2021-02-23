@@ -70,6 +70,7 @@ namespace SkaapBoek.Web
             services.AddScoped<IPenService, PenService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IMilsService, MilsService>();
+            services.AddScoped<IMilsTaskService, MilsTaskService>();
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 //options.Password.RequiredLength = 10;

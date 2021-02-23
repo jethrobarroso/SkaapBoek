@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SkaapBoek.Core
+namespace SkaapBoek.Web.ViewModels
 {
-    public class MilsTask
+    public class MilsPhaseEditViewModel : MilsPhaseDto
     {
-        public int Id { get; set; }
-
         [Required]
-        [Range(1,100)]
+        [Range(1, 100)]
         public int TaskOrder { get; set; }
 
         [Required]
@@ -18,6 +17,5 @@ namespace SkaapBoek.Core
         public string Instructions { get; set; }
 
         public int MilsPhaseId { get; set; }
-        public MilsPhase MilsPhase { get; set; }
     }
 }

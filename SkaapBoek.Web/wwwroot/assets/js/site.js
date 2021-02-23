@@ -3,6 +3,7 @@ import * as sheepViews from './views/sheep.js'
 import * as groupViews from './views/groups.js'
 import * as taskViews from './views/tasks.js'
 import * as penViews from './views/pen.js'
+import * as milsViews from './views/mils.js'
 
 document.addEventListener("DOMContentLoaded", () => {
     $('[data-toggle="tooltip"]').tooltip();
@@ -46,6 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
             details: taskViews.details,
             create: taskViews.create,
             edit: taskViews.edit,
+        },
+        mils: {
+            index: milsViews.index,
+            editPhase: milsViews.editPhase,
         }
     }
 })

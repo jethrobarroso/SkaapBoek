@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkaapBoek.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SkaapBoek.Web.ViewModels
 {
-    public class MilsPhaseCreateViewModel
+    public class MilsPhaseDto
     {
         [Required]
         [Range(1, 1000)]
@@ -22,5 +23,7 @@ namespace SkaapBoek.Web.ViewModels
         [Required]
         [Range(0, 5000)]
         public int Days { get; set; }
+
+        public IList<MilsTask> Tasks { get; set; }
     }
 }
