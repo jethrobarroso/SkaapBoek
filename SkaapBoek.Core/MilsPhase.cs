@@ -16,10 +16,6 @@ namespace SkaapBoek.Core
         [Required]
         [MaxLength(250)]
         public string Activity { get; set; }
-
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime StartDate { get; set; } = DateTime.Today;
         
         [Required]
         [Range(0,5000)]

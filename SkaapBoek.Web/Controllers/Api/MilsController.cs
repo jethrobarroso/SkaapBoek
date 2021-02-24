@@ -25,7 +25,7 @@ namespace SkaapBoek.Web.Controllers.Api
 
         [HttpPut("UpdatePhaseSequence")]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> UpdatePhaseSequence(PhaseSequenceChange model)
+        public async Task<IActionResult> UpdatePhaseSequence(UpdatedPhaseSequence model)
         {
             await _milsService.UpdatePhaseSequence(model.OldSequence, model.NewSequence);
 

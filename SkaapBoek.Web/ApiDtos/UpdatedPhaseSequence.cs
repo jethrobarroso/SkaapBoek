@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SkaapBoek.Web.ApiDtos
 {
-    public class PhaseSequenceChange
+    public class UpdatedPhaseSequence
     {
         public int OldSequence { get; set; }
         public int NewSequence { get; set; }

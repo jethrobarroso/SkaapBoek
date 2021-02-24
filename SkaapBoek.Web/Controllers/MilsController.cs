@@ -30,44 +30,6 @@ namespace SkaapBoek.Web.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> UpdatePhaseSequence(MilsPhaseIndexViewModel model)
-        {
-            if (model.OldSequence - model.NewSequence > 0)
-            {
-                var shiftedElements = _context.MilsPhaseSet.Where(p =>
-                    p.PhaseSequence >= model.NewSequence &&
-                    p.PhaseSequence <= model.OldSequence).OrderBy(p => p.PhaseSequence);
-
-                foreach (var phase in shiftedElements)
-                {
-                    phase.PhaseSequence++;
-                }
-
-                var last = shiftedElements.Last();
-                last.PhaseSequence = model.NewSequence;
-            }
-            else
-            {
-                var shiftedElements = await _context.MilsPhaseSet.Where(p =>
-                    p.PhaseSequence <= model.NewSequence &&
-                    p.PhaseSequence >= model.OldSequence).OrderBy(p => p.PhaseSequence).ToListAsync();
-
-                foreach (var phase in shiftedElements)
-                {
-                    phase.PhaseSequence--;
-                }
-
-                var first = shiftedElements.First();
-                first.PhaseSequence = model.NewSequence;
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
-        }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {

@@ -16,13 +16,8 @@ namespace SkaapBoek.Web.ViewModels
         public string Activity { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; } = DateTime.Today;
-
-        [Required]
         [Range(0, 5000)]
+        [Display(Name ="Duration in days")]
         public int Days { get; set; }
-
-        public int OldSequence { get; set; }
-        public int NewSequence { get; set; }
     }
 }
