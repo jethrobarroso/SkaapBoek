@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SkaapBoek.Core;
+using SkaapBoek.DAL;
 using SkaapBoek.DAL.Services;
 using SkaapBoek.Web.ViewModels;
 using System;
@@ -16,27 +19,80 @@ namespace SkaapBoek.Web.Controllers
         private readonly IMilsService _milsService;
         private readonly IMilsTaskService _milsTaskService;
         private readonly IMapper _mapper;
+        private readonly AppDbContext _context;
 
         public MilsController(IMilsService milsService, IMilsTaskService milsTaskService,
-            IMapper mapper)
+            IMapper mapper, AppDbContext context)
         {
             _milsService = milsService;
             _milsTaskService = milsTaskService;
             _mapper = mapper;
+            _context = context;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdatePhaseSequence(MilsPhaseIndexViewModel model)
+        {
+            if (model.OldSequence - model.NewSequence > 0)
+            {
+                var shiftedElements = _context.MilsPhaseSet.Where(p =>
+                    p.PhaseSequence >= model.NewSequence &&
+                    p.PhaseSequence <= model.OldSequence).OrderBy(p => p.PhaseSequence);
+
+                foreach (var phase in shiftedElements)
+                {
+                    phase.PhaseSequence++;
+                }
+
+                var last = shiftedElements.Last();
+                last.PhaseSequence = model.NewSequence;
+            }
+            else
+            {
+                var shiftedElements = await _context.MilsPhaseSet.Where(p =>
+                    p.PhaseSequence <= model.NewSequence &&
+                    p.PhaseSequence >= model.OldSequence).OrderBy(p => p.PhaseSequence).ToListAsync();
+
+                foreach (var phase in shiftedElements)
+                {
+                    phase.PhaseSequence--;
+                }
+
+                var first = shiftedElements.First();
+                first.PhaseSequence = model.NewSequence;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var phases = await _milsService.GetAllWithTasksSorted();
-            return View(phases);
+            var model = new MilsPhaseIndexViewModel
+            {
+                PhaseList = await _milsService.GetAllWithTasksSorted(),
+
+            };
+            return View(model);
         }
 
         [HttpGet]
-        public IActionResult CreatePhase()
+        public async Task<IActionResult> CreatePhase()
         {
-            var phase = new MilsPhase();
-            return View(_mapper.Map<MilsPhaseDto>(phase));
+            var allPhases = await _milsService.GetAll()
+                    .AsNoTracking()
+                    .Select(p => new SelectListItem
+                    {
+                        Value = p.PhaseSequence.ToString(),
+                        Text = p.Activity
+                    }).ToListAsync();
+
+            ViewBag.Phases = allPhases;
+            var model = new MilsPhaseDto();
+            return View(model);
         }
 
         [HttpPost]
@@ -61,7 +117,7 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var phase = await _milsService.GetById(id.Value);
-            
+
             if (phase is null)
             {
                 ViewBag.ErrorMessage = $"Mils phase with ID = {id} not found";
@@ -74,27 +130,68 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> EditPhase(MilsPhaseEditViewModel model, int? id)
+        {
+            if (id is null)
+            {
+                ViewBag.ErrorMessage = "Bad request. No phase ID specified.";
+                return View("BadRequest");
+            }
+            var phase = await _milsService.GetById(id.Value, true);
+            if (phase is null)
+            {
+                ViewBag.ErrorMessage = $"Mils phase with ID = {id} not found";
+                return View("NotFound");
+            }
+
+            _mapper.Map(model, phase);
+            await _milsService.Update(phase);
+            TempData["Success"] = "Successfully updated phase.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
         public async Task<IActionResult> CreateTask(MilsPhaseEditViewModel model)
         {
             var phase = await _milsService.GetById(model.MilsPhaseId, true);
 
-            if(phase is null)
+            if (phase is null)
             {
                 ViewBag.ErrorMessage = $"M.I.L.S phase with ID = {model.MilsPhaseId} not found.";
                 return View("NotFound");
             }
 
-            if(phase.Tasks.Any(p => p.TaskOrder == model.PhaseOrder))
-            {
-                ModelState.AddModelError("", "Another task already has this order");
-                return View(nameof(EditPhase), new { id = model.MilsPhaseId });
-            }
-
             var task = _mapper.Map<MilsTask>(model);
             phase.Tasks.Add(task);
             await _milsService.Update(phase);
-
+            TempData["Success"] = "Successfully updated phase.";
             return RedirectToAction(nameof(EditPhase), new { id = model.MilsPhaseId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePhase(int? id)
+        {
+            if (id is null)
+            {
+                ViewBag.ErrorMessage = "Bad request. No phase ID specified.";
+                return View("BadRequest");
+            }
+            await _milsService.Delete(id.Value);
+            TempData["Success"] = "Successfully deleted phase.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTask(int phaseId, int? id)
+        {
+            if (id is null)
+            {
+                ViewBag.ErrorMessage = "Bad request. No phase ID specified.";
+                return View("BadRequest");
+            }
+            await _milsTaskService.Delete(id.Value);
+            TempData["Success"] = "Successfully deleted task.";
+            return RedirectToAction(nameof(EditPhase), new { id = phaseId });
         }
     }
 }

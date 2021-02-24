@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkaapBoek.DAL;
 
 namespace SkaapBoek.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210223111440_RenameOrderToSequence")]
+    partial class RenameOrderToSequence
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -598,7 +600,7 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -607,7 +609,7 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -616,7 +618,7 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -625,13 +627,13 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -640,7 +642,7 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -648,7 +650,8 @@ namespace SkaapBoek.DAL.Migrations
                 {
                     b.HasOne("SkaapBoek.Core.MilsPhase", "MilsPhase")
                         .WithMany("Groups")
-                        .HasForeignKey("MilsPhaseId");
+                        .HasForeignKey("MilsPhaseId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SkaapBoek.Core.Pen", "Pen")
                         .WithMany("ContainedGroups")
@@ -661,13 +664,13 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("SkaapBoek.Core.Group", "Group")
                         .WithMany("GroupedSheep")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SkaapBoek.Core.Sheep", "Sheep")
                         .WithMany("GroupedSheep")
                         .HasForeignKey("SheepId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -676,7 +679,7 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("SkaapBoek.Core.MilsPhase", "MilsPhase")
                         .WithMany("Tasks")
                         .HasForeignKey("MilsPhaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -684,7 +687,8 @@ namespace SkaapBoek.DAL.Migrations
                 {
                     b.HasOne("SkaapBoek.Core.Feed", "Feed")
                         .WithMany("Pens")
-                        .HasForeignKey("FeedId");
+                        .HasForeignKey("FeedId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SkaapBoek.Core.Sheep", b =>
@@ -692,7 +696,7 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("SkaapBoek.Core.Color", "Color")
                         .WithMany("Sheep")
                         .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SkaapBoek.Core.Sheep", "Father")
@@ -707,7 +711,7 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("SkaapBoek.Core.Gender", "Gender")
                         .WithMany("Sheep")
                         .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SkaapBoek.Core.Sheep", "Mother")
@@ -722,13 +726,13 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("SkaapBoek.Core.SheepCategory", "Category")
                         .WithMany("Sheep")
                         .HasForeignKey("SheepCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SkaapBoek.Core.SheepStatus", "SheepStatus")
                         .WithMany("Sheep")
                         .HasForeignKey("SheepStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -736,22 +740,24 @@ namespace SkaapBoek.DAL.Migrations
                 {
                     b.HasOne("SkaapBoek.Core.Group", "Group")
                         .WithMany("TaskInstances")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SkaapBoek.Core.Priority", "Priority")
                         .WithMany("Tasks")
                         .HasForeignKey("PriorityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SkaapBoek.Core.Sheep", "Sheep")
                         .WithMany("TaskInstances")
-                        .HasForeignKey("SheepId");
+                        .HasForeignKey("SheepId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SkaapBoek.Core.Status", "Status")
                         .WithMany("Tasks")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

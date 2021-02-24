@@ -11,7 +11,7 @@ namespace SkaapBoek.Core
 
         [Required]
         [Range(1,100)]
-        public int TaskOrder { get; set; }
+        public int TaskSequence { get; set; }
 
         [Required]
         [MaxLength(500)]

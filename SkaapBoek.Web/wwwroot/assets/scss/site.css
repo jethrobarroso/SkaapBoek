@@ -107,3 +107,7 @@ body {
 .bg-semidark {
     background-color: #484d52;
 }
+
+.draggable.dragging {
+    background-color: #697e94;
+}

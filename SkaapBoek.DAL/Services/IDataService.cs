@@ -27,14 +27,14 @@ namespace SkaapBoek.DAL.Services
 
         public AppDbContext Context { get; set; }
 
-        public async Task<TEntity> Add(TEntity newEntity)
+        public virtual async Task<TEntity> Add(TEntity newEntity)
         {
             Context.Set<TEntity>().Add(newEntity);
             await Context.SaveChangesAsync();
             return newEntity;
         }
 
-        public async Task<TEntity> Update(TEntity updatedEntity)
+        public virtual async Task<TEntity> Update(TEntity updatedEntity)
         {
             Context.Entry(updatedEntity).State = EntityState.Modified;
             await Context.SaveChangesAsync();

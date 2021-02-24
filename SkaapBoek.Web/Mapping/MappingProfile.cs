@@ -12,10 +12,11 @@ namespace SkaapBoek.Web.Mapping
     {
         public MappingProfile()
         {
+            CreateMap<MilsPhase, MilsPhaseDto>().ReverseMap();
             CreateMap<MilsPhase, MilsPhaseEditViewModel>()
                 .ForMember(dest => dest.MilsPhaseId, opt => 
-                    opt.MapFrom(src => src.Id))
-                .ReverseMap();
+                    opt.MapFrom(src => src.Id));
+            CreateMap<MilsPhaseEditViewModel, MilsPhase>();
             CreateMap<MilsTask, MilsPhaseEditViewModel>().ReverseMap();
         }
     }

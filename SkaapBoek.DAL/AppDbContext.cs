@@ -32,10 +32,10 @@ namespace SkaapBoek.DAL
         {
             base.OnModelCreating(builder);
 
-            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
+            //foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            //{
+            //    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            //}
 
             builder.Entity<Feed>().ToTable("feed");
             builder.Entity<Gender>().ToTable("gender");

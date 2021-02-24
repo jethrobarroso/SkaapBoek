@@ -1,46 +1,52 @@
-﻿@model List<MilsPhase>
+﻿@model MilsPhaseIndexViewModel
 
 @{
   ViewBag.Title = "M.I.L.S Overview";
+  var phases = Model.PhaseList;
 }
 
 <h1 class="h1 text-light mb-4">M.I.L.S Overview</h1>
 
 <partial name="_UpdateMessage" />
 
-@if (Model.Any())
+@if (Model.PhaseList.Any())
 {
   <div class="accordion text-light" id="accordionExample">
-    @for (int i = 0; i < Model.Count(); i++)
+    @for (int i = 0; i < phases.Count(); i++)
     {
-      <div id="phasesCard" class="card">
-        <div class="card-header bg-semidark fadable-buttons-container">
+      <div data-phase-id="@Model.PhaseList[i].Id"
+           data-phase-sequence="@phases[i].PhaseSequence"
+           class="card draggable">
+        <div class="card-header bg-semidark fadable-buttons-container" draggable="true">
           <div class="mb-0">
             <div class="btn btn-block text-left text-light" type="button"
-                 data-toggle="collapse" data-target="#phase@(Model[i].PhaseOrder)">
+                 data-toggle="collapse" data-target="#phase@(phases[i].PhaseSequence)">
               <div class="row d-flex align-items-center">
-                <div class="col-10">
+                <div class="col-1">
+                  <i class="material-icons drag-icon">open_with</i>
+                </div>
+                <div class="col-8">
                   <div class="row">
-                    <div class="col-md-2">Phase: @Model[i].PhaseOrder</div>
-                    <div class="col-md-4">Starts: @Model[i].StartDate</div>
-                    <div class="col-md-4">Days: @Model[i].Days</div>
+                    @*<div class="col-md-2">Phase: @phases[i].PhaseSequence</div>*@
+                    <div class="col-md-6">Starts: @phases[i].StartDate</div>
+                    <div class="col-md-4">Days: @phases[i].Days</div>
                   </div>
                   <div class="row">
-                    <div class="col-12">Activity: @Model[i].Activity</div>
+                    <div class="col-12">Activity: @phases[i].Activity</div>
                   </div>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                   <div class="d-flex align-content-center">
                     <a class="icon-button mr-1 ml-1 fadable-button"
-                       asp-action="PhaseDetails" asp-route-id="@Model[i].Id"
+                       asp-action="PhaseDetails" asp-route-id="@phases[i].Id"
                        data-toggle="tooltip" data-placement="top" title="View">
                       <i class="material-icons">search</i>
                     </a>
-                    <a class="icon-button mr-1 ml-1 fadable-button" asp-action="EditPhase" asp-route-id="@Model[i].Id"
+                    <a class="icon-button mr-1 ml-1 fadable-button" asp-action="EditPhase" asp-route-id="@phases[i].Id"
                        data-toggle="tooltip" data-placement="top" title="Edit">
                       <i class="material-icons">edit</i>
                     </a>
-                    <button class="icon-button--delete fadable-button" data-user-id="@Model[i].Id"
+                    <button class="icon-button--delete fadable-button" data-user-id="@phases[i].Id"
                             data-toggle="modal" data-target="#deleteModal">
                       <i class="material-icons">delete</i>
                     </button>
@@ -51,11 +57,11 @@
           </div>
         </div>
 
-        <div id="phase@(Model[i].PhaseOrder)" class="collapse bg-dark" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div id="phase@(phases[i].PhaseSequence)" class="collapse bg-dark" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
-            @if (Model[i].Tasks.Any())
+            @if (phases[i].Tasks.Any())
             {
-              foreach (var task in Model[i].Tasks)
+              foreach (var task in phases[i].Tasks)
               {
                 <dl class="row">
                   <dt class="col-sm-3">Instructions:</dt>
@@ -67,27 +73,71 @@
             {
               <div class="alert alert-info">
                 <p>No tasks have been assigned to this phase.</p>
-                <a class="btn btn-primary" asp-action="CreateTask">Create task</a>
+                <a class="btn btn-primary" data-toggle="modal" data-target="#addPhaseModal">Create phase</a>
               </div>
             }
           </div>
         </div>
       </div>
     }
-    <a class="mt-2 mb-4 btn btn-primary" asp-action="CreatePhase">Add new phase</a>
   </div>
+  <a class="btn btn-primary mt-3 mb-3" data-toggle="modal"
+     data-target="#addPhaseModal">Create phase</a>
+
 }
 else
 {
   <div class="alert alert-info">
     <p>No phases are currently allocated to the M.I.L.S process.</p>
-    <a class="mt-2 btn btn-primary" asp-action="CreatePhase">Add new phase</a>
+    <a class="btn btn-primary" data-toggle="modal" data-target="#addPhaseModal">Create phase</a>
   </div>
 }
 
 <partial name="_ModalDelete" />
 
+<div class="modal fade" id="addPhaseModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create phase</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createTaskForm" method="post" asp-action="CreatePhase">
+          <div class="row">
+            <div class="col-6">
+              <label asp-for="StartDate" class="control-label"></label>
+              <input asp-for="StartDate" class="form-control" />
+              <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+              <label asp-for="Days" class="control-label"></label>
+              <input asp-for="Days" class="form-control" />
+              <span asp-validation-for="Days" class="text-danger"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label asp-for="Activity" class="control-label"></label>
+              <textarea asp-for="Activity" class="form-control"></textarea>
+              <span asp-validation-for="Activity" class="text-danger"></span>
+            </div>
+          </div>
+          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Index" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</a>
+        <button type="submit" form="createTaskForm" class="btn btn-primary">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @section Scripts {
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
   <script defer>
     $(function () {
       appns.mils.index();

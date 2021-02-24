@@ -10,20 +10,20 @@
   <form id="groupEditForm" class="text-light" asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @*<input type="hidden" asp-for="Id" />*@
-  <div class="form-row">
-    <div class="col-6 mb-3">
-      <label asp-for="Name" class="control-label"></label>
-      <input asp-for="Name" class="form-control" />
-      <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="form-row">
+      <div class="col-6 mb-3">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+      </div>
+      <div class="col-6 mb-3">
+        <label asp-for="PenId" class="control-label"></label>
+        <select asp-for="PenId" class="form-control" asp-items="@Model.Pens">
+          <option value="" hidden disabled selected></option>
+        </select>
+        <span asp-validation-for="PenId" class="text-danger"></span>
+      </div>
     </div>
-    <div class="col-6 mb-3">
-      <label asp-for="PenId" class="control-label"></label>
-      <select asp-for="PenId" class="form-control" asp-items="@Model.Pens">
-        <option value="" hidden disabled selected></option>
-      </select>
-      <span asp-validation-for="PenId" class="text-danger"></span>
-    </div>
-  </div>
     <div class="form-row mb-4">
       <div class="col-12">
         <label asp-for="Description" class="control-label"></label>
@@ -98,10 +98,10 @@
 </div>
 
 @section Scripts {
-<script defer>
-  $(function () {
-    appns.groups.edit();
-  });
-</script>
+  <script defer>
+    $(function () {
+      appns.groups.edit();
+    });
+  </script>
 }
 

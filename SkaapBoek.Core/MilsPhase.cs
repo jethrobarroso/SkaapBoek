@@ -11,7 +11,7 @@ namespace SkaapBoek.Core
 
         [Required]
         [Range(1, 1000)]
-        public int PhaseOrder { get; set; }
+        public int PhaseSequence { get; set; }
 
         [Required]
         [MaxLength(250)]

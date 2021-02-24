@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using SkaapBoek.Core;
+﻿using SkaapBoek.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace SkaapBoek.Web.ViewModels
 {
-    public class MilsPhaseDto
+    public class MilsPhaseIndexViewModel
     {
+        public IList<MilsPhase> PhaseList { get; set; }
+
         [Required]
         [MaxLength(250)]
         public string Activity { get; set; }
@@ -21,6 +22,7 @@ namespace SkaapBoek.Web.ViewModels
         [Range(0, 5000)]
         public int Days { get; set; }
 
-        public IList<MilsTask> Tasks { get; set; }
+        public int OldSequence { get; set; }
+        public int NewSequence { get; set; }
     }
 }
