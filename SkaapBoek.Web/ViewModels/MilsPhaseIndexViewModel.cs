@@ -19,5 +19,9 @@ namespace SkaapBoek.Web.ViewModels
         [Range(0, 5000)]
         [Display(Name ="Duration in days")]
         public int Days { get; set; }
+
+        [Required]
+        [MaxLength(500)]
+        public string Instructions { get; set; }
     }
 }

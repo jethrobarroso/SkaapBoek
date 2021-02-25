@@ -15,9 +15,6 @@ namespace SkaapBoek.Web.ViewModels
         public string Activity { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; } = DateTime.Today;
-
-        [Required]
         [Range(0, 5000)]
         public int Days { get; set; }
 

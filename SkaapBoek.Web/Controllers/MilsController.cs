@@ -131,6 +131,27 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> EditTask(int? id, int phaseId, string instructions)
+        {
+            if (id is null)
+            {
+                ViewBag.ErrorMessage = "Bad request. No task ID specified.";
+                return View("BadRequest");
+            }
+            var task = await _milsTaskService.GetById(id);
+            if (task is null)
+            {
+                ViewBag.ErrorMessage = $"Phase task with ID = {id} not found";
+                return View("NotFound");
+            }
+
+            task.Instructions = instructions;
+            await _milsTaskService.Update(task);
+            TempData["Success"] = "Successfully updated phase task.";
+            return RedirectToAction(nameof(EditPhase), new { id = phaseId });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> DeletePhase(int? id)
         {
             if (id is null)

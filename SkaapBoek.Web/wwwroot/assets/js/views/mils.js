@@ -1,4 +1,5 @@
 ﻿import * as common from '../common.js';
+import { edit } from './groups.js';
 
 export function index() {
     const body = document.querySelector('body');
@@ -54,6 +55,14 @@ export function editPhase() {
     const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
 
     obj.fromTable(table);
+}
 
+export function editPhaseTask(id, instructions) {
+    const body = document.querySelector('body');
+    const editModal = body.querySelector('#editTaskModal');
 
+    if (editModal) {
+        editModal.querySelector('form').action = `/Mils/EditTask/${id}`;
+        editModal.querySelector('#Instructions').innerHTML = instructions;
+    }
 }

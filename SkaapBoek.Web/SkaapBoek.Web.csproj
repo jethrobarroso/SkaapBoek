@@ -16,6 +16,7 @@
 	</Target>-->
 
 	<ItemGroup>
+		<Folder Include="Views\ViewComponents\" />
 		<Folder Include="wwwroot\lib\" />
 	</ItemGroup>
 

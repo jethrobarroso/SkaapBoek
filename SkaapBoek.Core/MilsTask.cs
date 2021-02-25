@@ -10,10 +10,6 @@ namespace SkaapBoek.Core
         public int Id { get; set; }
 
         [Required]
-        [Range(1,100)]
-        public int TaskSequence { get; set; }
-
-        [Required]
         [MaxLength(500)]
         public string Instructions { get; set; }
 

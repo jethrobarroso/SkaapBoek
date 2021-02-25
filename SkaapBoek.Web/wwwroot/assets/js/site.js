@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mils: {
             index: milsViews.index,
             editPhase: milsViews.editPhase,
+            editPhaseTask: milsViews.editPhaseTask,
         }
     }
 })
