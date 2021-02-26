@@ -48,10 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
             create: taskViews.create,
             edit: taskViews.edit,
         },
-        mils: {
-            index: milsViews.index,
-            editPhase: milsViews.editPhase,
-            editPhaseTask: milsViews.editPhaseTask,
-        }
+        mils: milsViews,
     }
 })

@@ -25,21 +25,29 @@
         <span asp-validation-for="Activity" class="text-danger"></span>
       </div>
     </div>
-    <div class="form-group mt-3 mb-4">
+    <div class="form-group mt-3 mb-1">
       <a asp-action="Index" class="btn btn-outline-secondary text-light">Cancel</a>
       <input type="submit" value="Update" class="btn btn-primary" />
     </div>
   </form>
 
-  <h4 class="h4 mb-4">Phase tasks</h4>
+  <a asp-action="Index" class="mb-3 mt-3 home-link-arrow d-inline-flex align-items-center">
+    <svg><use xlink:href="/images/main.svg#icon-arrow-left"></use></svg>
+
+    Return to list
+  </a>
+
+  <h4 class="h4 mb-3">Phase tasks</h4>
   @if (Model.Tasks.Any())
   {
     <div class="table-responsive-md text-light">
       <table id="phaseTaskTable" class="table table table-striped table-dark table-hover">
         <thead>
           <tr>
-            <th class="filterable">Feed</th>
-            <th>Action</th>
+            <th class="filterable">
+              <div>Instructions</div>
+            </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -49,13 +57,10 @@
               <td>@(task.Instructions)</td>
               <td>
                 <div class="d-flex align-content-center">
-                  <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@task.Id"
-                     data-toggle="tooltip" data-placement="top" title="View">
-                    <i class="material-icons">search</i>
-                  </a>
-                  <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Edit">
+                  <span data-toggle="tooltip" data-placement="top" title="Edit"
+                        class="icon-button--delete mr-1 ml-1">
                     <a href="#" data-toggle="modal" data-target="#editTaskModal"
-                       onclick="appns.mils.editPhaseTask(@task.Id, '@task.Instructions')" >
+                       onclick="appns.mils.editPhaseTask(@task.Id, this)">
                       <i class="material-icons">edit</i>
                     </a>
                   </span>
@@ -72,7 +77,7 @@
         </tbody>
       </table>
       <a class="mt-2 btn btn-primary" data-toggle="modal"
-         data-target="#addTaskModal">Add phase</a>
+         data-target="#addTaskModal">Add task</a>
     </div>
   }
   else
@@ -80,13 +85,64 @@
     <div class="alert alert-info">
       <p>No tasks are currently assigned to this phase.</p>
       <a class="mt-2 btn btn-primary" data-toggle="modal"
-         data-target="#addTaskModal">Add phase</a>
+         data-target="#addTaskModal">Add task</a>
     </div>
   }
 
-  <div class="mt-3">
-    <a asp-action="Index">Back to List</a>
-  </div>
+  <h4 class="h4 mb-3 mt-3">Sheep groups currently in this phase</h4>
+  @if (Model.Groups?.Any() ?? false)
+  {
+    <div class="table-responsive-md text-light">
+      <table id="groupTable" class="table table-striped table-dark table-hover">
+        <thead>
+          <tr>
+            <th class="filterable">
+              <div>Name</div>
+            </th>
+            <th class="filterable">
+              <div>Pen</div>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var group in Model.Groups)
+          {
+            <tr>
+              <td>
+                @Html.DisplayFor(modelItem => group.Name)
+              </td>
+              <td>@(group.Pen?.Number.ToString() ?? "None")</td>
+              <td>
+                <div class="d-flex align-content-center">
+                  <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@group.Id"
+                     data-toggle="tooltip" data-placement="top" title="View">
+                    <i class="material-icons">search</i>
+                  </a>
+                  <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@group.Id"
+                     data-toggle="tooltip" data-placement="top" title="Edit">
+                    <i class="material-icons">edit</i>
+                  </a>
+                  <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
+                    <button class="icon-button--delete" data-user-id="@group.Id"
+                            type="button" data-toggle="modal" data-target="#deleteModal">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  else
+  {
+    <div class="alert alert-info">
+      <p>No groups are currently assigned to this phase.</p>
+    </div>
+  }
 </div>
 
 <div class="modal fade" id="addTaskModal" tabindex="-1">

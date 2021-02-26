@@ -18,6 +18,8 @@ namespace SkaapBoek.Core
         public int? PenId { get; set; }
         public Pen Pen { get; set; }
 
+        public DateTime? PhaseStartDate { get; set; }
+
         public int? MilsPhaseId { get; set; }
         public MilsPhase MilsPhase { get; set; }
 

@@ -1,5 +1,4 @@
 ﻿import * as common from '../common.js';
-import { edit } from './groups.js';
 
 export function index() {
     const body = document.querySelector('body');
@@ -43,6 +42,12 @@ export function index() {
             }
         });
     }
+
+    $('#SelectedGroupId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select group"
+    });
 }
 
 
@@ -57,12 +62,23 @@ export function editPhase() {
     obj.fromTable(table);
 }
 
-export function editPhaseTask(id, instructions) {
+/**
+ * Prepare task edit modal with relevant data
+ * @param {number} id Task ID
+ * @param {HTMLElement} element Passed in from onclick property
+ */
+export function editPhaseTask(id, element) {
     const body = document.querySelector('body');
     const editModal = body.querySelector('#editTaskModal');
+    const instructions = element.closest("tr").firstElementChild.innerHTML;
 
     if (editModal) {
         editModal.querySelector('form').action = `/Mils/EditTask/${id}`;
         editModal.querySelector('#Instructions').innerHTML = instructions;
     }
+}
+
+export function assignGroup(groupId) {
+    const phaseIdInput = document.querySelector('#assignGroupForm #MilsPhaseId');
+    phaseIdInput.value = groupId;
 }

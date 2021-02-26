@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SkaapBoek.Core;
 using SkaapBoek.DAL;
 using SkaapBoek.DAL.Services;
@@ -18,16 +19,21 @@ namespace SkaapBoek.Web.Controllers
     {
         private readonly IMilsService _milsService;
         private readonly IMilsTaskService _milsTaskService;
+        private readonly IGroupService _groupService;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
+        private readonly ILogger<MilsController> _logger;
 
-        public MilsController(IMilsService milsService, IMilsTaskService milsTaskService,
-            IMapper mapper, AppDbContext context)
+        public MilsController(IMilsService milsService, 
+            IMilsTaskService milsTaskService,
+            IGroupService groupService,
+            IMapper mapper, 
+            ILogger<MilsController> logger)
         {
             _milsService = milsService;
             _milsTaskService = milsTaskService;
+            _groupService = groupService;
             _mapper = mapper;
-            _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -36,8 +42,9 @@ namespace SkaapBoek.Web.Controllers
             var model = new MilsPhaseIndexViewModel
             {
                 PhaseList = await _milsService.GetAllWithTasksSorted(),
-
+                AvailableGroups = new SelectList(await _milsService.GetAvailableGroups(), "Id", "Name")
             };
+            
             return View(model);
         }
 
@@ -106,7 +113,8 @@ namespace SkaapBoek.Web.Controllers
                 return View("NotFound");
             }
 
-            _mapper.Map(model, phase);
+            phase.Activity = model.Activity;
+            phase.Days = model.Days;
             await _milsService.Update(phase);
             TempData["Success"] = "Successfully updated phase.";
             return RedirectToAction(nameof(Index));
@@ -149,6 +157,16 @@ namespace SkaapBoek.Web.Controllers
             await _milsTaskService.Update(task);
             TempData["Success"] = "Successfully updated phase task.";
             return RedirectToAction(nameof(EditPhase), new { id = phaseId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignGroup(MilsPhaseIndexViewModel model)
+        {
+            var group = await _groupService.GetByIdLite(model.SelectedGroupId, true);
+            _mapper.Map(model, group);
+            await _groupService.Update(group);
+            TempData["Success"] = $"Successfully queued group to phase.";
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

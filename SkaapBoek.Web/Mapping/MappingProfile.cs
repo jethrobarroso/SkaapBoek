@@ -16,8 +16,10 @@ namespace SkaapBoek.Web.Mapping
             CreateMap<MilsPhase, MilsPhaseEditViewModel>()
                 .ForMember(dest => dest.MilsPhaseId, opt => 
                     opt.MapFrom(src => src.Id));
-            CreateMap<MilsPhaseEditViewModel, MilsPhase>();
+            CreateMap<MilsPhaseEditViewModel, MilsPhase>()
+                .ForMember(dest => dest.Tasks, opt => opt.Ignore());
             CreateMap<MilsTask, MilsPhaseEditViewModel>().ReverseMap();
+            CreateMap<MilsPhaseIndexViewModel, Group>();
         }
     }
 }

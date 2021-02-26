@@ -19,5 +19,6 @@ namespace SkaapBoek.Web.ViewModels
         public int Days { get; set; }
 
         public IList<MilsTask> Tasks { get; set; }
+        public IList<Group> Groups { get; set; }
     }
 }

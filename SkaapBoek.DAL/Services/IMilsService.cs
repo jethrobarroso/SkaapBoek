@@ -10,9 +10,11 @@ namespace SkaapBoek.DAL.Services
 {
     public interface IMilsService : IDataService<MilsPhase>
     {
+        Task AddGroupsToPhase(int phaseId, int[] groupIds);
         Task<bool> ExistsWithPhaseOrder(int order);
         Task<IList<MilsPhase>> GetAllWithTasksSorted();
-        Task<MilsPhase> GetById(int id, bool track = false);
+        Task<IEnumerable<Group>> GetAvailableGroups();
+        Task<MilsPhase> GetById(int? id, bool track = false);
         Task UpdatePhaseSequence(int oldSequence, int newSequence);
     }
 
@@ -31,10 +33,11 @@ namespace SkaapBoek.DAL.Services
             return newEntity;
         }
 
-        public async Task<MilsPhase> GetById(int id, bool track = false)
+        public async Task<MilsPhase> GetById(int? id, bool track = false)
         {
             var result = Context.MilsPhaseSet
-                .Include(m => m.Tasks);
+                .Include(m => m.Tasks)
+                .Include(g => g.Groups);
 
             return track ? await result.FirstOrDefaultAsync(m => m.Id == id)
                 : await result.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
@@ -44,6 +47,7 @@ namespace SkaapBoek.DAL.Services
         {
             return await base.GetAll()
                 .Include(m => m.Tasks)
+                .Include(m => m.Groups)
                 .OrderBy(m => m.PhaseSequence)
                 .AsNoTracking()
                 .ToListAsync();
@@ -53,6 +57,31 @@ namespace SkaapBoek.DAL.Services
         {
             return await Context.MilsPhaseSet
                 .AnyAsync(p => p.PhaseSequence == order);
+        }
+
+        public async Task AddGroupsToPhase(int phaseId, int[] groupIds)
+        {
+            if (groupIds is null) 
+                throw new NullReferenceException($"The property {groupIds} cannot be null.");
+            if (groupIds.Length == 0)
+                throw new ArgumentException($"Unable to updated phase with new groups." +
+                    $"The property ${nameof(groupIds)} is empty.");
+            if (await Context.MilsPhaseSet.AnyAsync(p => p.Id == phaseId))
+                throw new ArgumentException($"Invalid phase ID specified.");
+
+            await Context.GroupSet
+                .Where(g => groupIds.Contains(g.Id))
+                .ForEachAsync(g => g.MilsPhaseId = phaseId);
+
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Group>> GetAvailableGroups()
+        {
+            return await Context.GroupSet
+                .Where(g => g.MilsPhaseId == null)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task UpdatePhaseSequence(int oldSequence, int newSequence)

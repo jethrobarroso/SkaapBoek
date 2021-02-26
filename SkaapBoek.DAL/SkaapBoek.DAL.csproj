@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210225112421_AddPhaseStartDateToGroup.cs" />
+    <Compile Remove="Migrations\20210225112421_AddPhaseStartDateToGroup.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SkaapBoek.Core\SkaapBoek.Core.csproj" />
   </ItemGroup>
 

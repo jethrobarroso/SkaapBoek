@@ -13,6 +13,7 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<Group>> GetAllNoTrack();
         Task<IList<Sheep>> GetAvailableSheep(int? groupId = null);
         Task<Group> GetByIdFull(int id, bool track = false);
+        Task<Group> GetByIdLite(int id, bool track = false);
         Task<ICollection<Group>> GetGroupsByIds(int[] ids);
         Task<IList<Sheep>> GetSelectedSheep(int groupId);
     }
@@ -84,6 +85,13 @@ namespace SkaapBoek.DAL.Services
                 .Where(sg => sg.GroupId == groupId)
                 .AsNoTracking()
                 .Select(sg => sg.Sheep).ToListAsync();
+        }
+
+        public async Task<Group> GetByIdLite(int id, bool track = false)
+        {
+            return track
+                ? await Context.GroupSet.SingleOrDefaultAsync(g => g.Id == id)
+                : await Context.GroupSet.AsNoTracking().SingleOrDefaultAsync(g => g.Id == id);
         }
     }
 }
