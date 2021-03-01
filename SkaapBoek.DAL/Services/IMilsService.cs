@@ -48,6 +48,7 @@ namespace SkaapBoek.DAL.Services
             return await base.GetAll()
                 .Include(m => m.Tasks)
                 .Include(m => m.Groups)
+                    .ThenInclude(g => g.Pen)
                 .OrderBy(m => m.PhaseSequence)
                 .AsNoTracking()
                 .ToListAsync();

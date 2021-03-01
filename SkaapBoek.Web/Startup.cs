@@ -20,6 +20,10 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace SkaapBoek.Web
 {
@@ -54,7 +58,7 @@ namespace SkaapBoek.Web
                 options.UseSqlServer(Configuration.GetConnectionString("SkaapBoekDb"));
             });
 
-            services.AddSwaggerGen(options => 
+            services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {

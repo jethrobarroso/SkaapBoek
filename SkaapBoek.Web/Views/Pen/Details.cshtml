@@ -46,7 +46,7 @@
         <tr>
           <th class="filterable">Name</th>
           <th class="filterable">Pen</th>
-          <th>Action</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -54,15 +54,16 @@
         {
           <tr>
             <td>@group.Name</td>
-            <td>@group.Description</td>
             <td>@(group.Pen?.Number.ToString() ?? "None")</td>
             <td>
               <div class="d-flex align-content-center">
-                <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@group.Id"
+                <a class="icon-button mr-1 ml-1" asp-controller="Groups"
+                   asp-action="Details" asp-route-id="@group.Id"
                    data-toggle="tooltip" data-placement="top" title="View">
                   <i class="material-icons">search</i>
                 </a>
-                <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@group.Id"
+                <a class="icon-button mr-1 ml-1" asp-controller="Groups"
+                   asp-action="Edit" asp-route-id="@group.Id"
                    data-toggle="tooltip" data-placement="top" title="Edit">
                   <i class="material-icons">edit</i>
                 </a>

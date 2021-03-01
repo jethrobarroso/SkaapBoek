@@ -25,11 +25,26 @@ namespace SkaapBoek.Web.Controllers.Api
 
         [HttpPut("UpdatePhaseSequence")]
         [IgnoreAntiforgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdatePhaseSequence(UpdatedPhaseSequence model)
         {
-            await _milsService.UpdatePhaseSequence(model.OldSequence, model.NewSequence);
+            if (User.Identity.IsAuthenticated)
+            {
+                await _milsService.UpdatePhaseSequence(model.OldSequence, model.NewSequence);
+                return NoContent();
+            }
 
-            return NoContent();
+            return StatusCode(401);
+        }
+
+        [HttpGet("testapi")]
+        [AllowAnonymous]
+        public IActionResult TestApi()
+        {
+            if (User.Identity.IsAuthenticated)
+                return Ok("yebo");
+
+            return StatusCode(401);
         }
     }
 }

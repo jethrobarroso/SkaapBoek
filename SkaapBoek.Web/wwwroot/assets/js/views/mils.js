@@ -50,7 +50,22 @@ export function index() {
     });
 }
 
+/**
+ * Prepare task edit modal with relevant data
+ * @param {number} groupId Group ID
+ * @param {HTMLElement} element Passed in from onclick property
+ */
+export function unlinkGroup(groupId, element) {
+    const body = document.querySelector('body');
+    const unlinkModal = body.querySelector('#unlinkGroupModal');
+    const groupName = element.closest("tr").firstElementChild.innerHTML;
 
+    if (unlinkModal) {
+        unlinkModal.querySelector('form').action = `/Mils/RemoveGroup/${groupId}`;
+        let messageBody = `Are you sure you want to remove ${groupName} from this phase?`;
+        unlinkModal.querySelector('.modal-body').innerHTML = messageBody;
+    }
+}
 
 export function editPhase() {
     const deleteModal = document.querySelector('#deleteModal');

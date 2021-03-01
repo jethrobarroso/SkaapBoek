@@ -73,9 +73,6 @@
                   <a class="btn btn-primary" asp-action="EditPhase" asp-route-id="@phases[i].Id">Create task</a>
                 </div>
               }
-              <a class="btn btn-primary mt-3" data-toggle="modal"
-                 onclick="appns.mils.assignGroup(@phases[i].Id)"
-                 data-target="#assignGroupModal">Enqueue group</a>
 
               <h5 class="mt-3 mb-4">Groups in this phase</h5>
               @if (phases[i].Groups.Any())
@@ -103,12 +100,12 @@
                           <td>@(item.Pen?.Number.ToString() ?? "None")</td>
                           <td>
                             <div class="d-flex align-content-center">
-                              <a class="icon-button mr-1 ml-1" asp-controller="Groups" 
+                              <a class="icon-button mr-1 ml-1" asp-controller="Groups"
                                  asp-action="Details" asp-route-id="@item.Id"
                                  data-toggle="tooltip" data-placement="top" title="View">
                                 <i class="material-icons">search</i>
                               </a>
-                              <a class="icon-button mr-1 ml-1" asp-controller="Groups" 
+                              <a class="icon-button mr-1 ml-1" asp-controller="Groups"
                                  asp-action="Edit" asp-route-id="@item.Id"
                                  data-toggle="tooltip" data-placement="top" title="Edit">
                                 <i class="material-icons">edit</i>
@@ -125,9 +122,12 @@
               {
                 <div class="alert alert-info">
                   <p>No groups have been assigned to this phase.</p>
-                  <a class="btn btn-primary" asp-action="EditPhase" asp-route-id="@phases[i].Id">Create task</a>
                 </div>
               }
+
+              <a class="btn btn-primary mt-3" data-toggle="modal"
+                 onclick="appns.mils.assignGroup(@phases[i].Id)"
+                 data-target="#assignGroupModal">Enqueue group</a>
             </div>
           </div>
         </div>

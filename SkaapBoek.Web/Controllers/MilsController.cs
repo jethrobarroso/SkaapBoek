@@ -170,6 +170,26 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> RemoveGroup(int? id, int phaseId)
+        {
+            if (id is null)
+            {
+                ViewBag.ErrorMessage = "Bad request. No group ID specified.";
+                return View("BadRequest");
+            }
+            var group = await _groupService.GetByIdLite(id.Value);
+            if (group is null)
+            {
+                ViewBag.ErrorMessage = $"Phase group with ID = {id} not found";
+                return View("NotFound");
+            }
+            group.MilsPhaseId = null;
+            await _groupService.Update(group);
+            TempData["Success"] = "Successfully removed group from phase.";
+            return RedirectToAction(nameof(EditPhase), new { id = phaseId });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> DeletePhase(int? id)
         {
             if (id is null)
