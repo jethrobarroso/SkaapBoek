@@ -4,171 +4,171 @@
   ViewData["Title"] = "Edit";
 }
 
-<div class="col-lg-6">
-  <h1 class="mb-3 text-light">Edit Pen</h1>
 
-  <form id="penEditForm" class="text-light" asp-action="Edit">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @*<input type="hidden" asp-for="Id" />*@
-    <div class="form-row">
-      <div class="col-6 mb-3">
-        <label asp-for="Number" class="control-label"></label>
-        <input asp-for="Number" class="form-control" />
-        <span asp-validation-for="Number" class="text-danger"></span>
-      </div>
-      <div class="col-6 mb-3">
-        <label asp-for="FeedId" class="control-label"></label>
-        <select style="width: 100%" asp-for="FeedId" class="form-control" asp-items="Model.Feed"></select>
-        <span asp-validation-for="FeedId" class="text-danger"></span>
-      </div>
-    </div>
-    <div class="form-row mb-3">
-      <div class="col-12">
-        <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-      </div>
-    </div>
+<h1 class="mb-3 text-light">Edit Pen</h1>
 
-    <h4 class="h4 mb-4 mt-4">Contains</h4>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#groups" role="tab"
-           aria-controls="home" aria-selected="true">Groups</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#sheep" role="tab"
-           aria-controls="profile" aria-selected="false">Individual sheep</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="groups" role="tabpanel" aria-labelledby="group-tab">
-        @*Group multilist*@
-        <div class="multilist-container d-flex justify-content-between m-2">
-          <div class="flex-grow-1 card bg-secondary sheep-source">
-            <div class="card-header text-light">
-              <strong>Available groups</strong>
-            </div>
-            <div class="form-group m-1">
-              <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" />
-              </div>
-            </div>
-            <ul class="list-group">
-              @foreach (var group in Model.AvailableGroups)
-              {
-                <li data-item-id="@group.Id"
-                    class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@group.Name</span>
-                </li>
-              }
-            </ul>
-          </div>
-          <div class="align-self-center">
-            <div class="m-2">
-              <div>
-                <div class="multi-btn-target btn btn-info mt-1 mb-1">
-                  <i class="material-icons align-items-center">double_arrow</i>
-                </div>
-              </div>
-              <div>
-                <div class="multi-btn-source btn btn-info mt-1 mb-1">
-                  <i class="material-icons align-items-center">double_arrow</i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex-grow-1 card bg-secondary sheep-target">
-            <div class="card-header text-light">
-              <strong>Selected groups</strong>
-            </div>
-            <div class="form-group m-1">
-              <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" />
-              </div>
-            </div>
-            <ul class="list-group">
-              @for (int i = 0; i < Model.SelectedGroups.Count; i++)
-              {
-                <li data-item-id="@Model.SelectedGroups[i].Id"
-                    class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@Model.SelectedGroups[i].Name</span>
-                  <input hidden name="GroupIds" value="@Model.SelectedGroups[i].Id" />
-                </li>
-              }
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="sheep" role="tabpanel" aria-labelledby="sheep-tab">
-        @*Sheep multilist*@
-        <div class="multilist-container d-flex justify-content-between m-2">
-          <div class="flex-grow-1 card bg-secondary sheep-source">
-            <div class="card-header text-light">
-              <strong>Available sheep</strong>
-            </div>
-            <div class="form-group m-1">
-              <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" />
-              </div>
-            </div>
-            <ul class="list-group">
-              @foreach (var sheep in Model.AvailableSheep)
-              {
-                <li data-item-id="@sheep.Id"
-                    class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@sheep.TagNumber</span>
-                </li>
-              }
-            </ul>
-          </div>
-          <div class="align-self-center">
-            <div class="m-2">
-              <div>
-                <div class="multi-btn-target btn btn-info mt-1 mb-1">
-                  <i class="material-icons align-items-center">double_arrow</i>
-                </div>
-              </div>
-              <div>
-                <div class="multi-btn-source btn btn-info mt-1 mb-1">
-                  <i class="material-icons align-items-center">double_arrow</i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex-grow-1 card bg-secondary sheep-target">
-            <div class="card-header text-light">
-              <strong>Selected sheep</strong>
-            </div>
-            <div class="form-group m-1">
-              <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" />
-              </div>
-            </div>
-            <ul class="list-group">
-              @for (int i = 0; i < Model.SelectedSheep.Count; i++)
-              {
-                <li data-item-id="@Model.SelectedSheep[i].Id"
-                    class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
-                  <span>@Model.SelectedSheep[i].TagNumber</span>
-                  <input hidden name="SheepIds" value="@Model.SelectedSheep[i].Id" />
-                </li>
-              }
-            </ul>
-          </div>
-        </div>
-      </div>
+<form id="penEditForm" class="text-light" asp-action="Edit">
+  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+  @*<input type="hidden" asp-for="Id" />*@
+  <div class="form-row">
+    <div class="col-6 mb-3">
+      <label asp-for="Number" class="control-label"></label>
+      <input asp-for="Number" class="form-control" />
+      <span asp-validation-for="Number" class="text-danger"></span>
     </div>
-
-    <div class="form-group mt-3">
-      <input type="submit" value="Save" class="btn btn-primary" />
+    <div class="col-6 mb-3">
+      <label asp-for="FeedId" class="control-label"></label>
+      <select style="width: 100%" asp-for="FeedId" class="form-control" asp-items="Model.Feed"></select>
+      <span asp-validation-for="FeedId" class="text-danger"></span>
     </div>
-  </form>
-
-  <div class="mt-3">
-    <a asp-action="Index">Back to List</a>
   </div>
+  <div class="form-row mb-3">
+    <div class="col-12">
+      <label asp-for="Description" class="control-label"></label>
+      <textarea asp-for="Description" class="form-control"></textarea>
+      <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+  </div>
+
+  <h4 class="h4 mb-4 mt-4">Contains</h4>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#groups" role="tab"
+         aria-controls="home" aria-selected="true">Groups</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#sheep" role="tab"
+         aria-controls="profile" aria-selected="false">Individual sheep</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="groups" role="tabpanel" aria-labelledby="group-tab">
+      @*Group multilist*@
+      <div class="multilist-container d-flex justify-content-between m-2">
+        <div class="flex-grow-1 card bg-secondary sheep-source">
+          <div class="card-header text-light">
+            <strong>Available groups</strong>
+          </div>
+          <div class="form-group m-1">
+            <div class="input-group">
+              <input type="search" class="form-control" placeholder="Search" />
+            </div>
+          </div>
+          <ul class="list-group">
+            @foreach (var group in Model.AvailableGroups)
+            {
+              <li data-item-id="@group.Id"
+                  class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
+                <span>@group.Name</span>
+              </li>
+            }
+          </ul>
+        </div>
+        <div class="align-self-center">
+          <div class="m-2">
+            <div>
+              <div class="multi-btn-target btn btn-info mt-1 mb-1">
+                <i class="material-icons align-items-center">double_arrow</i>
+              </div>
+            </div>
+            <div>
+              <div class="multi-btn-source btn btn-info mt-1 mb-1">
+                <i class="material-icons align-items-center">double_arrow</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-grow-1 card bg-secondary sheep-target">
+          <div class="card-header text-light">
+            <strong>Selected groups</strong>
+          </div>
+          <div class="form-group m-1">
+            <div class="input-group">
+              <input type="search" class="form-control" placeholder="Search" />
+            </div>
+          </div>
+          <ul class="list-group">
+            @for (int i = 0; i < Model.SelectedGroups.Count; i++)
+            {
+              <li data-item-id="@Model.SelectedGroups[i].Id"
+                  class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
+                <span>@Model.SelectedGroups[i].Name</span>
+                <input hidden name="GroupIds" value="@Model.SelectedGroups[i].Id" />
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="sheep" role="tabpanel" aria-labelledby="sheep-tab">
+      @*Sheep multilist*@
+      <div class="multilist-container d-flex justify-content-between m-2">
+        <div class="flex-grow-1 card bg-secondary sheep-source">
+          <div class="card-header text-light">
+            <strong>Available sheep</strong>
+          </div>
+          <div class="form-group m-1">
+            <div class="input-group">
+              <input type="search" class="form-control" placeholder="Search" />
+            </div>
+          </div>
+          <ul class="list-group">
+            @foreach (var sheep in Model.AvailableSheep)
+            {
+              <li data-item-id="@sheep.Id"
+                  class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
+                <span>@sheep.TagNumber</span>
+              </li>
+            }
+          </ul>
+        </div>
+        <div class="align-self-center">
+          <div class="m-2">
+            <div>
+              <div class="multi-btn-target btn btn-info mt-1 mb-1">
+                <i class="material-icons align-items-center">double_arrow</i>
+              </div>
+            </div>
+            <div>
+              <div class="multi-btn-source btn btn-info mt-1 mb-1">
+                <i class="material-icons align-items-center">double_arrow</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-grow-1 card bg-secondary sheep-target">
+          <div class="card-header text-light">
+            <strong>Selected sheep</strong>
+          </div>
+          <div class="form-group m-1">
+            <div class="input-group">
+              <input type="search" class="form-control" placeholder="Search" />
+            </div>
+          </div>
+          <ul class="list-group">
+            @for (int i = 0; i < Model.SelectedSheep.Count; i++)
+            {
+              <li data-item-id="@Model.SelectedSheep[i].Id"
+                  class="multi-list-item list-group-item list-group-item-secondary list-group-item-action py-1">
+                <span>@Model.SelectedSheep[i].TagNumber</span>
+                <input hidden name="SheepIds" value="@Model.SelectedSheep[i].Id" />
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group mt-3">
+    <input type="submit" value="Save" class="btn btn-primary" />
+  </div>
+</form>
+
+<div class="mt-3">
+  <a asp-action="Index">Back to List</a>
 </div>
+
 
 @section Scripts {
   <script defer>
