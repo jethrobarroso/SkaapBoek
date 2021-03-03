@@ -54,6 +54,37 @@ namespace SkaapBoek.DAL.Services
             return sheep;
         }
 
+        public override async Task<Sheep> Delete(int id)
+        {
+            var sheep = await Context.SheepSet
+                .Include(s => s.ChildrenOfFather)
+                .Include(s => s.ChildrenOfMother)
+                .SingleOrDefaultAsync(s => s.Id == id);
+
+            if (sheep is null) return sheep;
+
+            if (sheep.ChildrenOfFather.Any())
+            {
+                foreach (var child in sheep.ChildrenOfFather)
+                {
+                    child.FatherId = null;
+                }
+            }
+
+            if (sheep.ChildrenOfMother.Any())
+            {
+                foreach (var child in sheep.ChildrenOfMother)
+                {
+                    child.MotherId = null;
+                }
+            }
+            Context.SheepSet.Remove(sheep);
+            await Context.SaveChangesAsync();
+
+
+            return sheep;
+        }
+
         public async Task<IEnumerable<Gender>> GetGenders() =>
             await Context.GenderSet.
             OrderByDescending(g => g.Type).ToListAsync();

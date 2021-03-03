@@ -7,6 +7,14 @@
   <ItemGroup>
     <Compile Remove="Migrations\20210225112421_AddPhaseStartDateToGroup.cs" />
     <Compile Remove="Migrations\20210225112421_AddPhaseStartDateToGroup.Designer.cs" />
+    <Compile Remove="Migrations\20210303084845_ParentIdSetNullOnDelete.cs" />
+    <Compile Remove="Migrations\20210303084845_ParentIdSetNullOnDelete.Designer.cs" />
+    <Compile Remove="Migrations\20210303085107_ParentIdSetNullOnDelete2.cs" />
+    <Compile Remove="Migrations\20210303085107_ParentIdSetNullOnDelete2.Designer.cs" />
+    <Compile Remove="Migrations\20210303085306_ParentIdSetNullOnDelete.cs" />
+    <Compile Remove="Migrations\20210303085306_ParentIdSetNullOnDelete.Designer.cs" />
+    <Compile Remove="Migrations\20210303090301_ParentIdSetNullOnDelete.cs" />
+    <Compile Remove="Migrations\20210303090301_ParentIdSetNullOnDelete.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

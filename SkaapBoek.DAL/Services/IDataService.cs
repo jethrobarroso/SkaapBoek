@@ -41,7 +41,7 @@ namespace SkaapBoek.DAL.Services
             return updatedEntity;
         }
 
-        public async Task<TEntity> Delete(int id)
+        public virtual async Task<TEntity> Delete(int id)
         {
             var entity = await Context.Set<TEntity>().FindAsync(id);
 
