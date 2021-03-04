@@ -51,7 +51,7 @@
         @foreach (var pen in Model.Pens)
         {
           <tr>
-            <td>@pen.Number</td>
+            <td>@pen.Name</td>
             <td>
               <div class="d-flex align-content-center">
                 <a class="icon-button mr-1 ml-1" asp-controller="Pen" asp-action="Details" asp-route-id="@pen.Id"
@@ -74,7 +74,6 @@ else
 {
   <div class="alert alert-info">
     <p>Feed not assigned to any pens.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Add sheep</a>
   </div>
 }
 

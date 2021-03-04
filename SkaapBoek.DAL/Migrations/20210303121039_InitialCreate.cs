@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SkaapBoek.DAL.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -162,7 +162,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,7 +183,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,7 +203,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,13 +221,13 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,7 +247,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,8 +256,8 @@ namespace SkaapBoek.DAL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
+                    Description = table.Column<string>(maxLength: 500, nullable: true),
                     FeedId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -272,24 +272,25 @@ namespace SkaapBoek.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "group",
+                name: "mils_phase",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: true),
-                    PenId = table.Column<int>(nullable: true)
+                    PhaseSequence = table.Column<int>(nullable: false),
+                    Activity = table.Column<string>(maxLength: 250, nullable: false),
+                    Days = table.Column<int>(nullable: false),
+                    PenId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_group", x => x.Id);
+                    table.PrimaryKey("PK_mils_phase", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_group_pen_PenId",
+                        name: "FK_mils_phase_pen_PenId",
                         column: x => x.PenId,
                         principalTable: "pen",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -321,7 +322,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.ColorId,
                         principalTable: "color",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sheep_sheep_FatherId",
                         column: x => x.FatherId,
@@ -339,7 +340,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.GenderId,
                         principalTable: "gender",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sheep_sheep_MotherId",
                         column: x => x.MotherId,
@@ -357,13 +358,62 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.SheepCategoryId,
                         principalTable: "sheep_category",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_sheep_state_SheepStatusId",
                         column: x => x.SheepStatusId,
                         principalTable: "state",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "group",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: true),
+                    PenId = table.Column<int>(nullable: true),
+                    PhaseStartDate = table.Column<DateTime>(nullable: true),
+                    MilsPhaseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_group", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_group_mils_phase_MilsPhaseId",
+                        column: x => x.MilsPhaseId,
+                        principalTable: "mils_phase",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_group_pen_PenId",
+                        column: x => x.PenId,
+                        principalTable: "pen",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mils_task",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Instructions = table.Column<string>(maxLength: 500, nullable: false),
+                    MilsPhaseId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mils_task", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_mils_task_mils_phase_MilsPhaseId",
+                        column: x => x.MilsPhaseId,
+                        principalTable: "mils_phase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -381,13 +431,13 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.GroupId,
                         principalTable: "group",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_grouped_herd_member_sheep_SheepId",
                         column: x => x.SheepId,
                         principalTable: "sheep",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -419,7 +469,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.PriorityId,
                         principalTable: "priority",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_task_instance_sheep_SheepId",
                         column: x => x.SheepId,
@@ -431,7 +481,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.StatusId,
                         principalTable: "status",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -474,6 +524,11 @@ namespace SkaapBoek.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_group_MilsPhaseId",
+                table: "group",
+                column: "MilsPhaseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_group_PenId",
                 table: "group",
                 column: "PenId");
@@ -482,6 +537,17 @@ namespace SkaapBoek.DAL.Migrations
                 name: "IX_grouped_herd_member_GroupId",
                 table: "grouped_herd_member",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mils_phase_PenId",
+                table: "mils_phase",
+                column: "PenId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mils_task_MilsPhaseId",
+                table: "mils_task",
+                column: "MilsPhaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_pen_FeedId",
@@ -570,6 +636,9 @@ namespace SkaapBoek.DAL.Migrations
                 name: "grouped_herd_member");
 
             migrationBuilder.DropTable(
+                name: "mils_task");
+
+            migrationBuilder.DropTable(
                 name: "task_instance");
 
             migrationBuilder.DropTable(
@@ -591,19 +660,22 @@ namespace SkaapBoek.DAL.Migrations
                 name: "status");
 
             migrationBuilder.DropTable(
+                name: "mils_phase");
+
+            migrationBuilder.DropTable(
                 name: "color");
 
             migrationBuilder.DropTable(
                 name: "gender");
 
             migrationBuilder.DropTable(
-                name: "pen");
-
-            migrationBuilder.DropTable(
                 name: "sheep_category");
 
             migrationBuilder.DropTable(
                 name: "state");
+
+            migrationBuilder.DropTable(
+                name: "pen");
 
             migrationBuilder.DropTable(
                 name: "feed");

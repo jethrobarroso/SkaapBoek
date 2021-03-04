@@ -48,6 +48,12 @@ export function index() {
         allowClear: true,
         placeholder: "Select group"
     });
+
+    $('#PenId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select pen"
+    });
 }
 
 /**

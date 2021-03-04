@@ -68,7 +68,7 @@ namespace SkaapBoek.Web.Controllers
         {
             var vm = new GroupEditViewModel
             {
-                Pens = new SelectList(await _penService.GetAllNoTrack(), "Id", "Number")
+                Pens = new SelectList(await _penService.GetAllNoTrack(), "Id", "Name")
             };
 
             return View(vm);

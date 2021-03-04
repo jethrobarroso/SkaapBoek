@@ -1,4 +1,5 @@
-﻿using SkaapBoek.Core;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SkaapBoek.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,5 +19,12 @@ namespace SkaapBoek.Web.ViewModels
         public string Instructions { get; set; }
 
         public int MilsPhaseId { get; set; }
+
+        [Required]
+        public int GroupId { get; set; }
+        public SelectList GroupList { get; set; }
+
+        [Required]
+        public DateTime PhaseStartDate { get; set; }
     }
 }

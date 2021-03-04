@@ -97,7 +97,7 @@
                         <td>
                           @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                        <td>@(item.Pen?.Number.ToString() ?? "None")</td>
+                        <td>@(item.Pen?.Name.ToString() ?? "None")</td>
                         <td>
                           <div class="d-flex align-content-center">
                             <a class="icon-button mr-1 ml-1" asp-controller="Groups"
@@ -163,6 +163,11 @@ else
               <label asp-for="Days" class="control-label"></label>
               <input asp-for="Days" class="form-control" />
               <span asp-validation-for="Days" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+              <label asp-for="PenId" class="control-label"></label>
+              <select asp-for="PenId" class="form-control" asp-items="Model.Pens"></select>
+              <span asp-validation-for="PenId" class="text-danger"></span>
             </div>
           </div>
           <div class="row">

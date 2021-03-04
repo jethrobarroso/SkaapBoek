@@ -28,7 +28,7 @@
         <td>
           @Html.DisplayFor(modelItem => item.Name)
         </td>
-        <td>@(item.Pen?.Number.ToString() ?? "None")</td>
+        <td>@(item.Pen?.Name.ToString() ?? "None")</td>
         <td>
           <div class="d-flex align-content-center">
             <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@item.Id"

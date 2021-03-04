@@ -32,7 +32,7 @@ namespace SkaapBoek.Web.Controllers
         public IActionResult Login()
         {
             if (_signingManager.IsSignedIn(User))
-                return View("Sheep");
+                return RedirectToAction("Index", "Sheep");
             return View();
         }
 

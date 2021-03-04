@@ -11,8 +11,7 @@ namespace SkaapBoek.Web.ViewModels
     public class PenEditViewModel
     {
         [Required]
-        [Range(0,10000)]
-        public int Number { get; set; }
+        public string Name { get; set; }
 
         [Display(Name ="Assigned Feed")]
         public int? FeedId { get; set; }

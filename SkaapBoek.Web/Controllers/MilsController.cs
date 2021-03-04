@@ -20,18 +20,21 @@ namespace SkaapBoek.Web.Controllers
         private readonly IMilsService _milsService;
         private readonly IMilsTaskService _milsTaskService;
         private readonly IGroupService _groupService;
+        private readonly IPenService _penService;
         private readonly IMapper _mapper;
         private readonly ILogger<MilsController> _logger;
 
         public MilsController(IMilsService milsService, 
             IMilsTaskService milsTaskService,
             IGroupService groupService,
+            IPenService penService,
             IMapper mapper, 
             ILogger<MilsController> logger)
         {
             _milsService = milsService;
             _milsTaskService = milsTaskService;
             _groupService = groupService;
+            _penService = penService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -42,25 +45,10 @@ namespace SkaapBoek.Web.Controllers
             var model = new MilsPhaseIndexViewModel
             {
                 PhaseList = await _milsService.GetAllWithTasksSorted(),
-                AvailableGroups = new SelectList(await _milsService.GetAvailableGroups(), "Id", "Name")
-            };
+                AvailableGroups = new SelectList(await _milsService.GetAvailableGroups(), "Id", "Name"),
+                Pens = new SelectList(await _penService.GetAll().AsNoTracking().ToListAsync(), "Id", "Name")
+        };
             
-            return View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> CreatePhase()
-        {
-            var allPhases = await _milsService.GetAll()
-                    .AsNoTracking()
-                    .Select(p => new SelectListItem
-                    {
-                        Value = p.PhaseSequence.ToString(),
-                        Text = p.Activity
-                    }).ToListAsync();
-
-            ViewBag.Phases = allPhases;
-            var model = new MilsPhaseDto();
             return View(model);
         }
 
@@ -84,9 +72,7 @@ namespace SkaapBoek.Web.Controllers
                 ViewBag.ErrorMessage = "Bad request. No phase ID specified.";
                 return View("BadRequest");
             }
-
             var phase = await _milsService.GetById(id.Value);
-
             if (phase is null)
             {
                 ViewBag.ErrorMessage = $"Mils phase with ID = {id} not found";
@@ -94,6 +80,7 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var model = _mapper.Map<MilsPhaseEditViewModel>(phase);
+            model.Pens = new SelectList(await _penService.GetAll().AsNoTracking().ToListAsync(), "Id", "Name");
 
             return View(model);
         }

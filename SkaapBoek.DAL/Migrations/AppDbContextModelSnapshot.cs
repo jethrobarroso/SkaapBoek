@@ -347,10 +347,16 @@ namespace SkaapBoek.DAL.Migrations
                     b.Property<int>("Days")
                         .HasColumnType("int");
 
+                    b.Property<int>("PenId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PhaseSequence")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PenId")
+                        .IsUnique();
 
                     b.ToTable("mils_phase");
                 });
@@ -385,13 +391,15 @@ namespace SkaapBoek.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<int?>("FeedId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -664,6 +672,15 @@ namespace SkaapBoek.DAL.Migrations
                     b.HasOne("SkaapBoek.Core.Sheep", "Sheep")
                         .WithMany("GroupedSheep")
                         .HasForeignKey("SheepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SkaapBoek.Core.MilsPhase", b =>
+                {
+                    b.HasOne("SkaapBoek.Core.Pen", "Pen")
+                        .WithOne("MilsPhase")
+                        .HasForeignKey("SkaapBoek.Core.MilsPhase", "PenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

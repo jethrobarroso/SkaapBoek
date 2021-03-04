@@ -19,7 +19,7 @@
     <div class="card-body text-light bg-dark">
       <dl class="row">
         <dt class="col-sm-3">Pen Number:</dt>
-        <dd class="col-sm-9">@(Model.Pen?.Number.ToString() ?? "None")</dd>
+        <dd class="col-sm-9">@(Model.Pen?.Name.ToString() ?? "None")</dd>
         <dt class="col-sm-3">
           @Html.DisplayNameFor(model => model.Description)
         </dt>

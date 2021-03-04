@@ -58,7 +58,7 @@ namespace SkaapBoek.Web.Controllers
             {
                 var enc = new Pen
                 {
-                    Number = model.Number,
+                    Name = model.Name,
                     Description = model.Description,
                     FeedId = model.FeedId,
                     ContainedGroups = await _groupService.GetGroupsByIds(model.GroupIds),
@@ -92,7 +92,7 @@ namespace SkaapBoek.Web.Controllers
 
             var model = new PenEditViewModel
             {
-                Number = enc.Number,
+                Name = enc.Name,
                 Description = enc.Description,
                 FeedId = enc.FeedId,
                 Feed = new SelectList(await _penService.GetAllFeed(), "Id", "Name"),
@@ -124,7 +124,7 @@ namespace SkaapBoek.Web.Controllers
                     return View("NotFound");
                 }
 
-                enc.Number = model.Number;
+                enc.Name = model.Name;
                 enc.Description = model.Description;
                 enc.FeedId = model.FeedId;
                 enc.ContainedGroups = await _groupService.GetGroupsByIds(model.GroupIds);

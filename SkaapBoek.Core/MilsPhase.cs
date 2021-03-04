@@ -21,6 +21,9 @@ namespace SkaapBoek.Core
         [Range(0,5000)]
         public int Days { get; set; }
 
+        public int PenId { get; set; }
+        public Pen Pen { get; set; }
+
         public ICollection<MilsTask> Tasks { get; set; }
         public ICollection<Group> Groups { get; set; }
     }

@@ -37,7 +37,8 @@ namespace SkaapBoek.DAL.Services
         {
             var result = Context.MilsPhaseSet
                 .Include(m => m.Tasks)
-                .Include(g => g.Groups);
+                .Include(g => g.Groups)
+                .Include(p => p.Pen);
 
             return track ? await result.FirstOrDefaultAsync(m => m.Id == id)
                 : await result.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);

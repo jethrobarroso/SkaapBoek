@@ -18,6 +18,10 @@ namespace SkaapBoek.Web.ViewModels
         [Range(0, 5000)]
         public int Days { get; set; }
 
+        [Required]
+        public int PenId { get; set; }
+        public SelectList Pens { get; set; }
+
         public IList<MilsTask> Tasks { get; set; }
         public IList<Group> Groups { get; set; }
     }

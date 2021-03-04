@@ -27,6 +27,10 @@ namespace SkaapBoek.Web.ViewModels
         [Display(Name ="Duration in days")]
         public int Days { get; set; }
 
+        [Required]
+        public int PenId { get; set; }
+        public SelectList Pens { get; set; }
+
         /// <summary>
         /// New phase task instructions
         /// </summary>
