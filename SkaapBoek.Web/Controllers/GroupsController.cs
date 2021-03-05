@@ -31,13 +31,6 @@ namespace SkaapBoek.Web.Controllers
             _penService = penService;
         }
 
-
-        public async Task<IActionResult> TestApi()
-        {
-            var result = await _groupService.GetAll().AsNoTracking().ToListAsync();
-            return Ok(result);
-        }
-
         // GET: Groups
         public async Task<IActionResult> Index()
         {
@@ -116,7 +109,7 @@ namespace SkaapBoek.Web.Controllers
                 Name = group.Name,
                 Description = group.Description,
                 PenId = group.PenId,
-                Pens = new SelectList(await _penService.GetAllNoTrack(), "Id", "Number"),
+                Pens = new SelectList(await _penService.GetAllNoTrack(), "Id", "Name"),
                 AvailableSheep = await _groupService.GetAvailableSheep(id.Value),
                 SelectedSheep = await _groupService.GetSelectedSheep(id.Value),
             };
