@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using SkaapBoek.Core;
+using SkaapBoek.Web.ViewModels.Partials;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,8 @@ namespace SkaapBoek.Web.ViewModels
     public class MilsPhaseIndexViewModel
     {
         public IList<MilsPhase> PhaseList { get; set; }
+
+        public AssignGroupToPhaseModel AssignGroupToPhaseModel { get; set; }
 
         /// <summary>
         /// New phase activity
@@ -37,26 +40,5 @@ namespace SkaapBoek.Web.ViewModels
         [Required]
         [MaxLength(500)]
         public string Instructions { get; set; }
-
-        /// <summary>
-        /// Assigned group selected ID
-        /// </summary>
-        [Required]
-        public int SelectedGroupId { get; set; }
-
-        /// <summary>
-        /// Phase ID that the group will be assigned to
-        /// </summary>
-        public int MilsPhaseId { get; set; }
-
-        /// <summary>
-        /// Assigned group start date
-        /// </summary>
-        public DateTime? PhaseStartDate { get; set; } = DateTime.Today;
-
-        /// <summary>
-        /// Available groups that can be assigned to phase
-        /// </summary>
-        public SelectList AvailableGroups { get; set; }
     }
 }

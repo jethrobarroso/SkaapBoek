@@ -17,7 +17,6 @@
 
 	<ItemGroup>
 		<Folder Include="Helpers\" />
-		<Folder Include="ViewModels\Responses\" />
 		<Folder Include="wwwroot\lib\" />
 	</ItemGroup>
 

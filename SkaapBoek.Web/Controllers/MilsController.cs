@@ -8,6 +8,7 @@ using SkaapBoek.Core;
 using SkaapBoek.DAL;
 using SkaapBoek.DAL.Services;
 using SkaapBoek.Web.ViewModels;
+using SkaapBoek.Web.ViewModels.Partials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,11 @@ namespace SkaapBoek.Web.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<MilsController> _logger;
 
-        public MilsController(IMilsService milsService, 
+        public MilsController(IMilsService milsService,
             IMilsTaskService milsTaskService,
             IGroupService groupService,
             IPenService penService,
-            IMapper mapper, 
+            IMapper mapper,
             ILogger<MilsController> logger)
         {
             _milsService = milsService;
@@ -42,13 +43,17 @@ namespace SkaapBoek.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var noPhaseGroups = new AssignGroupToPhaseModel
+            {
+                AvailableGroups = new SelectList(await _milsService.GetAvailableGroups(), "Id", "Name")
+            };
+
             var model = new MilsPhaseIndexViewModel
             {
+                AssignGroupToPhaseModel = noPhaseGroups,
                 PhaseList = await _milsService.GetAllWithTasksSorted(),
-                AvailableGroups = new SelectList(await _milsService.GetAvailableGroups(), "Id", "Name"),
                 Pens = new SelectList(await _penService.GetAll().AsNoTracking().ToListAsync(), "Id", "Name")
-        };
-            
+            };
             return View(model);
         }
 
@@ -147,10 +152,14 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignGroup(MilsPhaseIndexViewModel model)
+        public async Task<IActionResult> AssignGroup(AssignGroupToPhaseModel model)
         {
             var group = await _groupService.GetByIdLite(model.SelectedGroupId, true);
-            _mapper.Map(model, group);
+            //_mapper.Map(model, group);
+
+            group.MilsPhaseId = model.MilsPhaseId;
+            group.PhaseStartDate = model.PhaseStartDate;
+            group.PenId = model.PenId;
             await _groupService.Update(group);
             TempData["Success"] = $"Successfully queued group to phase.";
             return RedirectToAction(nameof(Index));
@@ -200,6 +209,28 @@ namespace SkaapBoek.Web.Controllers
             await _milsTaskService.Delete(id.Value);
             TempData["Success"] = "Successfully deleted task.";
             return RedirectToAction(nameof(EditPhase), new { id = phaseId });
+        }
+
+        public async Task<IActionResult> GetPhaseGroups(int id)
+        {
+            var phase = await _milsService.GetById(id);
+            var model = new GroupTableModel
+            {
+                DisplayMilsData = false,
+                Groups = phase.Groups
+            };
+            return PartialView("_GroupTable", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RenderAssignGroupForm()
+        {
+            var model = new AssignGroupToPhaseModel
+            {
+                AvailableGroups = new SelectList(await _groupService.GetNoPhaseGroups(), "Id", "Name")
+            };
+
+            return PartialView("_AssignGroupForm", model);
         }
     }
 }

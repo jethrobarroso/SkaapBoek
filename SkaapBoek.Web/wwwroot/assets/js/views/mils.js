@@ -54,6 +54,23 @@ export function index() {
         allowClear: true,
         placeholder: "Select pen"
     });
+
+
+    //const groupForm = body.querySelector('#assignGroupForm');
+    //groupForm.onsubmit = () => {
+    //    let formData = new FormData(groupForm);
+    //    fetch('/Mils/AssignGroup', {
+    //        method: 'post',
+    //        body: new URLSearchParams(formData)
+    //    })
+    //        .then(() => {
+    //            modal
+    //        })
+    //        .catch((error) => {
+    //            alert(error);
+    //        });
+    //    return false;
+    //};
 }
 
 /**
@@ -83,6 +100,56 @@ export function editPhase() {
     obj.fromTable(table);
 }
 
+export function addGroupToPhase() {
+    const body = document.querySelector('body');
+    const groupForm = body.querySelector('#assignGroupForm');
+    const phaseId = groupForm.querySelector('#MilsPhaseId').value;
+    let formData = new FormData(groupForm);
+    if ($('#assignGroupForm').valid()) {
+        fetch('/Mils/AssignGroup', {
+            method: 'post',
+            body: new URLSearchParams(formData)
+        })
+            .then(() => {
+                fetch(`/Mils/GetPhaseGroups/${phaseId}`, {
+                    method: 'get',
+                })
+                    .then(result => result.text())
+                    .then(content => {
+                        document.querySelector('#groupTable').innerHTML = content;
+                        $('#assignGroupModal').modal('toggle');
+                    })
+                fetch('/Mils/RenderAssignGroupForm', {
+                    method: 'get'
+                })
+                    .then(result => result.text())
+                    .then(formContent => {
+                        groupForm.parentElement.innerHTML = formContent;
+                        initSelect2Item('#SelectedGroupId', 'Select group');
+                    })
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    }
+    
+    return false;
+}
+
+/**
+ * Enable select2 feature on select element
+ * @param {string} selector CSS selector for the element
+ * @param {string} placeholder Select placeholder value
+ */
+function initSelect2Item(selector, placeholder) {
+    $(selector).val(null).empty().select2('destroy')
+    $(selector).select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: placeholder
+    });
+}
+
 /**
  * Prepare task edit modal with relevant data
  * @param {number} id Task ID
@@ -99,7 +166,7 @@ export function editPhaseTask(id, element) {
     }
 }
 
-export function assignGroup(groupId) {
-    const phaseIdInput = document.querySelector('#assignGroupForm #MilsPhaseId');
-    phaseIdInput.value = groupId;
+export function assignGroup(groupId, penId) {
+    document.querySelector('#assignGroupForm #MilsPhaseId').value = groupId;
+    document.querySelector('#assignGroupForm #addGroupPenId').value = penId;
 }
