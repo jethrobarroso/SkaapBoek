@@ -89,6 +89,11 @@ namespace SkaapBoek.DAL
                 .OnDelete(DeleteBehavior.SetNull);
             });
 
+            builder.Entity<Feed>()
+                .HasMany(f => f.Pens)
+                .WithOne(p => p.Feed)
+                .OnDelete(DeleteBehavior.SetNull);
+
             builder.Entity<Group>()
                 .HasOne(g => g.Pen)
                 .WithMany(e => e.ContainedGroups)

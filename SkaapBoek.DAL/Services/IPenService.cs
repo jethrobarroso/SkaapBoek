@@ -25,6 +25,7 @@ namespace SkaapBoek.DAL.Services
         {
             return await base.GetAll()
                 .Include(c => c.Feed)
+                .Include(c => c.MilsPhase)
                 .AsNoTracking()
                 .ToListAsync();
         }
