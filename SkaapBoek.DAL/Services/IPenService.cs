@@ -29,6 +29,8 @@ namespace SkaapBoek.DAL.Services
                 .ToListAsync();
         }
 
+
+
         public async Task<Pen> GetById(int id)
         {
             return await Context.PenSet
@@ -71,6 +73,30 @@ namespace SkaapBoek.DAL.Services
                 .Where(s => s.PenId == null)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public override async Task<Pen> Delete(int id)
+        {
+            var pen = Context.PenSet
+                .Include(p => p.MilsPhase)
+                .SingleOrDefault(p => p.Id == id);
+
+            if (pen != null)
+            {
+                if(pen.MilsPhase is null)
+                {
+                    Context.PenSet.Remove(pen);
+                    await Context.SaveChangesAsync();
+                }
+                else
+                {
+                    var message = "Cannot remove pen when MILS phase is bound to it.\n" +
+                        "Assign phase to another pen before attempting to remove the pen.";
+                    throw new DbUpdateException(message);
+                }
+            }
+
+            return pen;
         }
     }
 }

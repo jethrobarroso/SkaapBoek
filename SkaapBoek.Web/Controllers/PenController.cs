@@ -167,7 +167,16 @@ namespace SkaapBoek.Web.Controllers
                 return View(nameof(BadRequest));
             }
 
-            await _penService.Delete(id.Value);
+            try
+            {
+                await _penService.Delete(id.Value);
+            }
+            catch(DbUpdateException e)
+            {
+                _logger.LogWarning(e.Message);
+                TempData["Failure"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
             TempData["Success"] = $"Successfully deleted pen.";
             return RedirectToAction(nameof(Index));
         }
