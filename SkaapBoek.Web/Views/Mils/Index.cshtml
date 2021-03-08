@@ -76,7 +76,7 @@
             }
 
             <h5 class="mt-3 mb-4">Groups in this phase</h5>
-            <div id="groupTable">
+            <div id="groupTable-@phases[i].Id">
               <partial name="_GroupTable" 
                        model="new GroupTableModel {
                                 Groups = phases[i].Groups, 

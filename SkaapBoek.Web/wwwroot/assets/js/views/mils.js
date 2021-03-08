@@ -99,7 +99,7 @@ export function addGroupToPhase() {
                 })
                     .then(result => result.text())
                     .then(content => {
-                        document.querySelector('#groupTable').innerHTML = content;
+                        document.querySelector(`#groupTable-${phaseId}`).innerHTML = content;
                         $('#assignGroupModal').modal('toggle');
                     })
                 fetch('/Mils/RenderAssignGroupForm', {
