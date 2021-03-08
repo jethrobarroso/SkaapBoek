@@ -128,9 +128,14 @@ export function details() {
     deleteModal.querySelector('.modal-title').innerHTML = `Delete sheep with tag ${tag}`;
     deleteModal.querySelector('.modal-body').innerHTML = "Are you sure you want to delete this sheep?"
 
-    if (body.querySelector('#childrenTable')) {
-        common.initDt("childrenTable");
-    }
+    $('table').DataTable({
+        searchDelay: 1000,
+        columnDefs: [{
+            targets: -1,
+            searchable: false,
+            orderable: false
+        }]
+    });
 
     deleteButton.addEventListener('click', () => {
         form.action = deletePath + id;

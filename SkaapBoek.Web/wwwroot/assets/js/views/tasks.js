@@ -9,7 +9,14 @@ export function index() {
 
     obj.fromTable(table);
 
-    common.initDt("taskTable");
+    $('table').DataTable({
+        searchDelay: 1000,
+        columnDefs: [{
+            targets: -1,
+            searchable: false,
+            orderable: false
+        }]
+    });
 }
 
 export function details() {

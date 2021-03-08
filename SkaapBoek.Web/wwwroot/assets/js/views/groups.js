@@ -9,7 +9,15 @@ export function index() {
     const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
 
     obj.fromTable(table);
-    common.initDt('groupTable');
+
+    $('table').DataTable({
+        searchDelay: 1000,
+        columnDefs: [{
+            targets: -1,
+            searchable: false,
+            orderable: false
+        }]
+    });
 }
 
 export function edit() {
