@@ -8,7 +8,8 @@ namespace SkaapBoek.Web.ViewModels.Partials
 {
     public class GroupTableModel
     {
-        public bool DisplayMilsData { get; set; }
+        public bool HideMilsData { get; set; }
+        public bool HideDeleteAction { get; set; }
         public IEnumerable<Group> Groups { get; set; }
     }
 }

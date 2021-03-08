@@ -10,7 +10,7 @@
           <th class="filterable">
             <div>Name</div>
           </th>
-          @if (Model.DisplayMilsData)
+          @if (!Model.HideMilsData)
           {
             <th class="filterable">
               <div>Pen</div>
@@ -32,7 +32,7 @@
             <td>
               @Html.DisplayFor(modelItem => item.Name)
             </td>
-            @if (Model.DisplayMilsData)
+            @if (!Model.HideMilsData)
             {
               <td>@(item.Pen?.Name.ToString() ?? "None")</td>
               <td>@(item.MilsPhase?.Activity ?? "None")</td>
@@ -50,6 +50,15 @@
                    data-toggle="tooltip" data-placement="top" title="Edit">
                   <i class="material-icons">edit</i>
                 </a>
+                @if (!Model.HideDeleteAction)
+                {
+                  <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
+                    <button class="icon-button--delete" data-user-id="@item.Id"
+                            type="button" data-toggle="modal" data-target="#deleteModal">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </span>
+                }
               </div>
             </td>
           </tr>

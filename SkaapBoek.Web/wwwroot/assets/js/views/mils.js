@@ -54,23 +54,6 @@ export function index() {
         allowClear: true,
         placeholder: "Select pen"
     });
-
-
-    //const groupForm = body.querySelector('#assignGroupForm');
-    //groupForm.onsubmit = () => {
-    //    let formData = new FormData(groupForm);
-    //    fetch('/Mils/AssignGroup', {
-    //        method: 'post',
-    //        body: new URLSearchParams(formData)
-    //    })
-    //        .then(() => {
-    //            modal
-    //        })
-    //        .catch((error) => {
-    //            alert(error);
-    //        });
-    //    return false;
-    //};
 }
 
 /**

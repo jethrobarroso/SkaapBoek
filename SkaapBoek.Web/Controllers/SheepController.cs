@@ -31,6 +31,12 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpGet]
+        public IActionResult TestSheep()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var model = new SheepIndexViewModel

@@ -78,7 +78,11 @@
             <h5 class="mt-3 mb-4">Groups in this phase</h5>
             <div id="groupTable">
               <partial name="_GroupTable" 
-                       model="new GroupTableModel { Groups = phases[i].Groups, DisplayMilsData = false }" />
+                       model="new GroupTableModel {
+                                Groups = phases[i].Groups, 
+                                HideMilsData = true,
+                                HideDeleteAction = true
+                              }" />
             </div>
 
             <a class="btn btn-primary mt-3" data-toggle="modal"

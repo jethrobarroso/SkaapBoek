@@ -1,21 +1,74 @@
 ﻿import * as common from '../common.js';
-import { MultiList } from '../multilist.js'
 
 export function index() {
-    const deleteModal = document.querySelector('.modal');
-    const tables = document.querySelectorAll('table');
-    const message = "Are you sure you want to delete sheep with tag ";
-    const actionPath = "/Sheep/Delete/";
-    const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
+    
+    $("#herdTable").DataTable({
+        "processing": true,
+        "language": {
+            processing: `<div class="spinner-border text-light" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>`
+        },
+        "serverSide": true,
+        "searchDelay": 1000,
+        "filter": true,
+        "ajax": {
+            "url": "/api/sheep",
+            "type": "POST",
+            "datatype": "json",
+            "data": { "__RequestVerificationToken": $(':input[name="__RequestVerificationToken"]').val() }
+        },
+        "columnDefs": [{
+            "targets": [0],
+            "visible": false,
+            "searchable": false
+        }, {
+            "targets": [9],
+            "searchable": false,
+            "orderable": false,
 
-    obj.setBodyMessage = "Are you sure you want to delete this sheep?"
-
-    for (const table of tables) {
-        obj.fromTable(table);
-    }
-
-    common.initDt("herdTable");
-    common.initDt("childTable");
+        }],
+        "drawCallback": function (settings) {
+            const body = document.querySelector('body');
+            const buttonArray = [...this[0].querySelectorAll('tbody button')];
+            buttonArray.forEach(item => {
+                item.addEventListener('click', (item) => {
+                    const id = item.srcElement.closest('.action-container')
+                        .dataset.itemId;
+                    const name = item.srcElement.closest('tr').firstElementChild.innerText;
+                    common.prepTableRowDeleteModal({
+                        modal : body.querySelector('#deleteModal'),
+                        deletePath : '/Sheep/Delete',
+                        actionId : id,
+                        bodyMessage : `Are you sure you want to delete sheep ${name}?`,
+                        titleMessage : "Delete Sheep"
+                    });
+                });
+            });
+            
+        },
+        "columns": [
+            { "data": "id", "name": "id", "autoWidth": true },
+            { "data": "tagNumber", "name": "tagNumber", "autoWidth": true },
+            { "data": "color.name", "defaultContent": "<i>None</i>", "name": "color.name", "autoWidth": true },
+            { "data": "sheepStatus.name", "defaultContent": "<i>None</i>", "name": "sheepStatus.name", "autoWidth": true },
+            { "data": "gender.type", "defaultContent": "<i>None</i>", "name": "gender.type", "autoWidth": true },
+            { "data": "weight", "name": "weight", "autoWidth": true },
+            { "data": "birthDate", "name": "birthDate", "autoWidth": true },
+            { "data": "mother.tagNumber", "defaultContent": "<i>None</i>", "name": "mother.tagNumber", "autoWidth": true },
+            { "data": "father.tagNumber", "defaultContent": "<i>None</i>", "name": "father.tagNumber", "autoWidth": true },
+            {
+                "data" : "id",
+                "render": function (data, type, row, meta) {
+                    return common.buildTableRowActions({
+                        detailsPath : "/Sheep/Details",
+                        editPath : "/Sheep/Edit",
+                        itemId : row.id
+                    });
+                }
+            },
+        ]
+    });
 }
 
 export function create() {

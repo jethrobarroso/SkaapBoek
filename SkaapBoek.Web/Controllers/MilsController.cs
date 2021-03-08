@@ -216,7 +216,7 @@ namespace SkaapBoek.Web.Controllers
             var phase = await _milsService.GetById(id);
             var model = new GroupTableModel
             {
-                DisplayMilsData = false,
+                HideMilsData = true,
                 Groups = phase.Groups
             };
             return PartialView("_GroupTable", model);

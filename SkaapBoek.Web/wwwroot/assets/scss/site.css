@@ -121,3 +121,7 @@ body {
 .draggable.dragging {
     background-color: #697e94;
 }
+
+.dataTables_processing {
+    background-color: #6c757d;
+}

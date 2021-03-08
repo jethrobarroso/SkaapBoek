@@ -34,7 +34,11 @@ namespace SkaapBoek.Web.Controllers
         // GET: Groups
         public async Task<IActionResult> Index()
         {
-            return View(await _groupService.GetAll().AsNoTracking().ToListAsync());
+            return View(await _groupService.GetAll()
+                .Include(g => g.MilsPhase)
+                .Include(g => g.Pen)
+                .AsNoTracking()
+                .ToListAsync());
         }
 
         // GET: Groups/Details/5
