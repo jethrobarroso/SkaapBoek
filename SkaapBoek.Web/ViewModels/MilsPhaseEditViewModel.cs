@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using SkaapBoek.Core;
+using SkaapBoek.Web.ViewModels.Partials;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,8 @@ namespace SkaapBoek.Web.ViewModels
         [Range(1, 100)]
         public int TaskSequence { get; set; }
 
+        public int MilsTaskId { get; set; }
+
         [Required]
         [MaxLength(500)]
         public string Instructions { get; set; }
@@ -26,5 +29,7 @@ namespace SkaapBoek.Web.ViewModels
 
         [Required]
         public DateTime PhaseStartDate { get; set; }
+
+        public AssignGroupToPhaseModel AssignGroupModel { get; set; }
     }
 }

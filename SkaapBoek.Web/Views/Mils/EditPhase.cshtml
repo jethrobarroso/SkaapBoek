@@ -64,8 +64,8 @@
                 <div class="d-flex align-content-center">
                   <span data-toggle="tooltip" data-placement="top" title="Edit"
                         class="icon-button--delete mr-1 ml-1">
-                    <a href="#" data-toggle="modal" data-target="#editTaskModal"
-                       onclick="appns.mils.editPhaseTask(@task.Id, this)">
+                    <a href="#" data-toggle="modal" data-target="#addEditTaskModal"
+                       onclick="appns.mils.editPhaseTask(@Model.MilsPhaseId, this)">
                       <i class="material-icons">edit</i>
                     </a>
                   </span>
@@ -82,7 +82,8 @@
         </tbody>
       </table>
       <a class="mt-2 btn btn-primary" data-toggle="modal"
-         data-target="#addTaskModal">Add task</a>
+         onclick="appns.mils.addPhaseTask(@Model.MilsPhaseId)"
+         data-target="#addEditTaskModal">Add task</a>
     </div>
   }
   else
@@ -90,79 +91,84 @@
     <div class="alert alert-info">
       <p>No tasks are currently assigned to this phase.</p>
       <a class="mt-2 btn btn-primary" data-toggle="modal"
-         data-target="#addTaskModal">Add task</a>
+         onclick="appns.mils.addPhaseTask(@Model.MilsPhaseId)"
+         data-target="#addEditTaskModal">Add task</a>
     </div>
   }
 
-  <h4 class="h4 mb-3 mt-3">Sheep groups currently in this phase</h4>
+  <h4 class="h4 mb-3 mt-3">Groups currently in this phase</h4>
   @if (Model.Groups?.Any() ?? false)
   {
-    <div class="table-responsive-md text-light">
-      <table id="groupTable" class="table table-striped table-dark table-hover">
-        <thead>
-          <tr>
-            <th class="filterable">
-              <div>Name</div>
-            </th>
-            <th class="filterable">
-              <div>Pen</div>
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach (var group in Model.Groups)
-          {
-            <tr>
-              <td>
-                @Html.DisplayFor(modelItem => group.Name)
-              </td>
-              <td>@(group.Pen?.Name.ToString() ?? "None")</td>
-              <td>
-                <div class="d-flex align-content-center">
-                  <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@group.Id"
-                     data-toggle="tooltip" data-placement="top" title="View">
-                    <i class="material-icons">search</i>
-                  </a>
-                  <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@group.Id"
-                     data-toggle="tooltip" data-placement="top" title="Edit">
-                    <i class="material-icons">edit</i>
-                  </a>
-                  <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Unlink">
-                    <button class="icon-button--unlink" type="button" 
-                            data-toggle="modal" data-target="#unlinkGroupModal"
-                            onclick="appns.mils.unlinkGroup(@group.Id, this)">
-                      <i class="material-icons">link_off</i>
-                    </button>
-                  </span>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+<div class="table-responsive-md text-light">
+  <table id="groupTable" class="table table-striped table-dark table-hover">
+    <thead>
+      <tr>
+        <th class="filterable">
+          <div>Name</div>
+        </th>
+        <th class="filterable">
+          <div>Pen</div>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var group in Model.Groups)
+      {
+        <tr>
+          <td>
+            @Html.DisplayFor(modelItem => group.Name)
+          </td>
+          <td>@(group.Pen?.Name.ToString() ?? "None")</td>
+          <td>
+            <div class="d-flex align-content-center">
+              <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@group.Id"
+                 data-toggle="tooltip" data-placement="top" title="View">
+                <i class="material-icons">search</i>
+              </a>
+              <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@group.Id"
+                 data-toggle="tooltip" data-placement="top" title="Edit">
+                <i class="material-icons">edit</i>
+              </a>
+              <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Unlink">
+                <button class="icon-button--unlink" type="button"
+                        data-toggle="modal" data-target="#unlinkGroupModal"
+                        onclick="appns.mils.unlinkGroup(@group.Id, this)">
+                  <i class="material-icons">link_off</i>
+                </button>
+              </span>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <a class="mt-2 btn btn-primary" data-toggle="modal"
+     data-target="#assignGroupModal">Enqueue group</a>
+</div>
   }
   else
   {
     <div class="alert alert-info">
       <p>No groups are currently assigned to this phase.</p>
+      <a class="mt-2 btn btn-primary" data-toggle="modal"
+         data-target="#assignGroupModal">Enqueue group</a>
     </div>
   }
 </div>
 
-<div class="modal fade" id="addTaskModal" tabindex="-1">
+<div class="modal fade" id="addEditTaskModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Create phase task</h5>
+        <h5 class="modal-title">Create phase task</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id="createTaskForm" method="post" asp-action="CreateTask">
-          <input hidden asp-for="MilsPhaseId" />
+        <form id="createTaskForm" method="post">
+          <input hidden asp-for="MilsTaskId" />
           <div class="form-group">
             <label asp-for="Instructions" class="control-label"></label>
             <textarea asp-for="Instructions" class="form-control"></textarea>
@@ -172,36 +178,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <a asp-action="Index" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</a>
-        <button type="submit" form="createTaskForm" class="btn btn-primary">Add</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="editTaskModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit phase task</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="editTaskForm" method="post" asp-action="EditTask">
-          <input hidden name="phaseId" value="@Model.MilsPhaseId" />
-          <div class="form-group">
-            <label asp-for="Instructions" class="control-label"></label>
-            <textarea asp-for="Instructions" class="form-control"></textarea>
-            <span asp-validation-for="Instructions" class="text-danger"></span>
-          </div>
-          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <a asp-action="Index" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</a>
-        <button type="submit" form="editTaskForm" class="btn btn-primary">Update</button>
+        <a class="btn btn-outline-secondary" data-dismiss="modal">Cancel</a>
+        <button id="taskFormSubmitButton" type="submit" form="createTaskForm" class="btn btn-primary">Add</button>
       </div>
     </div>
   </div>
@@ -253,42 +231,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="assignGroupModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Enqueue group</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="assignGroupForm" method="post" asp-action="AssignGroup">
-          <input hidden asp-for="MilsPhaseId" />
-          <div class="row">
-            <div class="col-6">
-              <label asp-for="GroupId" class="control-label"></label>
-              <select asp-for="GroupId" class="form-control" asp-items="Model.GroupList">
-                <option value=""></option>
-              </select>
-              <span asp-validation-for="GroupId" class="text-danger"></span>
-            </div>
-            <div class="col-6">
-              <label asp-for="PhaseStartDate" class="control-label"></label>
-              <input asp-for="PhaseStartDate" class="form-control" />
-              <span asp-validation-for="PhaseStartDate" class="text-danger"></span>
-            </div>
-          </div>
-          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-outline-secondary" data-dismiss="modal">Cancel</a>
-        <button type="submit" form="assignGroupForm" class="btn btn-primary">Add</button>
-      </div>
-    </div>
-  </div>
-</div>
+<partial name="_AssignGroupForm" model="Model.AssignGroupModel" />
+
 
 @section Scripts {
   <script defer>

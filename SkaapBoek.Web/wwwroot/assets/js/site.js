@@ -11,6 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
     }
 
+    window.setTimeout(function () {
+        $("#pageDangerAlert, #pageSuccessAlert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).hide();
+        });
+    }, 1000);
+
     window.appns = {
         //account: {
         //    register: accountRegister

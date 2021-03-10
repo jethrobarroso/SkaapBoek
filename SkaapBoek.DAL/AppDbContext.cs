@@ -89,6 +89,11 @@ namespace SkaapBoek.DAL
                 .OnDelete(DeleteBehavior.SetNull);
             });
 
+            builder.Entity<Group>()
+                .HasOne(g => g.MilsPhase)
+                .WithMany(p => p.Groups)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
             builder.Entity<Feed>()
                 .HasMany(f => f.Pens)
                 .WithOne(p => p.Feed)

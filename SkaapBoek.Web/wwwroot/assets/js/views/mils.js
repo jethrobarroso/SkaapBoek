@@ -43,7 +43,15 @@ export function index() {
         });
     }
 
-    $('#SelectedGroupId').select2({
+    const assignGroupForm = body.querySelector('#assignGroupForm');
+    assignGroupForm.addEventListener('submit', e => {
+        e.preventDefault();
+        addGroupToPhase();
+    })
+
+    body.que
+
+    $('#GroupId').select2({
         theme: 'bootstrap4',
         allowClear: true,
         placeholder: "Select group"
@@ -74,13 +82,25 @@ export function unlinkGroup(groupId, element) {
 }
 
 export function editPhase() {
-    const deleteModal = document.querySelector('#deleteModal');
-    const table = document.querySelector('#phaseTaskTable');
+    const body = document.querySelector('body');
+    const deleteModal = body.querySelector('#deleteModal');
+    const table = body.querySelector('#phaseTaskTable');
     const message = "Are you sure you want to delete task ";
     const actionPath = "/Mils/DeleteTask/";
     const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
 
     obj.fromTable(table);
+
+    const taskModel = body.querySelector('#addEditTaskModal');
+    taskModel.addEventListener('submit', e => {
+        
+    })
+
+    $('#GroupId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select group"
+    });
 }
 
 export function addGroupToPhase() {
@@ -88,6 +108,11 @@ export function addGroupToPhase() {
     const groupForm = body.querySelector('#assignGroupForm');
     const phaseId = groupForm.querySelector('#MilsPhaseId').value;
     let formData = new FormData(groupForm);
+
+    groupForm.addEventListener('submit', e => {
+        e.preventDefault();
+    });
+    
     if ($('#assignGroupForm').valid()) {
         fetch('/Mils/AssignGroup', {
             method: 'post',
@@ -140,13 +165,30 @@ function initSelect2Item(selector, placeholder) {
  */
 export function editPhaseTask(id, element) {
     const body = document.querySelector('body');
-    const editModal = body.querySelector('#editTaskModal');
+    const taskModal = body.querySelector('#addEditTaskModal');
+    const modalForm = taskModal.querySelector('form');
+    taskModal.querySelector('.modal-title').innerHTML = 'Edit phase task';
     const instructions = element.closest("tr").firstElementChild.innerHTML;
 
-    if (editModal) {
-        editModal.querySelector('form').action = `/Mils/EditTask/${id}`;
-        editModal.querySelector('#Instructions').innerHTML = instructions;
+    if (taskModal) {
+        modalForm.querySelector('#MilsTaskId').value = id;
+        taskModal.querySelector('form').action = `/Mils/EditTask/${id}`;
+        taskModal.querySelector('#Instructions').innerHTML = instructions;
     }
+
+    taskModal.querySelector('#taskFormSubmitButton').innerHTML = 'Update';
+}
+
+export function addPhaseTask(id) {
+    const body = document.querySelector('body');
+    const taskModal = body.querySelector('#addEditTaskModal');
+    taskModal.querySelector('.modal-title').innerHTML = 'Create phase task';
+
+    if (taskModal) {
+        taskModal.querySelector('form').action = `/Mils/CreateTask/${id}`;
+        taskModal.querySelector('#Instructions').innerHTML = '';
+    }
+    taskModal.querySelector('#taskFormSubmitButton').innerHTML = 'Create';
 }
 
 export function assignGroup(groupId, penId) {

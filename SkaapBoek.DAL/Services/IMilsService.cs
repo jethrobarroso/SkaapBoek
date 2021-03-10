@@ -86,6 +86,21 @@ namespace SkaapBoek.DAL.Services
                 .ToListAsync();
         }
 
+        public override async Task<MilsPhase> Delete(int id)
+        {
+            var phase = Context.MilsPhaseSet
+                .Include(p => p.Groups)
+                .SingleOrDefault(p => p.Id == id);
+
+            if (phase != null)
+            {
+                Context.MilsPhaseSet.Remove(phase);
+                await Context.SaveChangesAsync();
+            }
+
+            return phase;
+        }
+
         public async Task UpdatePhaseSequence(int oldSequence, int newSequence)
         {
             if (oldSequence - newSequence > 0)

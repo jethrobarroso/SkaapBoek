@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210308145022_GroupPhaseFKSetNullOnDelete.cs" />
+    <Compile Remove="Migrations\20210308145022_GroupPhaseFKSetNullOnDelete.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SkaapBoek.Core\SkaapBoek.Core.csproj" />
   </ItemGroup>
 

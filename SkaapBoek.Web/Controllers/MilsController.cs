@@ -52,7 +52,7 @@ namespace SkaapBoek.Web.Controllers
             {
                 AssignGroupToPhaseModel = noPhaseGroups,
                 PhaseList = await _milsService.GetAllWithTasksSorted(),
-                Pens = new SelectList(await _penService.GetAll().AsNoTracking().ToListAsync(), "Id", "Name")
+                Pens = new SelectList(await _penService.GetPensWithNoPhase(), "Id", "Name")
             };
             return View(model);
         }
@@ -85,8 +85,15 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var model = _mapper.Map<MilsPhaseEditViewModel>(phase);
-            model.Pens = new SelectList(await _penService.GetAll().AsNoTracking().ToListAsync(), "Id", "Name");
-
+            model.Pens = new SelectList(await _penService.GetPensWithNoPhase(), "Id", "Name");
+            model.MilsPhaseId = phase.Id;
+            model.AssignGroupModel = new AssignGroupToPhaseModel
+            {
+                AvailableGroups = new SelectList(await _groupService.GetNoPhaseGroups(),
+                nameof(Group.Id), nameof(Group.Name)),
+                MilsPhaseId = id.Value,
+                PenId = phase.PenId
+            };
             return View(model);
         }
 
@@ -113,9 +120,9 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTask(MilsPhaseEditViewModel model)
+        public async Task<IActionResult> CreateTask(int id, MilsPhaseEditViewModel model)
         {
-            var phase = await _milsService.GetById(model.MilsPhaseId, true);
+            var phase = await _milsService.GetById(id, true);
 
             if (phase is null)
             {
@@ -127,34 +134,29 @@ namespace SkaapBoek.Web.Controllers
             phase.Tasks.Add(task);
             await _milsService.Update(phase);
             TempData["Success"] = "Successfully updated phase.";
-            return RedirectToAction(nameof(EditPhase), new { id = model.MilsPhaseId });
+            return RedirectToAction(nameof(EditPhase), new { id });
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditTask(int? id, int phaseId, string instructions)
+        public async Task<IActionResult> EditTask(int id, MilsPhaseEditViewModel model)
         {
-            if (id is null)
-            {
-                ViewBag.ErrorMessage = "Bad request. No task ID specified.";
-                return View("BadRequest");
-            }
-            var task = await _milsTaskService.GetById(id);
+            var task = await _milsTaskService.GetById(model.MilsTaskId);
             if (task is null)
             {
-                ViewBag.ErrorMessage = $"Phase task with ID = {id} not found";
+                ViewBag.ErrorMessage = $"Phase task with ID = {model.MilsTaskId} not found";
                 return View("NotFound");
             }
 
-            task.Instructions = instructions;
+            task.Instructions = model.Instructions;
             await _milsTaskService.Update(task);
             TempData["Success"] = "Successfully updated phase task.";
-            return RedirectToAction(nameof(EditPhase), new { id = phaseId });
+            return RedirectToAction(nameof(EditPhase), new { id });
         }
 
         [HttpPost]
         public async Task<IActionResult> AssignGroup(AssignGroupToPhaseModel model)
         {
-            var group = await _groupService.GetByIdLite(model.SelectedGroupId, true);
+            var group = await _groupService.GetByIdLite(model.GroupId, true);
             //_mapper.Map(model, group);
 
             group.MilsPhaseId = model.MilsPhaseId;
@@ -162,7 +164,7 @@ namespace SkaapBoek.Web.Controllers
             group.PenId = model.PenId;
             await _groupService.Update(group);
             TempData["Success"] = $"Successfully queued group to phase.";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(EditPhase), new { id = model.MilsPhaseId });
         }
 
         [HttpPost]

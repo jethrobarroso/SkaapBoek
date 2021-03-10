@@ -1,21 +1,39 @@
 ﻿@model AssignGroupToPhaseModel
 
-<form id="assignGroupForm" method="post" asp-action="AssignGroup">
-  <input hidden asp-for="MilsPhaseId" />
-  <input hidden asp-for="PenId" id="addGroupPenId"/>
-  <div class="row">
-    <div id="groupSelectInput" class="col-6">
-      <label asp-for="SelectedGroupId" class="control-label"></label>
-      <select asp-for="SelectedGroupId" class="form-control" asp-items="Model.AvailableGroups">
-        <option value=""></option>
-      </select>
-      <span asp-validation-for="SelectedGroupId" class="text-danger"></span>
+<div class="modal fade" id="assignGroupModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Enqueue group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="assignGroupForm" method="post" asp-action="AssignGroup">
+          <input hidden asp-for="MilsPhaseId" />
+          <input hidden asp-for="PenId" id="addGroupPenId" />
+          <div class="row">
+            <div id="groupSelectInput" class="col-6">
+              <label asp-for="GroupId" class="control-label"></label>
+              <select asp-for="GroupId" class="form-control" asp-items="Model.AvailableGroups">
+                <option value=""></option>
+              </select>
+              <span asp-validation-for="GroupId" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+              <label asp-for="PhaseStartDate" class="control-label"></label>
+              <input asp-for="PhaseStartDate" class="form-control" />
+              <span asp-validation-for="PhaseStartDate" class="text-danger"></span>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-secondary" data-dismiss="modal">Cancel</a>
+        <button type="submit" form="assignGroupForm" class="btn btn-primary">Enqueue</button>
+      </div>
     </div>
-    <div class="col-6">
-      <label asp-for="PhaseStartDate" class="control-label"></label>
-      <input asp-for="PhaseStartDate" class="form-control" />
-      <span asp-validation-for="PhaseStartDate" class="text-danger"></span>
-    </div>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
   </div>
-</form>
+</div>
