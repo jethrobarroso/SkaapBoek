@@ -116,7 +116,7 @@ export function addGroupToPhase() {
     if ($('#assignGroupForm').valid()) {
         fetch('/Mils/AssignGroup', {
             method: 'post',
-            body: new URLSearchParams(formData)
+            body: formData
         })
             .then(() => {
                 fetch(`/Mils/GetPhaseGroups/${phaseId}`, {
