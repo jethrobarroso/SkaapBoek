@@ -8,6 +8,7 @@ namespace SkaapBoek.Core
 {
     public class SheepStatus
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required]

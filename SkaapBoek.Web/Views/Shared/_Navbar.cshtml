@@ -14,10 +14,9 @@
         {
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="sheepDropDown" role="button"
-               data-toggle="dropdown" aria-expanded="false">Sheep</a>
+             data-toggle="dropdown" aria-expanded="false">Sheep</a>
             <ul class="dropdown-menu" aria-labelledby="sheepDropDown">
               <li><a class="dropdown-item" asp-controller="Sheep" asp-action="Index">All Sheep</a></li>
-              @*<li><a class="dropdown-item" asp-controller="Sheep" asp-action="Performance">Performance</a></li>*@
               <li><a class="dropdown-item" asp-controller="Groups" asp-action="Index">Groups</a></li>
             </ul>
           </li>
@@ -32,6 +31,14 @@
           </li>
           <li class="nav-item">
             <a asp-controller="Mils" asp-action="Index" class="nav-link">M.I.L.S</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="sheepDropDown" role="button"
+             data-toggle="dropdown" aria-expanded="false">Events</a>
+            <ul class="dropdown-menu" aria-labelledby="sheepDropDown">
+              <li><a class="dropdown-item" asp-controller="Events" asp-action="Overview">Overview</a></li>
+              <li><a class="dropdown-item" asp-controller="Events" asp-action="Settings">Settings</a></li>
+            </ul>
           </li>
         }
 

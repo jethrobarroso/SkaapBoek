@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SkaapBoek.DAL.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class IntialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,8 +81,7 @@ namespace SkaapBoek.DAL.Migrations
                 name: "gender",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     Type = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -94,8 +93,7 @@ namespace SkaapBoek.DAL.Migrations
                 name: "priority",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Color = table.Column<string>(type: "char(6)", nullable: false)
                 },
@@ -108,8 +106,7 @@ namespace SkaapBoek.DAL.Migrations
                 name: "sheep_category",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -121,8 +118,7 @@ namespace SkaapBoek.DAL.Migrations
                 name: "state",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -134,8 +130,7 @@ namespace SkaapBoek.DAL.Migrations
                 name: "status",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Color = table.Column<string>(type: "char(6)", nullable: false)
                 },
@@ -268,7 +263,7 @@ namespace SkaapBoek.DAL.Migrations
                         column: x => x.FeedId,
                         principalTable: "feed",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

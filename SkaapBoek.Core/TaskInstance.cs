@@ -17,7 +17,7 @@ namespace SkaapBoek.Core
         public string Description { get; set; }
 
         [Range(0, 1000)]
-        [Display(Name = "Duration")]
+        [Display(Name = "Duration in days")]
         public int? DurationDays { get; set; }
 
         [Required]

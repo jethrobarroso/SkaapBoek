@@ -6,6 +6,7 @@ namespace SkaapBoek.Core
 {
     public class Gender
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required]

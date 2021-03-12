@@ -45,14 +45,14 @@
         </div>
       </div>
     </div>
-    <partial name="_ModalDelete" />
+
   </div>
 </div>
 
 <div class="row row-cols-1 row-cols-xl-2">
   @if (Model.Father != null)
   {
-    <div class="col mb-4">
+    <div class="col mb-4 ">
       <div data-sb-tag="@Model.Father.TagNumber"
            data-sb-id="@Model.Father.Id"
            data-sb-type="father" class="card">
@@ -204,8 +204,8 @@ else
           if (sheeptype === 'child') {
             modalTitle.innerHTML = "Delete child";
             modalBody.innerHTML = `<div>Are you sure you want to delete this child sheep?</div>
-                                           <div><strong>NOTE:</strong> This will NOT delete the parents.
-                                           It will only unlink them from the deleted child.</div>`;
+                                             <div><strong>NOTE:</strong> This will NOT delete the parents.
+                                             It will only unlink them from the deleted child.</div>`;
             childId = card.getAttribute('data-sb-id');
             form.querySelector('.modal-footer button').innerHTML = "Delete";
             form.action = '/Sheep/DeleteChild/' + childId;
@@ -214,9 +214,9 @@ else
             const parentId = card.getAttribute('data-sb-id');
             modalTitle.innerHTML = "Unlink parent";
             modalBody.innerHTML = `Are you sure you want to unlink the parent from the child?
-                                       <div><strong>NOTE:</strong> This will NOT delete the parent
-                                       from the system.
-                                       It will simply unlink them from the deleted child.</div>`;
+                                         <div><strong>NOTE:</strong> This will NOT delete the parent
+                                         from the system.
+                                         It will simply unlink them from the deleted child.</div>`;
             form.action = `/Sheep/RemoveParentFromChild?childId=${childId}&parentId=${parentId}`;
             form.querySelector('.modal-footer button').innerHTML = "Unlink";
           }

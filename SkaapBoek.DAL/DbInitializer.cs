@@ -91,16 +91,16 @@ namespace SkaapBoek.DAL
 
             var sheepCategories = new SheepCategory[]
             {
-                new SheepCategory { Name = "Herd" },
-                new SheepCategory { Name = "Feedlot" }
+                new SheepCategory { Id = 1, Name = "Herd" },
+                new SheepCategory { Id = 2, Name = "Feedlot" }
             };
             context.SheepCategorySet.AddRange(sheepCategories);
             context.SaveChanges();
 
             var genders = new Gender[]
             {
-                new Gender { Type = "Male"},
-                new Gender { Type = "Female"}
+                new Gender { Id = 1, Type = "Male"},
+                new Gender { Id = 2, Type = "Female"}
             };
 
             context.GenderSet.AddRange(genders);
@@ -123,11 +123,11 @@ namespace SkaapBoek.DAL
 
             var states = new SheepStatus[]
             {
-                new SheepStatus { Name = "Healthy" },
-                new SheepStatus { Name = "Ill" },
-                new SheepStatus { Name = "Quarantined" },
-                new SheepStatus { Name = "Pregnant" },
-                new SheepStatus { Name = "Inactive" },
+                new SheepStatus { Id = 1, Name = "Healthy" },
+                new SheepStatus { Id = 2, Name = "Ill" },
+                new SheepStatus { Id = 3, Name = "Quarantined" },
+                new SheepStatus { Id = 4, Name = "Pregnant" },
+                new SheepStatus { Id = 5, Name = "Inactive" },
             };
 
             context.SheepStateSet.AddRange(states);
@@ -135,12 +135,11 @@ namespace SkaapBoek.DAL
 
             var status = new Status[]
             {
-                new Status { Name = "Not Started", Color = "FC7150"},
-                new Status { Name = "In Progress", Color = "5185FC"},
-                new Status { Name = "In Review", Color = "5185FC"},
-                new Status { Name = "Delayed", Color = "D7CF00"},
-                new Status { Name = "Completed", Color = "5185FC"},
-                new Status { Name = "Canceled", Color = "5185FC"}
+                new Status { Id = 1, Name = "Not Started", Color = "FC7150"},
+                new Status { Id = 2, Name = "In Progress", Color = "5185FC"},
+                new Status { Id = 3, Name = "In Review", Color = "5185FC"},
+                new Status { Id = 4, Name = "Overdue", Color = "D7CF00"},
+                new Status { Id = 5, Name = "Completed", Color = "5185FC"},
             };
 
             context.StatusSet.AddRange(status);
@@ -148,10 +147,10 @@ namespace SkaapBoek.DAL
 
             var priorities = new Priority[]
             {
-                new Priority { Name = "Critical", Color = "DC143C"},
-                new Priority { Name = "High", Color = "FF5B5A"},
-                new Priority { Name = "Medium", Color = "98C14A"},
-                new Priority { Name = "Low", Color = "7FD9FF"}
+                new Priority { Id = 1, Name = "Critical", Color = "DC143C"},
+                new Priority { Id = 2, Name = "High", Color = "FF5B5A"},
+                new Priority { Id = 3, Name = "Medium", Color = "98C14A"},
+                new Priority { Id = 4, Name = "Low", Color = "7FD9FF"}
             };
             
             context.PrioritySet.AddRange(priorities);

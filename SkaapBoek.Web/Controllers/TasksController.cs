@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace SkaapBoek.Web.Controllers
     public class TasksController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public TasksController(AppDbContext context)
+        public TasksController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Tasks
@@ -60,16 +63,19 @@ namespace SkaapBoek.Web.Controllers
         }
 
         // GET: Tasks/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            PopulateLists();
+            await PopulateLists();
             return View();
         }
 
-        private void PopulateLists()
+        private async Task PopulateLists()
         {
+            var priorities = await _context.PrioritySet
+                .OrderByDescending(p => p.Id)
+                .ToListAsync();
             ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name");
-            ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name");
+            ViewData["PriorityId"] = new SelectList(priorities, "Id", "Name");
             ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber");
             ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name");
         }
@@ -83,20 +89,27 @@ namespace SkaapBoek.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                PopulateLists();
+                await PopulateLists();
                 return View(model);
             }
 
-            var task = new TaskInstance
+            var task = _mapper.Map<TaskInstance>(model);
+
+            switch (model.AssignOption)
             {
-                Name = model.Name,
-                Description = model.Description,
-                DurationDays = model.Duration,
-                GroupId = model.GroupId,
-                PriorityId = model.PriorityId,
-                SheepId = model.SheepId,
-                StatusId = model.StatusId
-            };
+                case "group":
+                    task.SheepId = null;
+                    break;
+                case "sheep":
+                    task.GroupId = null;
+                    break;
+                default:
+                    task.GroupId = null;
+                    task.SheepId = null;
+                    break;
+            }
+
+            task.StatusId = model.StartDate >= DateTime.Now ? 1 : 4;
 
             _context.Add(task);
             await _context.SaveChangesAsync();
@@ -115,6 +128,7 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var taskInstance = await _context.TaskInstanceSet.FindAsync(id);
+            var model = _mapper.Map<TaskEditViewModel>(taskInstance);
 
             if (taskInstance == null)
             {
@@ -122,9 +136,9 @@ namespace SkaapBoek.Web.Controllers
                 return View("NotFound");
             }
 
-            PopulateLists();
+            await PopulateLists();
 
-            return View(taskInstance);
+            return View(model);
         }
 
         // POST: Tasks/Edit/5
@@ -134,8 +148,8 @@ namespace SkaapBoek.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, TaskEditViewModel model)
         {
-            var taskInstance = await _context.TaskInstanceSet.FindAsync(id);
-            if (taskInstance == null)
+            var task = await _context.TaskInstanceSet.FindAsync(id);
+            if (task == null)
             {
                 ViewBag.ErrorMessage = $"Task with ID = {id} not found";
                 return View("NotFound");
@@ -143,27 +157,36 @@ namespace SkaapBoek.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                PopulateLists();
-                return View(taskInstance);
+                await PopulateLists();
+                return View(task);
             }
 
-            taskInstance.Name = model.Name;
-            taskInstance.Description = model.Description;
-            taskInstance.DurationDays = model.Duration;
-            taskInstance.GroupId = model.GroupId;
-            taskInstance.PriorityId = model.PriorityId;
-            taskInstance.SheepId = model.SheepId;
-            taskInstance.StatusId = model.StatusId;
+            _mapper.Map(model,task);
+
+            switch (model.AssignOption)
+            {
+                case "group":
+                    task.SheepId = null;
+                    break;
+                case "sheep":
+                    task.GroupId = null;
+                    break;
+                default:
+                    task.GroupId = null;
+                    task.SheepId = null;
+                    break;
+            }
+
+            task.StatusId = model.StartDate >= DateTime.Now ? 1 : 4;
 
             try
             {
-                
-                _context.Update(taskInstance);
+                _context.Update(task);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TaskInstanceExists(taskInstance.Id))
+                if (!TaskInstanceExists(task.Id))
                 {
                     return NotFound();
                 }

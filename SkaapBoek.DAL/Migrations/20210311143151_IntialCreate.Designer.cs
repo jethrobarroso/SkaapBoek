@@ -10,8 +10,8 @@ using SkaapBoek.DAL;
 namespace SkaapBoek.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210308140545_PenFeedSetNullOnDelete")]
-    partial class PenFeedSetNullOnDelete
+    [Migration("20210311143151_IntialCreate")]
+    partial class IntialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -272,9 +272,7 @@ namespace SkaapBoek.DAL.Migrations
             modelBuilder.Entity("SkaapBoek.Core.Gender", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -413,9 +411,7 @@ namespace SkaapBoek.DAL.Migrations
             modelBuilder.Entity("SkaapBoek.Core.Priority", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -505,9 +501,7 @@ namespace SkaapBoek.DAL.Migrations
             modelBuilder.Entity("SkaapBoek.Core.SheepCategory", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -520,9 +514,7 @@ namespace SkaapBoek.DAL.Migrations
             modelBuilder.Entity("SkaapBoek.Core.SheepStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -536,9 +528,7 @@ namespace SkaapBoek.DAL.Migrations
             modelBuilder.Entity("SkaapBoek.Core.Status", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Color")
                         .IsRequired()

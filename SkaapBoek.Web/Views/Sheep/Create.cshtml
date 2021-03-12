@@ -50,7 +50,8 @@
         @foreach (var gender in Model.Genders)
         {
           <div class="form-check">
-            <input class="form-check-input" id="Gender[@gender.Id]" asp-for="GenderId" type="radio" value="@gender.Id" />
+            <input class="form-check-input" id="Gender[@gender.Id]" 
+                   asp-for="GenderId" type="radio" value="@gender.Id" />
             <label class="form-check-label" for="Gender[@gender.Id]">@gender.Type</label>
           </div>
         }

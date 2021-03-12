@@ -39,7 +39,7 @@
             @(item.StartDate.ToShortDateString())
           </td>
           <td>
-            @Html.DisplayFor(modelItem => item.DurationDays)
+            @(item.DurationDays ?? 0)
           </td>
           <td>
             @Html.DisplayFor(modelItem => item.Priority.Name)
