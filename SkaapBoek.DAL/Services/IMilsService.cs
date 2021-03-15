@@ -15,6 +15,7 @@ namespace SkaapBoek.DAL.Services
         Task<IList<MilsPhase>> GetAllWithTasksSorted();
         Task<IEnumerable<Group>> GetAvailableGroups();
         Task<MilsPhase> GetById(int? id, bool track = false);
+        Task<int?> GetPhaseDuration(int phaseId);
         Task UpdatePhaseSequence(int oldSequence, int newSequence);
     }
 
@@ -99,6 +100,11 @@ namespace SkaapBoek.DAL.Services
             }
 
             return phase;
+        }
+
+        public async Task<int?> GetPhaseDuration(int phaseId)
+        {
+            return (await Context.MilsPhaseSet.FindAsync(phaseId))?.Days ?? null;
         }
 
         public async Task UpdatePhaseSequence(int oldSequence, int newSequence)

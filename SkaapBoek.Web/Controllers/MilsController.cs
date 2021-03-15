@@ -52,7 +52,7 @@ namespace SkaapBoek.Web.Controllers
             {
                 AssignGroupToPhaseModel = noPhaseGroups,
                 PhaseList = await _milsService.GetAllWithTasksSorted(),
-                Pens = new SelectList(await _penService.GetPensWithNoPhase(), "Id", "Name")
+                Pens = new SelectList(await _penService.GetPens(), "Id", "Name")
             };
             return View(model);
         }
@@ -85,8 +85,9 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var model = _mapper.Map<MilsPhaseEditViewModel>(phase);
-            model.Pens = new SelectList(await _penService.GetPensWithNoPhase(), "Id", "Name");
+            model.Pens = new SelectList(await _penService.GetPens(phase.Id), "Id", "Name");
             model.MilsPhaseId = phase.Id;
+            model.PenId = phase.PenId;
             model.AssignGroupModel = new AssignGroupToPhaseModel
             {
                 AvailableGroups = new SelectList(await _groupService.GetNoPhaseGroups(),
@@ -94,6 +95,7 @@ namespace SkaapBoek.Web.Controllers
                 MilsPhaseId = id.Value,
                 PenId = phase.PenId
             };
+            TempData["PhaseId"] = id;
             return View(model);
         }
 
@@ -157,10 +159,11 @@ namespace SkaapBoek.Web.Controllers
         public async Task<IActionResult> AssignGroup(AssignGroupToPhaseModel model)
         {
             var group = await _groupService.GetByIdLite(model.GroupId, true);
-            //_mapper.Map(model, group);
+            var days = await _milsService.GetPhaseDuration(model.MilsPhaseId) ?? 0;
 
             group.MilsPhaseId = model.MilsPhaseId;
             group.PhaseStartDate = model.PhaseStartDate;
+            group.PhaseEndDate = model.PhaseStartDate.Value.AddDays(days);
             group.PenId = model.PenId;
             await _groupService.Update(group);
             TempData["Success"] = $"Successfully queued group to phase.";
@@ -233,6 +236,22 @@ namespace SkaapBoek.Web.Controllers
             };
 
             return PartialView("_AssignGroupForm", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditGroupAssignmentDate(EditPhaseGroupModel model)
+        {
+            var group = await _groupService.GetByIdLite(model.OnEditedGroupId, true);
+            if(group is null)
+            {
+                ViewBag.ErrorMessage = $"Invalid group details specified.";
+                return View("BadRequest");
+            }
+
+            group.PhaseStartDate = model.NewDate.AddDays(group.MilsPhase.Days);
+
+            await _groupService.Update(group);
+            return RedirectToAction("EditPhase", new { id = TempData["PhaseId"]});
         }
     }
 }

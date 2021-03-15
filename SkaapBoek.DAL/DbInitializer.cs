@@ -137,9 +137,7 @@ namespace SkaapBoek.DAL
             {
                 new Status { Id = 1, Name = "Not Started", Color = "FC7150"},
                 new Status { Id = 2, Name = "In Progress", Color = "5185FC"},
-                new Status { Id = 3, Name = "In Review", Color = "5185FC"},
-                new Status { Id = 4, Name = "Overdue", Color = "D7CF00"},
-                new Status { Id = 5, Name = "Completed", Color = "5185FC"},
+                new Status { Id = 3, Name = "Completed", Color = "5185FC"},
             };
 
             context.StatusSet.AddRange(status);

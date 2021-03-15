@@ -31,4 +31,9 @@
     <ProjectReference Include="..\SkaapBoek.DAL\SkaapBoek.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Utility\" />
+  </ItemGroup>
+
 </Project>

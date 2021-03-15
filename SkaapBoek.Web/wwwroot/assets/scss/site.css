@@ -52,6 +52,16 @@ body {
     line-height: 0;
 }
 
+.icon-button--edit {
+    all: unset;
+    color: #007bff;
+    line-height: 0;
+}
+
+    .icon-button--edit:hover {
+        color: #0056b3;
+    }
+
 .icon-button--delete {
     all: unset;
     color: #dd0000;
@@ -124,4 +134,39 @@ body {
 
 .dataTables_processing {
     background-color: #6c757d;
+}
+
+.complete-icon {
+    color: green;
+    cursor: pointer;
+}
+
+.task-card-main, .sticky-taskheader {
+    background-color: #293042;
+}
+
+.sticky-navtab {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 3.5rem;
+    z-index: 2;
+}
+
+.sticky-taskheader {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 6.5rem;
+    z-index: 1;
+}
+
+#pageSuccessAlert, #pageDangerAlert {
+    position: fixed;
+    top: 4.5rem;
+    z-index: 999;
+    box-shadow: 0.25rem 0.25rem 10px black;
+}
+
+.icon-check {
+    cursor: pointer;
+    color: green;
 }

@@ -18,9 +18,8 @@ namespace SkaapBoek.Web.ViewModels
         [MaxLength(500)]
         public string Description { get; set; }
 
-        [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Today;
 
         [Display(Name = "Duration (days)")]
         public int? DurationDays { get; set; }

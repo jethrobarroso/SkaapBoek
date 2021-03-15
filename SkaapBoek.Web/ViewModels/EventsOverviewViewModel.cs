@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkaapBoek.Web.ViewModels.Partials;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ namespace SkaapBoek.Web.ViewModels
 {
     public class EventsOverviewViewModel
     {
-        public int MyProperty { get; set; }
+        public MilsEventsModel MilsEventsModel { get; set; }
+        public TaskEventsModel TaskEventsModel { get; set; }
     }
 }

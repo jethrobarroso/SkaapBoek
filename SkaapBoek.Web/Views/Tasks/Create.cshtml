@@ -14,7 +14,12 @@
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-3">
+        <label asp-for="StatusId" class="control-label"></label>
+        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusList"></select>
+        <span asp-validation-for="StatusId" class="text-danger"></span>
+      </div>
+      <div class="col-md-3">
         <label asp-for="PriorityId" class="control-label"></label>
         <select asp-for="PriorityId" class="form-control" asp-items="ViewBag.PriorityId"></select>
         <span asp-validation-for="PriorityId" class="text-danger"></span>

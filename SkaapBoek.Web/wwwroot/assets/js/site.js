@@ -4,6 +4,7 @@ import * as groupViews from './views/groups.js'
 import * as taskViews from './views/tasks.js'
 import * as penViews from './views/pen.js'
 import * as milsViews from './views/mils.js'
+import * as eventsViews from './views/events.js'
 
 document.addEventListener("DOMContentLoaded", () => {
     $('[data-toggle="tooltip"]').tooltip();
@@ -15,7 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
         $("#pageDangerAlert, #pageSuccessAlert").fadeTo(500, 0).slideUp(500, function () {
             $(this).hide();
         });
-    }, 1000);
+    }, 3000);
+
+    $('[data-toggle="popover"]').popover()
 
     window.appns = {
         //account: {
@@ -50,5 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         tasks: taskViews,
         mils: milsViews,
+        events: eventsViews
     }
 })

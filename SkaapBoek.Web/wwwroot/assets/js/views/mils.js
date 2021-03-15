@@ -96,6 +96,12 @@ export function editPhase() {
         
     })
 
+    $('#PenId').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: 'Select pen'
+    });
+
     $('#GroupId').select2({
         theme: 'bootstrap4',
         allowClear: true,
@@ -194,4 +200,9 @@ export function addPhaseTask(id) {
 export function assignGroup(groupId, penId) {
     document.querySelector('#assignGroupForm #MilsPhaseId').value = groupId;
     document.querySelector('#assignGroupForm #addGroupPenId').value = penId;
+}
+
+
+export function editGroupDate(groupId) {
+    document.querySelector('#OnEditedGroupId').value = groupId;
 }

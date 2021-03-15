@@ -1,0 +1,189 @@
+﻿@model TaskEventsModel
+
+<div class="text-light">
+  <div class="row">
+
+    <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card task-card-main mt-4">
+        <div class="card-header sticky-taskheader">
+          <h5 class="card-title">Today</h5>
+          <h6 class="card-subtitle text-white-50">Tasks starting/ending today.</h6>
+        </div>
+        <div class="card-body p-3">
+          <div id="tasks-today">
+            @foreach (var task in Model.TodaysTasks)
+            {
+              <div class="card bg-dark mb-3 card-inner  border">
+                <div class="card-body p-3">
+
+                  <dl class="row p-0 m-0">
+                    <dt class="col-4 p-0">Name:</dt>
+                    <dd class="col-8 p-0">
+                      <span class="material-icons icon-check float-right"
+                            onclick="appns.events.completeTask(@task.Id, this)">check_circle</span>
+                      @task.Name
+                    </dd>
+                    @if (task.GroupId != null)
+                    {
+                      <dt class="col-4 p-0">Group:</dt>
+                      <dd class="col-8 p-0">@task.Group.Name</dd>
+                    }
+                    @if (task.SheepId != null)
+                    {
+                      <dt class="col-4 p-0">Sheep:</dt>
+                      <dd class="col-8 p-0">@task.Sheep.TagNumber</dd>
+                    }
+                    <dt class="col-4 p-0">Status:</dt>
+                    <dd class="col-8 p-0">@task.Status.Name</dd>
+                    <dt class="col-4 p-0">Priority:</dt>
+                    <dd class="col-8 p-0">@task.Priority.Name</dd>
+                    <dt class="col-4 p-0">Start:</dt>
+                    <dd class="col-8 p-0">@task.StartDate</dd>
+                    <dt class="col-4 p-0">End:</dt>
+                    <dd class="col-8 p-0">@task.EndDate</dd>
+                  </dl>
+
+                  <div class="d-flex justify-content-between">
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light" role="button"
+                       data-toggle="popover" data-trigger="focus" title="Task Description"
+                       data-placement="bottom" data-content="@task.Description">Description</a>
+                    @if (task.StatusId == 1 && task.EndDate > DateTime.Today)
+                    {
+                      <button class="btn btn-primary btn-sm"
+                              onclick="appns.events.markAsInProgress(@task.Id, this)">
+                        Mark as in progress
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="alert alert-info m-0"
+                 hidden="@Model.TodaysTasks.Any()">
+              No events today.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card task-card-main mt-4">
+        <div class="card-header sticky-taskheader">
+          <h5 class="card-title">Overdue</h5>
+          <h6 class="card-subtitle text-white-50">Tasks that are overdue and not marked as completed.</h6>
+        </div>
+        <div class="card-body p-3">
+          <div id="tasks-today">
+            @foreach (var task in Model.OverdueTasks)
+            {
+              <div class="card bg-dark mb-3 card-inner  border">
+                <div class="card-body p-3">
+                  <dl class="row p-0 m-0">
+                    <dt class="col-4 p-0">Name:</dt>
+                    <dd class="col-8 p-0">
+                      @task.Name
+                      <span class="material-icons icon-check float-right"
+                            onclick="appns.events.completeTask(@task.Id, this)">check_circle</span>
+                    </dd>
+                    @if (task.GroupId != null)
+                    {
+                      <dt class="col-4 p-0">Group:</dt>
+                      <dd class="col-8 p-0">@task.Group.Name</dd>
+                    }
+                    @if (task.SheepId != null)
+                    {
+                      <dt class="col-4 p-0">Sheep:</dt>
+                      <dd class="col-8 p-0">@task.Sheep.TagNumber</dd>
+                    }
+                    <dt class="col-4 p-0">Status:</dt>
+                    <dd class="col-8 p-0">@task.Status.Name</dd>
+                    <dt class="col-4 p-0">Priority:</dt>
+                    <dd class="col-8 p-0">@task.Priority.Name</dd>
+                    <dt class="col-4 p-0">Start:</dt>
+                    <dd class="col-8 p-0">@task.StartDate</dd>
+                    <dt class="col-4 p-0">End:</dt>
+                    <dd class="col-8 p-0">@task.EndDate</dd>
+                  </dl>
+                  <div class="d-flex justify-content-between">
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light" role="button"
+                       data-toggle="popover" data-trigger="focus" title="Task Description"
+                       data-placement="bottom" data-content="@task.Description">Description</a>
+                    @if (task.StatusId == 1 && task.EndDate > DateTime.Today)
+                    {
+                      <button class="btn btn-primary btn-sm"
+                              onclick="appns.events.markAsInProgress(@task.Id, this)">
+                        Mark as in progress
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="alert alert-info m-0"
+                 hidden="@Model.OverdueTasks.Any()">
+              No overdue tasks.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card task-card-main mt-4">
+        <div class="card-header sticky-taskheader">
+          <h5 class="card-title">Upcoming</h5>
+          <h6 class="card-subtitle text-white-50">Events upcoming within the next 7 days</h6>
+        </div>
+        <div class="card-body p-3">
+          <div id="tasks-today">
+            @foreach (var task in Model.UpcomingTasks)
+            {
+              <div class="card bg-dark mb-3 card-inner  border">
+                <div class="card-body p-3">
+                  <dl class="row p-0 m-0">
+                    <dt class="col-4 p-0">Name:</dt>
+                    <dd class="col-8 p-0">
+                      @task.Name
+                      <span class="material-icons icon-check float-right"
+                            onclick="appns.events.completeTask(@task.Id, this)">check_circle</span>
+                    </dd>
+                    @if (task.GroupId != null)
+                    {
+                      <dt class="col-4 p-0">Group:</dt>
+                      <dd class="col-8 p-0">@task.Group.Name</dd>
+                    }
+                    @if (task.SheepId != null)
+                    {
+                      <dt class="col-4 p-0">Sheep:</dt>
+                      <dd class="col-8 p-0">@task.Sheep.TagNumber</dd>
+                    }
+                    <dt class="col-4 p-0">Status:</dt>
+                    <dd class="col-8 p-0">@task.Status.Name</dd>
+                    <dt class="col-4 p-0">Priority:</dt>
+                    <dd class="col-8 p-0">@task.Priority.Name</dd>
+                    <dt class="col-4 p-0">Start:</dt>
+                    <dd class="col-8 p-0">@task.StartDate</dd>
+                    <dt class="col-4 p-0">End:</dt>
+                    <dd class="col-8 p-0">@task.EndDate</dd>
+                  </dl>
+                  <div class="d-flex justify-content-between">
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light" role="button"
+                       data-toggle="popover" data-trigger="focus" title="Task Description"
+                       data-placement="bottom" data-content="@task.Description">Description</a>
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="alert alert-info m-0"
+                 hidden="@Model.UpcomingTasks.Any()">
+              No upcoming events withing the time frame.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

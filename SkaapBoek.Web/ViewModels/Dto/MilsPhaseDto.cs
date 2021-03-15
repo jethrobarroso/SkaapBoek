@@ -19,6 +19,7 @@ namespace SkaapBoek.Web.ViewModels
         public int Days { get; set; }
 
         [Required]
+        [Display(Name = "Pen")]
         public int PenId { get; set; }
         public SelectList Pens { get; set; }
 

@@ -15,7 +15,7 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<Sheep>> GetAvailableSheep();
         Task<Pen> GetById(int id);
         Task<Pen> GetByIdFullNoTrack(int id);
-        Task<IEnumerable<Pen>> GetPensWithNoPhase();
+        Task<IEnumerable<Pen>> GetPens(int? phaseId = null);
     }
 
     public class PenService : BaseService<Pen>, IPenService
@@ -42,11 +42,11 @@ namespace SkaapBoek.DAL.Services
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<Pen>> GetPensWithNoPhase()
+        public async Task<IEnumerable<Pen>> GetPens(int? phaseId = null)
         {
             return await Context.PenSet
                 .Include(p => p.MilsPhase)
-                .Where(p => p.MilsPhase == null)
+                .Where(p => p.MilsPhase == null || p.MilsPhase.Id == phaseId)
                 .AsNoTracking()
                 .ToListAsync();
         }

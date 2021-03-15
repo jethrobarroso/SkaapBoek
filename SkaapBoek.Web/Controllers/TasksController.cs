@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SkaapBoek.Core;
 using SkaapBoek.DAL;
+using SkaapBoek.DAL.Services;
 using SkaapBoek.Web.ViewModels;
 
 namespace SkaapBoek.Web.Controllers
@@ -17,11 +18,13 @@ namespace SkaapBoek.Web.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ITaskService _taskService;
 
-        public TasksController(AppDbContext context, IMapper mapper)
+        public TasksController(AppDbContext context, IMapper mapper, ITaskService taskService)
         {
             _context = context;
             _mapper = mapper;
+            _taskService = taskService;
         }
 
         // GET: Tasks
@@ -66,7 +69,7 @@ namespace SkaapBoek.Web.Controllers
         public async Task<IActionResult> Create()
         {
             await PopulateLists();
-            return View();
+            return View(new TaskEditViewModel());
         }
 
         private async Task PopulateLists()
@@ -80,9 +83,6 @@ namespace SkaapBoek.Web.Controllers
             ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name");
         }
 
-        // POST: Tasks/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TaskEditViewModel model)
@@ -94,6 +94,9 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var task = _mapper.Map<TaskInstance>(model);
+            var now = DateTime.Now;
+            var startDate = model.StartDate;
+            var duration = model.DurationDays ?? 0;
 
             switch (model.AssignOption)
             {
@@ -109,7 +112,8 @@ namespace SkaapBoek.Web.Controllers
                     break;
             }
 
-            task.StatusId = model.StartDate >= DateTime.Now ? 1 : 4;
+            if ((model.DurationDays ?? 0) != 0)
+                task.EndDate = model.StartDate.AddDays(model.DurationDays.Value);
 
             _context.Add(task);
             await _context.SaveChangesAsync();
@@ -161,7 +165,7 @@ namespace SkaapBoek.Web.Controllers
                 return View(task);
             }
 
-            _mapper.Map(model,task);
+            _mapper.Map(model, task);
 
             switch (model.AssignOption)
             {
@@ -177,7 +181,8 @@ namespace SkaapBoek.Web.Controllers
                     break;
             }
 
-            task.StatusId = model.StartDate >= DateTime.Now ? 1 : 4;
+            if ((model.DurationDays ?? 0) != 0)
+                task.EndDate = model.StartDate.AddDays(model.DurationDays.Value);
 
             try
             {
@@ -208,6 +213,19 @@ namespace SkaapBoek.Web.Controllers
             _context.TaskInstanceSet.Remove(taskInstance);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Complete(int id)
+        {
+            var task = await _taskService.GetByIdLite(id, true);
+
+            if (task is null)
+                return NotFound();
+
+            //task.StatusId = 3;
+            //await _taskService.Update(task);
+            return NoContent();
         }
 
         private bool TaskInstanceExists(int id)

@@ -91,8 +91,12 @@ namespace SkaapBoek.DAL.Services
         public async Task<Group> GetByIdLite(int id, bool track = false)
         {
             return track
-                ? await Context.GroupSet.SingleOrDefaultAsync(g => g.Id == id)
-                : await Context.GroupSet.AsNoTracking().SingleOrDefaultAsync(g => g.Id == id);
+                ? await Context.GroupSet
+                    .Include(g => g.MilsPhase)
+                    .SingleOrDefaultAsync(g => g.Id == id)
+                : await Context.GroupSet.Include(g => g.MilsPhase)
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(g => g.Id == id);
         }
 
         public async Task<IEnumerable<Group>> GetNoPhaseGroups()

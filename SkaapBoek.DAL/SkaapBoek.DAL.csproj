@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210314161348_AddEndDateToTask.cs" />
+    <Compile Remove="Migrations\20210314161348_AddEndDateToTask.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SkaapBoek.Core\SkaapBoek.Core.csproj" />
   </ItemGroup>
 

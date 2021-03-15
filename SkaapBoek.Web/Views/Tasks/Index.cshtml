@@ -4,6 +4,8 @@
   ViewData["Title"] = "Index";
 }
 
+<partial name="_UpdateMessage" />
+
 <h1 class="mb-3 text-light">Tasks</h1>
 
 <div class="table-responsive-md text-light">
@@ -17,7 +19,7 @@
           <div>@Html.DisplayNameFor(model => model.StartDate)</div>
         </th>
         <th class="filterable">
-          <div>@Html.DisplayNameFor(model => model.DurationDays)</div>
+          <div>@Html.DisplayNameFor(model => model.EndDate)</div>
         </th>
         <th class="filterable">
           <div>@Html.DisplayNameFor(model => model.Priority)</div>
@@ -39,7 +41,7 @@
             @(item.StartDate.ToShortDateString())
           </td>
           <td>
-            @(item.DurationDays ?? 0)
+            @item.EndDate
           </td>
           <td>
             @Html.DisplayFor(modelItem => item.Priority.Name)

@@ -16,7 +16,6 @@
 	</Target>-->
 
 	<ItemGroup>
-		<Folder Include="Helpers\" />
 		<Folder Include="wwwroot\lib\" />
 	</ItemGroup>
 

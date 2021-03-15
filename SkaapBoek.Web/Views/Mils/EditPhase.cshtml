@@ -99,53 +99,55 @@
   <h4 class="h4 mb-3 mt-3">Groups currently in this phase</h4>
   @if (Model.Groups?.Any() ?? false)
   {
-<div class="table-responsive-md text-light">
-  <table id="groupTable" class="table table-striped table-dark table-hover">
-    <thead>
-      <tr>
-        <th class="filterable">
-          <div>Name</div>
-        </th>
-        <th class="filterable">
-          <div>Pen</div>
-        </th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach (var group in Model.Groups)
-      {
-        <tr>
-          <td>
-            @Html.DisplayFor(modelItem => group.Name)
-          </td>
-          <td>@(group.Pen?.Name.ToString() ?? "None")</td>
-          <td>
-            <div class="d-flex align-content-center">
-              <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@group.Id"
-                 data-toggle="tooltip" data-placement="top" title="View">
-                <i class="material-icons">search</i>
-              </a>
-              <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@group.Id"
-                 data-toggle="tooltip" data-placement="top" title="Edit">
-                <i class="material-icons">edit</i>
-              </a>
-              <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Unlink">
-                <button class="icon-button--unlink" type="button"
-                        data-toggle="modal" data-target="#unlinkGroupModal"
-                        onclick="appns.mils.unlinkGroup(@group.Id, this)">
-                  <i class="material-icons">link_off</i>
-                </button>
-              </span>
-            </div>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-  <a class="mt-2 btn btn-primary" data-toggle="modal"
-     data-target="#assignGroupModal">Enqueue group</a>
-</div>
+    <div class="table-responsive-md text-light">
+      <table id="groupTable" class="table table-striped table-dark table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phase Start</th>
+            <th>Phase End</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var group in Model.Groups)
+          {
+            <tr>
+              <td>
+                @Html.DisplayFor(modelItem => group.Name)
+              </td>
+              <td>@group.PhaseStartDate</td>
+              <td>@group.PhaseStartDate.Value.AddDays(Model.Days)</td>
+              <td>
+                <div class="d-flex align-content-center">
+                  <a class="icon-button mr-1 ml-1" asp-controller="Groups"
+                     asp-action="Details" asp-route-id="@group.Id"
+                     data-toggle="tooltip" data-placement="top" title="View">
+                    <i class="material-icons">search</i>
+                  </a>
+                  <span data-toggle="tooltip" class="icon-button--edit mr-1 ml-1" data-placement="top" title="Edit">
+                    <button class="icon-button--edit" type="button"
+                            data-toggle="modal" data-target="#editGroupModal"
+                            onclick="appns.mils.editGroupDate(@group.Id)">
+                      <i class="material-icons">edit</i>
+                    </button>
+                  </span>
+                  <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Unlink">
+                    <button class="icon-button--unlink" type="button"
+                            data-toggle="modal" data-target="#unlinkGroupModal"
+                            onclick="appns.mils.unlinkGroup(@group.Id, this)">
+                      <i class="material-icons">link_off</i>
+                    </button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <a class="mt-2 btn btn-primary" data-toggle="modal"
+         data-target="#assignGroupModal">Enqueue group</a>
+    </div>
   }
   else
   {
@@ -156,6 +158,8 @@
     </div>
   }
 </div>
+
+<partial name="_EditMilsGroupDateForm" model="new EditPhaseGroupModel()" />
 
 <div class="modal fade" id="addEditTaskModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">

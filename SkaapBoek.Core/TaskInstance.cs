@@ -16,13 +16,11 @@ namespace SkaapBoek.Core
         [MaxLength(500)]
         public string Description { get; set; }
 
-        [Range(0, 1000)]
-        [Display(Name = "Duration in days")]
-        public int? DurationDays { get; set; }
-
         [Required]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
 
         [Display(Name = "Priority")]
         public int PriorityId { get; set; }

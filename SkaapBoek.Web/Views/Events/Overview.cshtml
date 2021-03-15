@@ -3,58 +3,38 @@
   ViewBag.Title = "Events Overview";
 }
 
-<div class="text-light">
 
-  <div class="shadow rounded bg-secondary p-1 pl-3 mb-3">
-    <h1 class="text-light mb-3 display-4">Events Overview</h1>
-  </div>
-  <h4 class="mb-3">General Task Events</h4>
-  <div class="table-responsive text-light">
-    <table id="taskTable" class="table table-dark table-hover" style="width:100%">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Name</th>
-          <th>Start Date</th>
-          <th>Priority</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-    </table>
-  </div>
+<h1 class="text-light mb-3">Events</h1>
 
-  <div class="card">
-    <div class="card-header bg-secondary text-light">
-      <h3>Task details</h3>
+
+<div class="wrapper">
+  <div class="sticky-navtab bg-dark pt-2">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="tasks-tab" data-toggle="tab"
+           href="#tasksPage" role="tab" aria-controls="Tasks" aria-selected="true">Tasks</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="mils-tab" data-toggle="tab"
+           href="#milsPage" role="tab" aria-controls="MILS" aria-selected="false">M.I.L.S</a>
+      </li>
+    </ul>
+  </div>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="tasksPage" role="tabpanel" aria-labelledby="home-tab">
+      <partial name="_TaskEvents" model="Model.TaskEventsModel" />
     </div>
-    <div class="card-body bg-dark text-light text-break">
-      <h4>Groups</h4>
-      
-      <dl class="row mb-0">
-        @*<dt class="col-sm-3">Tag Color:</dt>
-        <dd class="col-sm-9">@Model.Sheep.Color.Name</dd>
-        <dt class="col-sm-3">Gender:</dt>
-        <dd class="col-sm-9">@Model.Sheep.Gender.Type</dd>
-        <dt class="col-sm-3">Weight:</dt>
-        <dd class="col-sm-9">@Model.Sheep.Weight kg</dd>
-        <dt class="col-sm-3">Birth Date:</dt>
-        <dd class="col-sm-9">@Model.Sheep.BirthDate</dd>
-        <dt class="col-sm-3">State:</dt>
-        <dd class="col-sm-9">@Model.Sheep.SheepStatus.Name</dd>
-        <dt class="col-sm-3">Acquire Date:</dt>
-        <dd class="col-sm-9">@Model.Sheep.AcquireDate</dd>
-        <dt class="col-sm-3">Cost Price:</dt>
-        <dd class="col-sm-9">@Model.Sheep.CostPrice</dd>
-        <dt class="col-sm-3">Sale Price:</dt>
-        <dd class="col-sm-9">@Model.Sheep.SalePrice</dd>*@
-      </dl>
-    </div>
-    <div class="card-footer bg-secondary">
-      <div class="m-3">
-        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
-        <a asp-action="Edit" class="btn btn-primary">Edit</a>
-      </div>
+    <div class="tab-pane fade" id="milsPage" role="tabpanel" aria-labelledby="profile-tab">
+      <partial name="_MilsEvents" model="Model.TaskEventsModel" />
     </div>
   </div>
 </div>
+
+@section Scripts
+{
+  <script defer>
+    $(function () {
+      //appns.events.overview();
+    })
+  </script>
+}

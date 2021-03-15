@@ -18,6 +18,7 @@ namespace SkaapBoek.Web.ViewModels.Partials
 
         public SelectList AvailableGroups { get; set; }
 
+        [Display(Name = "Start Date")]
         public DateTime? PhaseStartDate { get; set; } = DateTime.Today;
     }
 }

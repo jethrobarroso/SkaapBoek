@@ -31,18 +31,8 @@ namespace SkaapBoek.Web.Controllers.Api
             if (User.Identity.IsAuthenticated)
             {
                 await _milsService.UpdatePhaseSequence(model.OldSequence, model.NewSequence);
-                return NoContent();
+                return NotFound();
             }
-
-            return StatusCode(401);
-        }
-
-        [HttpGet("testapi")]
-        [AllowAnonymous]
-        public IActionResult TestApi()
-        {
-            if (User.Identity.IsAuthenticated)
-                return Ok("yebo");
 
             return StatusCode(401);
         }

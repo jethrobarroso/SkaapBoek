@@ -9,6 +9,7 @@ namespace SkaapBoek.DAL.Services
 {
     public interface ITaskService : IDataService<TaskInstance>
     {
+        Task<TaskInstance> GetByIdLite(int id, bool track = false);
         Task<IEnumerable<TaskInstance>> GetFullListNoTrack();
         Task<IEnumerable<Priority>> GetPriorities();
         Task<IEnumerable<Priority>> GetStatusList();
@@ -35,6 +36,15 @@ namespace SkaapBoek.DAL.Services
         public async Task<IEnumerable<Priority>> GetStatusList()
         {
             return await Context.PrioritySet.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<TaskInstance> GetByIdLite(int id, bool track = false)
+        {
+            var query = track 
+                ? Context.TaskInstanceSet 
+                : Context.TaskInstanceSet.AsNoTracking();
+
+            return await query.SingleOrDefaultAsync(t => t.Id == id);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace SkaapBoek.Web.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class SheepController : ControllerBase
     {
         private readonly ISheepService _sheepService;
