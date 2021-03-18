@@ -18,8 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, 3000);
 
-    $('[data-toggle="popover"]').popover()
-
     window.appns = {
         //account: {
         //    register: accountRegister

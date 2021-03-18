@@ -84,6 +84,7 @@ namespace SkaapBoek.Web.Controllers
                 return View("NotFound");
             }
 
+
             var model = _mapper.Map<MilsPhaseEditViewModel>(phase);
             model.Pens = new SelectList(await _penService.GetPens(phase.Id), "Id", "Name");
             model.MilsPhaseId = phase.Id;
@@ -95,6 +96,7 @@ namespace SkaapBoek.Web.Controllers
                 MilsPhaseId = id.Value,
                 PenId = phase.PenId
             };
+
             TempData["PhaseId"] = id;
             return View(model);
         }
@@ -116,6 +118,13 @@ namespace SkaapBoek.Web.Controllers
 
             phase.Activity = model.Activity;
             phase.Days = model.Days;
+            phase.PenId = model.PenId;
+            var groups = await _groupService.GetByPhaseId(id.Value);
+            
+            foreach(var group in groups)
+            {
+                group.PenId = model.PenId;
+            }
             await _milsService.Update(phase);
             TempData["Success"] = "Successfully updated phase.";
             return RedirectToAction(nameof(Index));
@@ -185,6 +194,8 @@ namespace SkaapBoek.Web.Controllers
                 return View("NotFound");
             }
             group.MilsPhaseId = null;
+            group.PhaseStartDate = null;
+            group.PhaseEndDate = null;
             await _groupService.Update(group);
             TempData["Success"] = "Successfully removed group from phase.";
             return RedirectToAction(nameof(EditPhase), new { id = phaseId });
@@ -222,7 +233,8 @@ namespace SkaapBoek.Web.Controllers
             var model = new GroupTableModel
             {
                 HideMilsData = true,
-                Groups = phase.Groups
+                Groups = phase.Groups,
+                HideDeleteAction = true
             };
             return PartialView("_GroupTable", model);
         }
@@ -240,7 +252,7 @@ namespace SkaapBoek.Web.Controllers
 
         [HttpPost]
         public async Task<IActionResult> EditGroupAssignmentDate(EditPhaseGroupModel model)
-        {
+         {
             var group = await _groupService.GetByIdLite(model.OnEditedGroupId, true);
             if(group is null)
             {
@@ -248,7 +260,8 @@ namespace SkaapBoek.Web.Controllers
                 return View("BadRequest");
             }
 
-            group.PhaseStartDate = model.NewDate.AddDays(group.MilsPhase.Days);
+            group.PhaseStartDate = model.NewDate;
+            group.PhaseEndDate = model.NewDate.AddDays(group.MilsPhase.Days);
 
             await _groupService.Update(group);
             return RedirectToAction("EditPhase", new { id = TempData["PhaseId"]});

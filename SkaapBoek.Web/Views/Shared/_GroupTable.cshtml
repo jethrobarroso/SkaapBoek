@@ -22,6 +22,9 @@
           <th class="filterable">
             <div>Phase Start Date</div>
           </th>
+          <th class="filterable">
+            <div>Phase End Date</div>
+          </th>
           <th></th>
         </tr>
       </thead>
@@ -38,6 +41,7 @@
               <td>@(item.MilsPhase?.Activity ?? "None")</td>
             }
             <td>@(item.PhaseStartDate)</td>
+            <td>@(item.PhaseEndDate)</td>
             <td>
               <div class="d-flex align-content-center">
                 <a class="icon-button mr-1 ml-1" asp-controller="Groups"

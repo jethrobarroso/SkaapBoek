@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SkaapBoek.Core;
 using SkaapBoek.DAL.Services;
 using SkaapBoek.Web.ViewModels;
 using SkaapBoek.Web.ViewModels.Partials;
@@ -31,6 +32,10 @@ namespace SkaapBoek.Web.Controllers
             model.TaskEventsModel.TodaysTasks = await _eventService.GetTasksDueToday();
             model.TaskEventsModel.OverdueTasks = await _eventService.GetOverdueTasks();
             model.TaskEventsModel.UpcomingTasks = await _eventService.GetUpcomingTasks(7);
+
+            model.MilsEventsModel.TodaysMilsGroups = await _eventService.GetTodaysMilsEvents();
+            model.MilsEventsModel.OverdueMilsGroups = await _eventService.GetOverdueMilsEvents();
+            model.MilsEventsModel.UpcomingMilsGroups = await _eventService.GetUpcomingMilsEvents(7);
             //var todaysTasks = await _eventService.GetTasksDueToday();
             return View(model);
         }

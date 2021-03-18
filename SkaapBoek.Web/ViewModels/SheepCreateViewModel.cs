@@ -26,13 +26,13 @@ namespace SkaapBoek.Web.ViewModels
         public List<Gender> Genders { get; set; }
 
         [Display(Name = "Birth date"), DataType(DataType.Date)]
-        public DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; } = DateTime.Today;
 
         [Display(Name = "Selling price")]
         public decimal? SalePrice { get; set; }
 
         [Display(Name = "Date acquired"), DataType(DataType.Date)]
-        public DateTime AcquireDate { get; set; }
+        public DateTime AcquireDate { get; set; } = DateTime.Today;
 
         [Display(Name = "Cost price")]
         public decimal? CostPrice { get; set; }

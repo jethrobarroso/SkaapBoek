@@ -17,6 +17,7 @@ namespace SkaapBoek.DAL.Services
         Task<ICollection<Group>> GetGroupsByIds(int[] ids);
         Task<IList<Sheep>> GetSelectedSheep(int groupId);
         Task<IEnumerable<Group>> GetNoPhaseGroups();
+        Task<IEnumerable<Group>> GetByPhaseId(int phaseId);
     }
 
     public class GroupService : BaseService<Group>, IGroupService
@@ -47,10 +48,18 @@ namespace SkaapBoek.DAL.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Group>> GetByPhaseId(int phaseId)
+        {
+            return await Context.GroupSet
+                .Where(g => g.MilsPhaseId == phaseId)
+                .ToListAsync();
+        }
+
         public async Task<Group> GetByIdFull(int id, bool track = false)
         {
             var query = Context.GroupSet
                 .Include(g => g.Pen)
+                .Include(g => g.MilsPhase)
                 .Include(g => g.GroupedSheep)
                     .ThenInclude(gs => gs.Sheep.Gender)
                 .Include(g => g.GroupedSheep)

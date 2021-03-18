@@ -20,6 +20,12 @@
       <dl class="row">
         <dt class="col-sm-3">Pen Number:</dt>
         <dd class="col-sm-9">@(Model.Pen?.Name.ToString() ?? "None")</dd>
+        <dt class="col-sm-3">M.I.L.S Phase:</dt>
+        <dd class="col-sm-9">@Model.MilsPhase?.Activity</dd>
+        <dt class="col-sm-3">Phase Start Date:</dt>
+        <dd class="col-sm-9">@Model.PhaseStartDate</dd>
+        <dt class="col-sm-3">Phase Start Date:</dt>
+        <dd class="col-sm-9">@Model.PhaseEndDate</dd>
         <dt class="col-sm-3">
           @Html.DisplayNameFor(model => model.Description)
         </dt>

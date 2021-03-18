@@ -8,7 +8,7 @@ module.exports = {
     // define entry points
     entry: {
         main: './wwwroot/assets/main.js',
-        dependencies: './wwwroot/assets/dependencies.js'
+        //dependencies: './wwwroot/assets/dependencies.js'
     },
 
     // define output files

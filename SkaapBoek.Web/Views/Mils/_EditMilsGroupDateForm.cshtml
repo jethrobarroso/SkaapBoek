@@ -10,12 +10,12 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="reassignGroupForm" method="post" asp-action="EditGroupAssignmentDate">
+        <form id="editGroupDateForm" method="post" asp-action="EditGroupAssignmentDate">
           <input hidden asp-for="OnEditedGroupId" />
           <div class="row">
             <div class="col-12">
               <label asp-for="NewDate" class="control-label"></label>
-              <input asp-for="NewDate" value="@DateTime.Today.ToString("yyyy-MM-ddT00:00")" class="form-control" />
+              <input asp-for="NewDate" class="form-control" />
               <span asp-validation-for="NewDate" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -24,7 +24,7 @@
       </div>
       <div class="modal-footer">
         <a class="btn btn-outline-secondary" data-dismiss="modal">Cancel</a>
-        <button type="submit" form="assignGroupForm" class="btn btn-primary">Enqueue</button>
+        <button type="submit" form="editGroupDateForm" class="btn btn-primary">Enqueue</button>
       </div>
     </div>
   </div>

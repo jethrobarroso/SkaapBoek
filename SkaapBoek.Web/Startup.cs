@@ -91,6 +91,13 @@ namespace SkaapBoek.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var cultureInfo = new CultureInfo("en-ZA");
+            cultureInfo.NumberFormat.CurrencySymbol = "R";
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+            cultureInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -110,8 +117,6 @@ namespace SkaapBoek.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

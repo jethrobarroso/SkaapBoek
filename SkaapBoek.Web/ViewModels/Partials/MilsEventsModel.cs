@@ -8,8 +8,8 @@ namespace SkaapBoek.Web.ViewModels.Partials
 {
     public class MilsEventsModel
     {
-        public IEnumerable<Group> TodaysMilsGroups { get; set; }
-        public IEnumerable<Group> OverdueMilsGroups { get; set; }
-        public IEnumerable<Group> UpcomingMilsGroups { get; set; }
+        public IEnumerable<MilsEventModel> TodaysMilsGroups { get; set; }
+        public IEnumerable<MilsEventModel> OverdueMilsGroups { get; set; }
+        public IEnumerable<MilsEventModel> UpcomingMilsGroups { get; set; }
     }
 }

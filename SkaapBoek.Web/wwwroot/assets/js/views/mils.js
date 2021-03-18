@@ -43,13 +43,10 @@ export function index() {
         });
     }
 
-    const assignGroupForm = body.querySelector('#assignGroupForm');
-    assignGroupForm.addEventListener('submit', e => {
+    body.querySelector('#assignGroupForm').addEventListener('submit', e => {
         e.preventDefault();
         addGroupToPhase();
     })
-
-    body.que
 
     $('#GroupId').select2({
         theme: 'bootstrap4',
@@ -91,10 +88,10 @@ export function editPhase() {
 
     obj.fromTable(table);
 
-    const taskModel = body.querySelector('#addEditTaskModal');
-    taskModel.addEventListener('submit', e => {
-        
-    })
+    //const taskModel = body.querySelector('#addEditTaskModal');
+    //taskModel.addEventListener('submit', e => {
+    //    e.preventDefault();
+    //})
 
     $('#PenId').select2({
         theme: 'bootstrap4',
@@ -112,12 +109,8 @@ export function editPhase() {
 export function addGroupToPhase() {
     const body = document.querySelector('body');
     const groupForm = body.querySelector('#assignGroupForm');
-    const phaseId = groupForm.querySelector('#MilsPhaseId').value;
+    const phaseId = body.querySelector('#assignGroupForm #MilsPhaseId').value;
     let formData = new FormData(groupForm);
-
-    groupForm.addEventListener('submit', e => {
-        e.preventDefault();
-    });
     
     if ($('#assignGroupForm').valid()) {
         fetch('/Mils/AssignGroup', {
@@ -138,15 +131,19 @@ export function addGroupToPhase() {
                 })
                     .then(result => result.text())
                     .then(formContent => {
+                        disposeSelect2Item('#GroupId');
                         groupForm.parentElement.innerHTML = formContent;
-                        initSelect2Item('#SelectedGroupId', 'Select group');
+                        body.querySelector('#assignGroupForm').addEventListener('submit', e => {
+                            e.preventDefault();
+                            addGroupToPhase();
+                        });
+                        initSelect2Item('#GroupId', 'Select group');
                     })
             })
             .catch((error) => {
                 alert(error);
             });
     }
-    
     return false;
 }
 
@@ -156,12 +153,15 @@ export function addGroupToPhase() {
  * @param {string} placeholder Select placeholder value
  */
 function initSelect2Item(selector, placeholder) {
-    $(selector).val(null).empty().select2('destroy')
     $(selector).select2({
         theme: 'bootstrap4',
         allowClear: true,
         placeholder: placeholder
     });
+}
+
+function disposeSelect2Item(selector) {
+    $(selector).val(null).empty().select2('destroy');
 }
 
 /**

@@ -36,5 +36,33 @@ namespace SkaapBoek.Web.Controllers.Api
 
             return StatusCode(401);
         }
+
+        //[HttpPut("{id}/Complete")]
+        //[IgnoreAntiforgeryToken]
+        //public async Task<IActionResult> Complete(int id)
+        //{
+        //    var task = await _taskService.GetByIdLite(id, true);
+
+        //    if (task is null)
+        //        return NotFound();
+
+        //    task.StatusId = 3;
+        //    await _taskService.Update(task);
+        //    return NoContent();
+        //}
+
+        //[HttpPut("{id}/Complete")]
+        //[IgnoreAntiforgeryToken]
+        //public async Task<IActionResult> MoveToNextPhase(int id)
+        //{
+        //    var task = await _taskService.GetByIdLite(id, true);
+
+        //    if (task is null)
+        //        return NotFound();
+
+        //    task.StatusId = 3;
+        //    await _taskService.Update(task);
+        //    return NoContent();
+        //}
     }
 }

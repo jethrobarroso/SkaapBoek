@@ -44,9 +44,10 @@
                   </dl>
 
                   <div class="d-flex justify-content-between">
-                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light" role="button"
-                       data-toggle="popover" data-trigger="focus" title="Task Description"
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light task-info-popover" 
+                       role="button" data-toggle="popover" data-trigger="focus" title="Task Description"
                        data-placement="bottom" data-content="@task.Description">Description</a>
+
                     @if (task.StatusId == 1 && task.EndDate > DateTime.Today)
                     {
                       <button class="btn btn-primary btn-sm"
@@ -82,9 +83,9 @@
                   <dl class="row p-0 m-0">
                     <dt class="col-4 p-0">Name:</dt>
                     <dd class="col-8 p-0">
-                      @task.Name
                       <span class="material-icons icon-check float-right"
                             onclick="appns.events.completeTask(@task.Id, this)">check_circle</span>
+                      @task.Name
                     </dd>
                     @if (task.GroupId != null)
                     {
@@ -106,7 +107,7 @@
                     <dd class="col-8 p-0">@task.EndDate</dd>
                   </dl>
                   <div class="d-flex justify-content-between">
-                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light" role="button"
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light task-info-popover" role="button"
                        data-toggle="popover" data-trigger="focus" title="Task Description"
                        data-placement="bottom" data-content="@task.Description">Description</a>
                     @if (task.StatusId == 1 && task.EndDate > DateTime.Today)
@@ -144,9 +145,9 @@
                   <dl class="row p-0 m-0">
                     <dt class="col-4 p-0">Name:</dt>
                     <dd class="col-8 p-0">
-                      @task.Name
                       <span class="material-icons icon-check float-right"
                             onclick="appns.events.completeTask(@task.Id, this)">check_circle</span>
+                      @task.Name
                     </dd>
                     @if (task.GroupId != null)
                     {
@@ -168,7 +169,7 @@
                     <dd class="col-8 p-0">@task.EndDate</dd>
                   </dl>
                   <div class="d-flex justify-content-between">
-                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light" role="button"
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light task-info-popover" role="button"
                        data-toggle="popover" data-trigger="focus" title="Task Description"
                        data-placement="bottom" data-content="@task.Description">Description</a>
                   </div>
@@ -184,6 +185,47 @@
       </div>
     </div>
 
+  </div>
+</div>
 
+<div class="modal fade" id="milsEventInfoModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Unlink group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <form method="post">
+          <div class="btn btn-secondary" data-dismiss="modal">Close</div>
+          <button class="btn btn-danger" type="submit">Remove</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="taskEventInfoModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Unlink group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <form method="post">
+          <div class="btn btn-secondary" data-dismiss="modal">Close</div>
+          <button class="btn btn-danger" type="submit">Remove</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

@@ -5,6 +5,20 @@
  * @param {number} id Task ID 
  * @param {HTMLElement} element Containing card
  */
+export function overview() {
+    $('.task-info-popover').popover();
+    $('.mils-info-popover').popover({
+        title: 'Additional Info',
+        placement: 'bottom',
+        html: true,
+        content: '<div class="event-body">Loading...</div>'
+    })
+
+    document.querySelectorAll('mils-info-popover').forEach(item => {
+        $(item).on('shown.bs.popover')
+    })
+}
+
 export function completeTask(id, element) {
     fetch(`/api/Tasks/${id}/Complete`, {
         method: 'put',
