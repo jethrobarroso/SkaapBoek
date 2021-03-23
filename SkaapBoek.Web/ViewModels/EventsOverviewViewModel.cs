@@ -1,4 +1,5 @@
-﻿using SkaapBoek.Web.ViewModels.Partials;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SkaapBoek.Web.ViewModels.Partials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace SkaapBoek.Web.ViewModels
     {
         public MilsEventsModel MilsEventsModel { get; set; }
         public TaskEventsModel TaskEventsModel { get; set; }
+        public MoveToPhaseModel MoveToPhaseModel { get; set; }
     }
 }

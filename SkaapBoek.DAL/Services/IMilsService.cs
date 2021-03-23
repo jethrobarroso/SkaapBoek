@@ -12,6 +12,7 @@ namespace SkaapBoek.DAL.Services
     {
         Task AddGroupsToPhase(int phaseId, int[] groupIds);
         Task<bool> ExistsWithPhaseOrder(int order);
+        Task<IEnumerable<MilsPhase>> GetAllExcept(int phaseId);
         Task<IList<MilsPhase>> GetAllWithTasksSorted();
         Task<IEnumerable<Group>> GetAvailableGroups();
         Task<MilsPhase> GetById(int? id, bool track = false);
@@ -43,6 +44,14 @@ namespace SkaapBoek.DAL.Services
 
             return track ? await result.FirstOrDefaultAsync(m => m.Id == id)
                 : await result.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<IEnumerable<MilsPhase>> GetAllExcept(int phaseId)
+        {
+            return await Context.MilsPhaseSet
+                .Where(p => p.Id != phaseId)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<IList<MilsPhase>> GetAllWithTasksSorted()

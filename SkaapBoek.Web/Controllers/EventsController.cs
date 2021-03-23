@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SkaapBoek.Core;
 using SkaapBoek.DAL.Services;
 using SkaapBoek.Web.ViewModels;
@@ -14,11 +16,15 @@ namespace SkaapBoek.Web.Controllers
     {
         private readonly IEventService _eventService;
         private readonly ITaskService _taskService;
+        private readonly IMilsService _milsService;
 
-        public EventsController(IEventService eventService, ITaskService taskService)
+        public EventsController(IEventService eventService, 
+            ITaskService taskService,
+            IMilsService milsService)
         {
             _eventService = eventService;
             _taskService = taskService;
+            _milsService = milsService;
         }
 
         public async Task<IActionResult> Overview()
@@ -26,7 +32,8 @@ namespace SkaapBoek.Web.Controllers
             var model = new EventsOverviewViewModel
             {
                 MilsEventsModel = new MilsEventsModel(),
-                TaskEventsModel = new TaskEventsModel()
+                TaskEventsModel = new TaskEventsModel(),
+                MoveToPhaseModel = new MoveToPhaseModel()
             };
 
             model.TaskEventsModel.TodaysTasks = await _eventService.GetTasksDueToday();
@@ -36,8 +43,18 @@ namespace SkaapBoek.Web.Controllers
             model.MilsEventsModel.TodaysMilsGroups = await _eventService.GetTodaysMilsEvents();
             model.MilsEventsModel.OverdueMilsGroups = await _eventService.GetOverdueMilsEvents();
             model.MilsEventsModel.UpcomingMilsGroups = await _eventService.GetUpcomingMilsEvents(7);
-            //var todaysTasks = await _eventService.GetTasksDueToday();
+
+            model.MoveToPhaseModel.Phases = new SelectList(
+                await _milsService.GetAll().AsNoTracking().ToListAsync(),
+                "Id", "Activity");
             return View(model);
+        }
+
+        [HttpGet("[controller]/[action]/{groupId}")]
+        public async Task<IActionResult> RenderMilsEventInfo(int groupId)
+        {
+            var model = await _eventService.GetMilsEventByGroupId(groupId);
+            return PartialView("_MilsAdditionalEventInfo", model);
         }
     }
 }

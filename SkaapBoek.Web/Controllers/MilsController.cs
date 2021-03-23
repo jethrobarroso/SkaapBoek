@@ -37,7 +37,7 @@ namespace SkaapBoek.Web.Controllers
             _groupService = groupService;
             _penService = penService;
             _mapper = mapper;
-            _logger = logger;
+            _logger = logger; 
         }
 
         [HttpGet]
@@ -168,6 +168,13 @@ namespace SkaapBoek.Web.Controllers
         public async Task<IActionResult> AssignGroup(AssignGroupToPhaseModel model)
         {
             var group = await _groupService.GetByIdLite(model.GroupId, true);
+
+            if(group is null)
+            {
+                ViewBag.ErrorMessage = "Invalid group details specified.";
+                return View("BadRequest");
+            }
+
             var days = await _milsService.GetPhaseDuration(model.MilsPhaseId) ?? 0;
 
             group.MilsPhaseId = model.MilsPhaseId;
@@ -265,6 +272,43 @@ namespace SkaapBoek.Web.Controllers
 
             await _groupService.Update(group);
             return RedirectToAction("EditPhase", new { id = TempData["PhaseId"]});
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> MoveGroupToPhase(MoveToPhaseModel model)
+        {
+            var group = await _groupService.GetByIdLite(model.GroupId, true);
+            var phase = await _milsService.GetById(model.PhaseId, false);
+
+            if (group is null)
+                return BadRequest();
+
+            group.MilsPhaseId = model.PhaseId;
+            group.PhaseStartDate = model.StartDate;
+            group.PhaseEndDate = group.PhaseStartDate.Value.AddDays(phase.Days);
+            group.PenId = phase.PenId;
+
+            await _groupService.Update(group);
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> RemoveGroupFromMils(MoveToPhaseModel model)
+        {
+            var group = await _groupService.GetByIdLite(model.GroupId, true);
+
+            if (group is null)
+                return BadRequest();
+
+            group.MilsPhaseId = null;
+            group.PhaseStartDate = null;
+            group.PhaseEndDate = null;
+            group.PenId = null;
+
+            await _groupService.Update(group);
+
+            return NoContent();
         }
     }
 }

@@ -141,7 +141,7 @@ body {
     cursor: pointer;
 }
 
-.task-card-main, .sticky-taskheader {
+.event-card-main, .sticky-taskheader {
     background-color: #293042;
 }
 

@@ -61,27 +61,19 @@ function moveToSourceList(multilist, selectedLi) {
 
 function initializeLists(multilist) {
     multilist.sourceList.addEventListener("click", (e) => {
-        let selectedLi;
-        for (let node of e.path) {
-            if (node.tagName == "LI") {
-                selectedLi = node;
-                break;
+        e.composedPath().forEach(item => {
+            if (item.tagName == "LI") {
+                moveToTargetList(multilist, item);
             }
-        }
-
-        moveToTargetList(multilist, selectedLi);
+        })
     });
 
     multilist.targetList.addEventListener("click", (e) => {
-        let selectedLi;
-        for (let node of e.path) {
-            if (node.tagName == "LI") {
-                selectedLi = node;
-                break;
+        e.composedPath().forEach(item => {
+            if (item.tagName == "LI") {
+                moveToSourceList(multilist, item);
             }
-        }
-
-        moveToSourceList(multilist, selectedLi);
+        })
     });
 }
 

@@ -124,6 +124,7 @@ namespace SkaapBoek.DAL.Services
         {
             var group = await _context.GroupSet
                 .Include(g => g.MilsPhase.Tasks)
+                .Include(g => g.Pen)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(g => g.Id == groupId);
 

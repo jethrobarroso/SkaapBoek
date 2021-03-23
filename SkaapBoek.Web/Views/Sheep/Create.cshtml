@@ -81,13 +81,15 @@
         </div>
         <span asp-validation-for="Weight" class="text-danger"></span>
       </div>
-      <div class="col-md-6 mb-3">
-        <label asp-for="FeedId"></label>
-        <select asp-for="FeedId" class="form-control" asp-items="@Model.FeedList"
-                style="width: 100%;">
-          <option value="" selected hidden disabled></option>
-        </select>
-        <span asp-validation-for="FeedId" class="text-danger"></span>
+      <div class="col-md-3 mb-3">
+        <label asp-for="BirthDate"></label>
+        <input asp-for="BirthDate" class="form-control" />
+        <span asp-validation-for="BirthDate" class="text-danger"></span>
+      </div>
+      <div class="col-md-3 mb-3">
+        <label asp-for="AcquireDate"></label>
+        <input asp-for="AcquireDate" class="form-control" />
+        <span asp-validation-for="AcquireDate" class="text-danger"></span>
       </div>
     </div>
     <div class="form-row">
@@ -101,18 +103,6 @@
         </div>
         <span asp-validation-for="CostPrice" class="text-danger"></span>
       </div>
-      <div class="col-md-3 mb-3">
-        <label asp-for="BirthDate"></label>
-        <input asp-for="BirthDate" class="form-control" />
-        <span asp-validation-for="BirthDate" class="text-danger"></span>
-      </div>
-      <div class="col-md-3 mb-3">
-        <label asp-for="AcquireDate"></label>
-        <input asp-for="AcquireDate" class="form-control" />
-        <span asp-validation-for="AcquireDate" class="text-danger"></span>
-      </div>
-    </div>
-    <div class="form-row">
       <div class="col-md-6 mb-3">
         <label asp-for="SalePrice"></label>
         <div class="input-group">

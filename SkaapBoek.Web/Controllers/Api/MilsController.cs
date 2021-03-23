@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SkaapBoek.DAL;
 using SkaapBoek.DAL.Services;
 using SkaapBoek.Web.ApiDtos;
+using SkaapBoek.Web.ViewModels.Partials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace SkaapBoek.Web.Controllers.Api
     public class MilsController : ControllerBase
     {
         private readonly IMilsService _milsService;
+        private readonly IGroupService _groupService;
 
-        public MilsController(IMilsService milsService)
+        public MilsController(IMilsService milsService, IGroupService groupService)
         {
             _milsService = milsService;
+            _groupService = groupService;
         }
 
         [HttpPut("UpdatePhaseSequence")]
@@ -36,20 +39,6 @@ namespace SkaapBoek.Web.Controllers.Api
 
             return StatusCode(401);
         }
-
-        //[HttpPut("{id}/Complete")]
-        //[IgnoreAntiforgeryToken]
-        //public async Task<IActionResult> Complete(int id)
-        //{
-        //    var task = await _taskService.GetByIdLite(id, true);
-
-        //    if (task is null)
-        //        return NotFound();
-
-        //    task.StatusId = 3;
-        //    await _taskService.Update(task);
-        //    return NoContent();
-        //}
 
         //[HttpPut("{id}/Complete")]
         //[IgnoreAntiforgeryToken]
