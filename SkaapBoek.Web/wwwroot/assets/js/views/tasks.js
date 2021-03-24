@@ -39,6 +39,20 @@ export function create() {
     const groupSelect = body.querySelector('#groupSelectContainer');
     const sheepSelect = body.querySelector('#sheepSelectContainer');
 
+    if (groupSelect.querySelector('select').value != '') {
+        groupSelect.hidden = false;
+        sheepSelect.hidden = true;
+        groupRadio.checked = true;
+        sheepRadio.checked = false;
+    }
+
+    if (sheepSelect.querySelector('select').value != '') {
+        groupSelect.hidden = true;
+        sheepSelect.hidden = false;
+        groupRadio.checked = false;
+        sheepRadio.checked = true;
+    }
+
     groupRadio.addEventListener('change', e => {
         groupSelect.hidden = false;
         sheepSelect.hidden = true;

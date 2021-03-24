@@ -43,26 +43,22 @@
             <td>@(item.PhaseStartDate)</td>
             <td>@(item.PhaseEndDate)</td>
             <td>
-              <div class="d-flex align-content-center">
-                <a class="icon-button mr-1 ml-1" asp-controller="Groups"
-                   asp-action="Details" asp-route-id="@item.Id"
-                   data-toggle="tooltip" data-placement="top" title="View">
-                  <i class="material-icons">search</i>
-                </a>
-                <a class="icon-button mr-1 ml-1" asp-controller="Groups"
-                   asp-action="Edit" asp-route-id="@item.Id"
-                   data-toggle="tooltip" data-placement="top" title="Edit">
-                  <i class="material-icons">edit</i>
-                </a>
-                @if (!Model.HideDeleteAction)
-                {
-                  <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
-                    <button class="icon-button--delete" data-user-id="@item.Id"
-                            type="button" data-toggle="modal" data-target="#deleteModal">
-                      <i class="material-icons">delete</i>
-                    </button>
+              <div class="d-flex float-right">
+                <div class="btn-group icon-button--action">
+                  <span class="material-icons" data-toggle="dropdown" 
+                        data-display="static" aria-haspopup="true" aria-expanded="false">
+                    more_vert
                   </span>
-                }
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" asp-controller="Groups"
+                       asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="dropdown-item" asp-controller="Groups"
+                       asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="dropdown-item" href="/Tasks/Group/@item.Id/Create">New Task</a>
+                    <a class="dropdown-item bg-danger text-light"
+                       data-user-id="@item.Id" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                  </div>
+                </div>
               </div>
             </td>
           </tr>

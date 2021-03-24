@@ -82,6 +82,18 @@ body {
         color: darkorange;
     }
 
+.icon-button--action {
+    cursor: pointer;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+    .icon-button--action:hover {
+        color: lightgray;
+    }
+
 .multi-btn-target {
     display: flex;
     vertical-align: middle;
@@ -159,12 +171,12 @@ body {
     z-index: 1;
 }
 
-#pageSuccessAlert, #pageDangerAlert {
+/*#pageSuccessAlert, #pageDangerAlert {
     position: fixed;
-    top: 4.5rem;
+    right: 1em;
     z-index: 999;
     box-shadow: 0.25rem 0.25rem 10px black;
-}
+}*/
 
 .icon-check {
     cursor: pointer;

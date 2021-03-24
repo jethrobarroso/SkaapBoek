@@ -66,9 +66,18 @@ namespace SkaapBoek.Web.Controllers
         }
 
         // GET: Tasks/Create
-        public async Task<IActionResult> Create()
+        [HttpGet("[controller]/[action]")]
+        [Route("[controller]/Sheep/{sheepId?}/[action]")]
+        [Route("[controller]/Group/{groupId?}/[action]")]
+        public async Task<IActionResult> Create(int? groupId, int? sheepId)
         {
             await PopulateLists();
+            var model = new TaskEditViewModel
+            {
+                GroupId = groupId,
+                SheepId = sheepId
+            };
+
             return View(new TaskEditViewModel());
         }
 
@@ -84,8 +93,10 @@ namespace SkaapBoek.Web.Controllers
         }
 
         [HttpPost]
+        [Route("[controller]/Sheep/{sheepId?}/[action]")]
+        [Route("[controller]/Group/{groupId?}/[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaskEditViewModel model)
+        public async Task<IActionResult> Create(int? sheepId, int? groupId, TaskEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -118,6 +129,13 @@ namespace SkaapBoek.Web.Controllers
             _context.Add(task);
             await _context.SaveChangesAsync();
             TempData["Success"] = "Successfully created task.";
+
+            if(sheepId != null)
+                return RedirectToAction("Details", "Sheep", new { id = sheepId });
+
+            if (groupId != null)
+                return RedirectToAction("Details", "Groups", new { id = groupId });
+
             return RedirectToAction(nameof(Index));
 
         }

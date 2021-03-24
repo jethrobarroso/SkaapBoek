@@ -7,7 +7,7 @@
 <div class="text-light">
   <h1 class="mb-3">Create Task</h1>
 
-  <form id="taskCreateForm" asp-action="Create">
+  <form id="taskCreateForm" asp-controller="Tasks" asp-action="Create">
     <div class="form-row mb-3">
       <div class="col-md-6">
         <label asp-for="Name" class="control-label"></label>

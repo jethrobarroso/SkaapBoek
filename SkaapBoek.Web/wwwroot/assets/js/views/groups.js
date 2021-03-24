@@ -2,13 +2,26 @@
 import { MultiList } from '../multilist.js';
 
 export function index() {
-    const deleteModal = document.querySelector('.modal');
-    const table = document.querySelector('table');
+    const body = document.querySelector('body');
+    const deleteModal = body.querySelector('.modal');
+    const deleteForm = deleteModal.querySelector('form');
+    const table = body.querySelector('table');
     const message = "Are you sure you want to delete project";
     const actionPath = "/Groups/Delete/";
-    const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
 
-    obj.fromTable(table);
+    body.querySelectorAll('[data-user-id]').forEach(btn => {
+        btn.addEventListener('click', e => {
+            let groupId = btn.dataset.userId;
+            if (!groupId) {
+                console.error("Error: No group ID specified for delete action.");
+                return;
+            }
+            let groupName = btn.closest('tr').firstElementChild.innerHTML;
+            deleteModal.querySelector('.modal-body').innerHTML = `Are you sure 
+                you want to delete ${groupName.trim()}?`;
+            deleteForm.action = actionPath + groupId;
+        })
+    })
 
     $('table').DataTable({
         searchDelay: 1000,
