@@ -171,14 +171,15 @@ body {
     z-index: 1;
 }
 
-/*#pageSuccessAlert, #pageDangerAlert {
-    position: fixed;
-    right: 1em;
+.update-message {
     z-index: 999;
-    box-shadow: 0.25rem 0.25rem 10px black;
-}*/
+}
 
 .icon-check {
     cursor: pointer;
     color: green;
+}
+
+table.dataTable  {
+    padding-bottom: 2.5rem !important;
 }

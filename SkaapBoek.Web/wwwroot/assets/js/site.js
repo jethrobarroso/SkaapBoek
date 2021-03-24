@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         $("#pageDangerAlert, #pageSuccessAlert").fadeTo(500, 0).slideUp(500, function () {
             $(this).hide();
         });
-    }, 3000);
+    }, 5000);
 
     window.appns = {
         //account: {

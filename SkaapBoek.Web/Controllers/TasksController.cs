@@ -230,6 +230,7 @@ namespace SkaapBoek.Web.Controllers
             var taskInstance = await _context.TaskInstanceSet.FindAsync(id);
             _context.TaskInstanceSet.Remove(taskInstance);
             await _context.SaveChangesAsync();
+            TempData["Success"] = "Successfully deleted task.";
             return RedirectToAction(nameof(Index));
         }
 

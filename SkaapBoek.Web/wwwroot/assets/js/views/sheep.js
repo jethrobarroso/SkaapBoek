@@ -69,6 +69,15 @@ export function index() {
             },
         ]
     });
+
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        console.log(event);
+        let sheepId = $(event.relatedTarget).closest('[data-item-id]').data('itemId');
+        let tagName = event.relatedTarget.closest('tr').firstElementChild.innerText;
+
+        this.querySelector('.modal-body').innerHTML = `Are you sure you want to delete ${tagName.trim()}?`;
+        this.querySelector('form').action = `/Sheep/Delete/${sheepId}`;
+    })
 }
 
 export function create() {
