@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SkaapBoek.Core;
 using SkaapBoek.DAL;
+using SkaapBoek.DAL.Services;
+using SkaapBoek.Web.ViewModels;
 
 namespace SkaapBoek.Web.Controllers
 {
@@ -14,10 +17,14 @@ namespace SkaapBoek.Web.Controllers
     public class TasksController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly ITaskService _taskService;
 
-        public TasksController(AppDbContext context)
+        public TasksController(AppDbContext context, IMapper mapper, ITaskService taskService)
         {
             _context = context;
+            _mapper = mapper;
+            _taskService = taskService;
         }
 
         // GET: Tasks
@@ -27,7 +34,6 @@ namespace SkaapBoek.Web.Controllers
                 .Include(t => t.Group)
                 .Include(t => t.Priority)
                 .Include(t => t.Sheep)
-                .Include(t => t.TaskTemplate)
                 .Include(t => t.Status)
                 .AsNoTracking();
             return View(await appDbContext.ToListAsync());
@@ -38,55 +44,100 @@ namespace SkaapBoek.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = "Bad request. Task ID not specified.";
+                return View("BadRequest");
             }
 
             var taskInstance = await _context.TaskInstanceSet
                 .Include(t => t.Group)
                 .Include(t => t.Priority)
                 .Include(t => t.Sheep)
-                .Include(t => t.TaskTemplate)
                 .Include(t => t.Status)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (taskInstance == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = $"Task with ID = {id} not found";
+                return View("NotFound");
             }
 
             return View(taskInstance);
         }
 
         // GET: Tasks/Create
-        public IActionResult Create()
+        [HttpGet("[controller]/[action]")]
+        [Route("[controller]/Sheep/{sheepId?}/[action]")]
+        [Route("[controller]/Group/{groupId?}/[action]")]
+        public async Task<IActionResult> Create(int? groupId, int? sheepId)
         {
-            ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name");
-            ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name");
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber");
-            ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name");
-            ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name");
-            return View();
+            await PopulateLists();
+            var model = new TaskEditViewModel
+            {
+                GroupId = groupId,
+                SheepId = sheepId
+            };
+
+            return View(new TaskEditViewModel());
         }
 
-        // POST: Tasks/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,DurationDays,StartDate,PriorityId,StatusId,TaskTemplateId,ProjectId,SheepId,GroupId")] TaskInstance taskInstance)
+        private async Task PopulateLists()
         {
-            if (ModelState.IsValid)
+            var priorities = await _context.PrioritySet
+                .OrderByDescending(p => p.Id)
+                .ToListAsync();
+            ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name");
+            ViewData["PriorityId"] = new SelectList(priorities, "Id", "Name");
+            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber");
+            ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name");
+        }
+
+        [HttpPost]
+        [Route("[controller]/Sheep/{sheepId?}/[action]")]
+        [Route("[controller]/Group/{groupId?}/[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(int? sheepId, int? groupId, TaskEditViewModel model)
+        {
+            if (!ModelState.IsValid)
             {
-                _context.Add(taskInstance);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await PopulateLists();
+                return View(model);
             }
-            ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name", taskInstance.GroupId);
-            ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name", taskInstance.PriorityId);
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber", taskInstance.SheepId);
-            ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name", taskInstance.TaskTemplateId);
-            ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name", taskInstance.StatusId);
-            return View(taskInstance);
+
+            var task = _mapper.Map<TaskInstance>(model);
+            var now = DateTime.Now;
+            var startDate = model.StartDate;
+            var duration = model.DurationDays ?? 0;
+
+            switch (model.AssignOption)
+            {
+                case "group":
+                    task.SheepId = null;
+                    break;
+                case "sheep":
+                    task.GroupId = null;
+                    break;
+                default:
+                    task.GroupId = null;
+                    task.SheepId = null;
+                    break;
+            }
+
+            if ((model.DurationDays ?? 0) != 0)
+                task.EndDate = model.StartDate.AddDays(model.DurationDays.Value);
+
+            _context.Add(task);
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Successfully created task.";
+
+            if(sheepId != null)
+                return RedirectToAction("Details", "Sheep", new { id = sheepId });
+
+            if (groupId != null)
+                return RedirectToAction("Details", "Groups", new { id = groupId });
+
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Tasks/Edit/5
@@ -94,20 +145,22 @@ namespace SkaapBoek.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = "Bad request. Task ID not specified.";
+                return View("BadRequest");
             }
 
             var taskInstance = await _context.TaskInstanceSet.FindAsync(id);
+            var model = _mapper.Map<TaskEditViewModel>(taskInstance);
+
             if (taskInstance == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = $"Task with ID = {id} not found";
+                return View("NotFound");
             }
-            ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name", taskInstance.GroupId);
-            ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name", taskInstance.PriorityId);
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber", taskInstance.SheepId);
-            ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name", taskInstance.TaskTemplateId);
-            ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name", taskInstance.StatusId);
-            return View(taskInstance);
+
+            await PopulateLists();
+
+            return View(model);
         }
 
         // POST: Tasks/Edit/5
@@ -115,72 +168,83 @@ namespace SkaapBoek.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,DurationDays,StartDate,PriorityId,StatusId,TaskTemplateId,ProjectId,SheepId,GroupId")] TaskInstance taskInstance)
+        public async Task<IActionResult> Edit(int id, TaskEditViewModel model)
         {
-            if (id != taskInstance.Id)
+            var task = await _context.TaskInstanceSet.FindAsync(id);
+            if (task == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = $"Task with ID = {id} not found";
+                return View("NotFound");
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                await PopulateLists();
+                return View(task);
+            }
+
+            _mapper.Map(model, task);
+
+            switch (model.AssignOption)
+            {
+                case "group":
+                    task.SheepId = null;
+                    break;
+                case "sheep":
+                    task.GroupId = null;
+                    break;
+                default:
+                    task.GroupId = null;
+                    task.SheepId = null;
+                    break;
+            }
+
+            if ((model.DurationDays ?? 0) != 0)
+                task.EndDate = model.StartDate.AddDays(model.DurationDays.Value);
+
+            try
+            {
+                _context.Update(task);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TaskInstanceExists(task.Id))
                 {
-                    _context.Update(taskInstance);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!TaskInstanceExists(taskInstance.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["GroupId"] = new SelectList(_context.GroupSet, "Id", "Name", taskInstance.GroupId);
-            ViewData["PriorityId"] = new SelectList(_context.PrioritySet, "Id", "Name", taskInstance.PriorityId);
-            ViewData["SheepId"] = new SelectList(_context.SheepSet, "Id", "TagNumber", taskInstance.SheepId);
-            ViewData["TaskTemplateId"] = new SelectList(_context.TaskTemplateSet, "Id", "Name", taskInstance.TaskTemplateId);
-            ViewData["StatusList"] = new SelectList(_context.StatusSet, "Id", "Name", taskInstance.StatusId);
-            return View(taskInstance);
-        }
-
-        // GET: Tasks/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var taskInstance = await _context.TaskInstanceSet
-                .Include(t => t.Group)
-                .Include(t => t.Priority)
-                .Include(t => t.Sheep)
-                .Include(t => t.TaskTemplate)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (taskInstance == null)
-            {
-                return NotFound();
-            }
-
-            return View(taskInstance);
+            TempData["Success"] = "Successfully updated task.";
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Tasks/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var taskInstance = await _context.TaskInstanceSet.FindAsync(id);
             _context.TaskInstanceSet.Remove(taskInstance);
             await _context.SaveChangesAsync();
+            TempData["Success"] = "Successfully deleted task.";
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Complete(int id)
+        {
+            var task = await _taskService.GetByIdLite(id, true);
+
+            if (task is null)
+                return NotFound();
+
+            //task.StatusId = 3;
+            //await _taskService.Update(task);
+            return NoContent();
         }
 
         private bool TaskInstanceExists(int id)

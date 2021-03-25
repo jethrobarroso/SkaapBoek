@@ -17,7 +17,7 @@ namespace SkaapBoek.Web.Utilities
         /// <returns>True if entity was not found</returns>
         protected bool FeedNullCheckWith404(object model, int id)
         {
-            if (model == null)
+            if (model is null)
             {
                 ViewBag.ErrorMessage = $"Feed with ID = {id} could not be found";
                 return true;
@@ -34,7 +34,7 @@ namespace SkaapBoek.Web.Utilities
         /// <returns>True if entity was not found</returns>
         protected bool SheepNullCheckWith404(object model, int id)
         {
-            if (model == null)
+            if (model is null)
             {
                 ViewBag.ErrorMessage = $"Sheep with ID = {id} could not be found";
                 return true;

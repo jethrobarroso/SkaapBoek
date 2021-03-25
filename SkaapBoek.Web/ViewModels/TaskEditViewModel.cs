@@ -9,6 +9,8 @@ namespace SkaapBoek.Web.ViewModels
 {
     public class TaskEditViewModel
     {
+        public int TaskId { get; set; }
+
         [MaxLength(50)]
         [Required]
         public string Name { get; set; }
@@ -16,16 +18,25 @@ namespace SkaapBoek.Web.ViewModels
         [MaxLength(500)]
         public string Description { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime? StartDate { get; set; }
+        [Display(Name = "Start Date")]
+        public DateTime StartDate { get; set; } = DateTime.Today;
 
-        [DataType(DataType.Date)]
-        public DateTime? EndDate { get; set; }
+        [Display(Name = "Duration (days)")]
+        public int? DurationDays { get; set; }
 
-        public int SelectedPriority { get; set; }
-        public List<SelectListItem> Priorities { get; set; }
+        [Display(Name = "Priority")]
+        public int PriorityId { get; set; }
 
-        public int SelectedStatus { get; set; }
-        public List<SelectListItem> StatusList { get; set; }
+        [Display(Name = "Status")]
+        public int StatusId { get; set; }
+
+        [Display(Name = "Sheep")]
+        public int? SheepId { get; set; }
+
+        [Display(Name = "Group")]
+        public int? GroupId { get; set; }
+        
+        [Display(Name = "Assign to: ")]
+        public string AssignOption { get; set; }
     }
 }

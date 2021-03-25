@@ -1,0 +1,56 @@
+﻿@inject SignInManager<IdentityUser> signInManager;
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a asp-controller="sheep" asp-action="index" class="navbar-brand">
+      <img src="~/images/brandx64.jpg" style="height: 32px; width:32px;" />
+    </a>
+    <button type="button" class="navbar-toggler"
+            data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+        @if (signInManager.IsSignedIn(User))
+        {
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="sheepDropDown" role="button"
+               data-toggle="dropdown" aria-expanded="false">Sheep</a>
+            <ul class="dropdown-menu" aria-labelledby="sheepDropDown">
+              <li><a class="dropdown-item" asp-controller="Sheep" asp-action="Index">All Sheep</a></li>
+              <li><a class="dropdown-item" asp-controller="Groups" asp-action="Index">Groups</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a asp-controller="Feed" asp-action="Index" class="nav-link">Feed</a>
+          </li>
+          <li class="nav-item">
+            <a asp-controller="Tasks" asp-action="Index" class="nav-link">Tasks</a>
+          </li>
+          <li class="nav-item">
+            <a asp-controller="Pen" asp-action="Index" class="nav-link">Pens</a>
+          </li>
+          <li class="nav-item">
+            <a asp-controller="Mils" asp-action="Index" class="nav-link">M.I.L.S</a>
+          </li>
+          <li class="nav-item">
+            <a asp-controller="Events" asp-action="Overview" class="nav-link">Events</a>
+          </li>
+        }
+
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        @if (signInManager.IsSignedIn(User))
+        {
+          <li class="nav-item">
+            <form method="post" asp-action="logout" asp-controller="account">
+              <button type="submit" class="nav-link btn btn-link">
+                Logout
+                @User.Identity.Name
+              </button>
+            </form>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>

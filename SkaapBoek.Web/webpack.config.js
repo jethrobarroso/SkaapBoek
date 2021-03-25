@@ -2,13 +2,13 @@
 
 module.exports = {
     // dev mode and source mapping
-    mode: 'development',
-    devtool: 'inline-source-map',
+    //mode: 'development',
+    //devtool: 'inline-source-map',
 
     // define entry points
     entry: {
-        main: './assets/main.js',
-        dependencies: './assets/dependencies.js'
+        main: './wwwroot/assets/main.js',
+        //dependencies: './wwwroot/assets/dependencies.js'
     },
 
     // define output files

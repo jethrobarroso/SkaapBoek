@@ -1,19 +1,15 @@
 ﻿import * as common from '../common.js'
 
 export function create() {
-    const button = document.querySelector('#btnCreate');
-    const form = button.closest('form');
-    button.disabled = false;
-
-    common.preventDoubleSubmit(form, button);
 }
 
 export function details() {
-    const deleteModal = document.querySelector('.modal');
+    const body = document.querySelector('body');
+    const deleteModal = body.querySelector('.modal');
     const urlPath = window.location.pathname;
     const deletePath = "/Feed/Delete/";
     const id = urlPath.substring(urlPath.lastIndexOf('/') + 1);
-    const deleteButton = document.querySelector('.card-footer button');
+    const deleteButton = body.querySelector('.card-footer button');
     const form = deleteModal.querySelector('form');
 
     deleteButton.addEventListener('click', () => {
@@ -22,14 +18,9 @@ export function details() {
 }
 
 export function edit() {
-    const button = document.querySelector('#btnCreate');
-    const form = button.closest('form');
-    button.disabled = false;
-
-    common.preventDoubleSubmit(form, button);
 }
 
-export function list() {
+export function index() {
     const deleteModal = document.querySelector('.modal');
     const table = document.querySelector('table');
     const message = "Are you sure you want to delete item";
@@ -37,4 +28,13 @@ export function list() {
     const obj = new common.ModalDeletePrompt(deleteModal, actionPath, message);
 
     obj.fromTable(table);
+
+    $('table').DataTable({
+        searchDelay: 1000,
+        columnDefs: [{
+            targets: -1,
+            searchable: false,
+            orderable: false
+        }]
+    });
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,6 +36,9 @@ namespace SkaapBoek.Web
                 try
                 {
                     var context = services.GetRequiredService<AppDbContext>();
+                    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    DbInitializer.SeedUserAndRoles(userManager, roleManager);
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

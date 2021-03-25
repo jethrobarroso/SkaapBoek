@@ -16,14 +16,11 @@ namespace SkaapBoek.Core
         [MaxLength(500)]
         public string Description { get; set; }
 
-        [Range(0, 1000)]
-        [Required]
-        [Display(Name = "Duration")]
-        public int? DurationDays { get; set; }
-
         [Required]
         [Display(Name = "Start Date")]
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
 
         [Display(Name = "Priority")]
         public int PriorityId { get; set; }
@@ -32,10 +29,6 @@ namespace SkaapBoek.Core
         [Display(Name = "Status")]
         public int StatusId { get; set; }
         public Status Status { get; set; }
-
-        [Display(Name = "Template")]
-        public int TaskTemplateId { get; set; }
-        public TaskTemplate TaskTemplate { get; set; }
 
         [Display(Name = "Sheep")]
         public int? SheepId { get; set; }

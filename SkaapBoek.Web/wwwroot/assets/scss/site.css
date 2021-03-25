@@ -1,9 +1,5 @@
-/**, *::before, *::after {
+*, *::before, *::after {
     box-sizing: border-box;
-}*/
-
-.btn--fixed {
-    width: 75px;
 }
 
 .imageThumbnail {
@@ -15,6 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    padding-top: 4.5rem;
 }
 
 .footer {
@@ -55,15 +52,47 @@ body {
     line-height: 0;
 }
 
+.icon-button--edit {
+    all: unset;
+    color: #007bff;
+    line-height: 0;
+}
+
+    .icon-button--edit:hover {
+        color: #0056b3;
+    }
+
 .icon-button--delete {
     all: unset;
     color: #dd0000;
     line-height: 0;
 }
 
-.icon-button--delete:hover {
-    color: #b00;
+    .icon-button--delete:hover {
+        color: #b00;
+    }
+
+.icon-button--unlink {
+    all: unset;
+    color: darkgoldenrod;
+    line-height: 0;
 }
+
+    .icon-button--unlink:hover {
+        color: darkorange;
+    }
+
+.icon-button--action {
+    cursor: pointer;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+    .icon-button--action:hover {
+        color: lightgray;
+    }
 
 .multi-btn-target {
     display: flex;
@@ -80,10 +109,93 @@ body {
     height: 300px;
 }
 
-.multilist-container li {
+    .multilist-container li {
+        cursor: pointer;
+    }
+
+    .multilist-container ul {
+        overflow: auto;
+    }
+
+/*.fadable-buttons-container .fadable-button {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.25s linear;
+}
+
+.fadable-buttons-container:hover .fadable-button {
+    visibility: visible;
+    opacity: 1;
+}*/
+
+.card-button--blue {
+    color: #0056b3;
+}
+
+    .card-button--blue:hover {
+        color: #007bff;
+    }
+
+.bg-semidark {
+    background-color: #484d52;
+}
+
+.draggable.dragging {
+    background-color: #697e94;
+}
+
+.dataTables_processing {
+    background-color: #6c757d;
+}
+
+.complete-icon {
+    color: green;
     cursor: pointer;
 }
 
-.multilist-container ul {
-    overflow: auto;
+.event-card-main, .sticky-taskheader {
+    background-color: #293042;
 }
+
+.sticky-navtab {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 3.5rem;
+    z-index: 2;
+}
+
+.sticky-taskheader {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 6.5rem;
+    z-index: 1;
+}
+
+.update-message {
+    z-index: 999;
+}
+
+.icon-check {
+    cursor: pointer;
+    color: green;
+}
+
+table.dataTable  {
+    padding-bottom: 2.5rem !important;
+}
+
+.count-reset-icon {
+    font-size: 32px;
+    line-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: pointer;
+}
+
+    .count-reset-icon:hover {
+        text-decoration: none;
+    }
+
+    .count-reset-icon:active {
+        text-decoration: none;
+    }

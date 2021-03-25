@@ -15,7 +15,16 @@ namespace SkaapBoek.Core
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public ICollection<SheepGroup> SheepGroups { get; set; }
+        public int? PenId { get; set; }
+        public Pen Pen { get; set; }
+
+        public DateTime? PhaseStartDate { get; set; }
+        public DateTime? PhaseEndDate { get; set; }
+
+        public int? MilsPhaseId { get; set; }
+        public MilsPhase MilsPhase { get; set; }
+
+        public ICollection<GroupedSheep> GroupedSheep { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
     }
 }

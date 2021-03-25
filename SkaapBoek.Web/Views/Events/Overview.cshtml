@@ -1,0 +1,48 @@
+﻿@model EventsOverviewViewModel
+@{
+  ViewBag.Title = "Events Overview";
+}
+
+
+<h1 class="text-light mb-3">Events</h1>
+
+<div class="wrapper">
+  <div class="sticky-navtab bg-dark pt-2">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="tasks-tab" data-toggle="tab"
+           href="#tasksPage" role="tab" aria-controls="Tasks" aria-selected="true">Tasks</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="mils-tab" data-toggle="tab"
+           href="#milsPage" role="tab" aria-controls="MILS" aria-selected="false">M.I.L.S</a>
+      </li>
+      @*<li class="nav-item" role="presentation">
+        <a class="nav-link" id="mils-tab" data-toggle="tab"
+           href="#othersPage" role="tab" aria-controls="Others" aria-selected="false">Other</a>
+      </li>*@
+    </ul>
+  </div>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="tasksPage" role="tabpanel" aria-labelledby="tasks-tab">
+      <partial name="_TaskEvents" model="Model.TaskEventsModel" />
+    </div>
+    <div class="tab-pane fade" id="milsPage" role="tabpanel" aria-labelledby="mils-tab">
+      <partial name="_MilsEvents" model="Model.MilsEventsModel" />
+    </div>
+    @*<div class="tab-pane fade" id="othersPage" role="tabpanel" aria-labelledby="others-tab">
+      other
+    </div>*@
+  </div>
+</div>
+
+<partial name="_MoveToPhaseModal" Model="Model.MoveToPhaseModel"/>
+
+@section Scripts
+{
+  <script defer>
+    $(function () {
+      appns.events.overview();
+    })
+  </script>
+}

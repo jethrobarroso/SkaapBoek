@@ -11,5 +11,6 @@ window.$ = window.jQuery = $;
 import 'bootstrap';
 import 'jquery-validation';
 import 'jquery-validation-unobtrusive';
+import 'jquery-ajax-unobtrusive';
 
 import 'select2';

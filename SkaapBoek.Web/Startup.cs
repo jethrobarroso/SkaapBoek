@@ -18,6 +18,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace SkaapBoek.Web
 {
@@ -33,18 +40,31 @@ namespace SkaapBoek.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            //services.AddControllers();
             services.AddControllersWithViews(options =>
             {
+                // Globally set required authentication
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).AddRazorRuntimeCompilation()
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SkaapBoekDb"));
             });
 
-            services.AddSwaggerGen(options => 
+            services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
@@ -57,6 +77,11 @@ namespace SkaapBoek.Web
             services.AddScoped<ISheepService, SheepService>();
             services.AddScoped<IFeedService, FeedService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IPenService, PenService>();
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IMilsService, MilsService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IMilsTaskService, MilsTaskService>();
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 //options.Password.RequiredLength = 10;
@@ -66,6 +91,13 @@ namespace SkaapBoek.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var cultureInfo = new CultureInfo("en-ZA");
+            cultureInfo.NumberFormat.CurrencySymbol = "R";
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+            cultureInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -75,6 +107,7 @@ namespace SkaapBoek.Web
                 app.UseExceptionHandler("/Error");
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHttpsRedirection();
                 app.UseHsts();
             }
             app.UseSwagger();
@@ -83,10 +116,8 @@ namespace SkaapBoek.Web
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Demo API");
             });
 
-            app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
-
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

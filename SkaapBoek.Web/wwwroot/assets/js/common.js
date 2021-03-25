@@ -53,7 +53,11 @@ export class ModalDeletePrompt {
      * @param {HTMLElement} table The table element 
      */
     fromTable(table) {
+        if (!table) {
+            return;
+        }
         const buttons = table.querySelectorAll('button');
+
         if (buttons.length !== 0 && helper.meetsModalRequirements(this.modal)) {
             for (const btn of buttons) {
                 let row = btn.closest('tr');
@@ -105,11 +109,15 @@ export function preventDoubleSubmit(form, input) {
     }
 }
 
-export function initDt() {
+/**
+ * 
+ * @param {string} tableId
+ */
+export function initDt(tableId) {
     // Setup - add a text input to each footer cell
     let i = 0;
-    let colCount = $('#datatable thead tr th').length;
-    $('#datatable thead th').each(function () {
+    let colCount = $(`#${tableId} thead tr th`).length;
+    $(`#${tableId} thead th`).each(function () {
         if (i !== (colCount - 1)) {
             var title = $(this).children().first().text()
             $(this).append('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />');
@@ -118,7 +126,7 @@ export function initDt() {
     });
 
     // DataTable
-    var dt = $('#datatable').DataTable({
+    var dt = $(`#${tableId}`).DataTable({
         columnDefs: [
             { targets: [colCount - 1], searchable: false, orderable: false }
         ],
@@ -138,4 +146,67 @@ export function initDt() {
             });
         }
     });
+}
+
+/**
+ * @typedef buildTableOptions
+ * @param {object} options
+ * @param {string} options.itemId
+ * @param {string} options.detailsPath
+ * @param {string} options.editPath
+ */
+export function buildTableRowActions(options) {
+    //return `<div class="action-container d-flex align-content-center" data-item-id="${options.itemId}">
+    //            <a class="icon-button mr-1 ml-1" data-toggle="tooltip" data-placement="top" title="Details"
+    //                href="${options.detailsPath}/${options.itemId}" data-original-title="View">
+    //                <i class="material-icons">search</i>
+    //            </a>
+    //            <a class="icon-button mr-1 ml-1" data-toggle="tooltip" data-placement="top" title="Edit"
+    //                href="${options.editPath}/${options.itemId}" data-original-title="Edit">
+    //                <i class="material-icons">edit</i>
+    //            </a>
+    //            <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete" data-original-title="Delete">
+    //                <button class="icon-button--delete"
+    //                    type="button" data-toggle="modal" data-target="#deleteModal">
+    //                <i class="material-icons">delete</i>
+    //                </button>
+    //            </span>
+    //        </div>`;
+
+    return `<div class="d-flex float-right" data-item-id="${options.itemId}">
+                <div class="btn-group icon-button--action">
+                  <span class="material-icons" data-toggle="dropdown" 
+                        data-display="static" aria-haspopup="true" aria-expanded="false">
+                    more_vert
+                  </span>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="${options.detailsPath}/${options.itemId}">Details</a>
+                    <a class="dropdown-item" href="${options.editPath}/${options.itemId}">Edit</a>
+                    <a class="dropdown-item" href="/Tasks/Sheep/${options.itemId}/Create">New Task</a>
+                    <a class="dropdown-item bg-danger text-light" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                  </div>
+                </div>
+              </div>`;
+}
+
+/**
+ * Prepare delete modal.
+ * @param {object} options
+ * @param {HTMLElement} options.modal
+ * @param {string} options.titleMessage
+ * @param {string} options.bodyMessage
+ * @param {string} options.deletePath
+ * @param {string} options.actionId
+ */
+export function prepTableRowDeleteModal(options) {
+    if (!options.modal
+        && !options.modal.classList.contains('.modal')
+        && !options.modal.classList.contains('.modal-title')
+        && !options.modal.classList.contains('.modal-body')) {
+        console.error('Not a valid bootstrap 4 modal');
+    }
+
+    options.modal.querySelector('.modal-title').innerHTML = options.titleMessage;
+    options.modal.querySelector('.modal-body').innerHTML = options.bodyMessage;
+    options.modal.querySelector('form').action = `${options.deletePath}/${options.actionId}`;
 }

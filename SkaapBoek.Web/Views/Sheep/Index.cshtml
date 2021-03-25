@@ -1,84 +1,46 @@
-﻿@model IEnumerable<Sheep>
+﻿@model SheepIndexViewModel
 
 @{
   ViewBag.Title = "Sheep List";
 }
-<h1 class="text-light mb-3">All Sheep</h1>
 
-@if (TempData["Success"] != null)
-{
-  <div class="alert alert-success alert-dismissible fade show">
-    @TempData["Success"]
-    <button type="button" class="close" data-dismiss="alert">
-      <span>&times;</span>
-    </button>
-  </div>
-}
+<partial name="_UpdateMessage" />
 
-@if (Model.Any())
-{
-  <div class="table-responsive-md text-light">
-    <table id="datatable" class="table table-striped table-dark table-hover" style="width:100%">
+<div class="shadow rounded bg-secondary p-1 pl-3 mb-3">
+  <h1 class="text-light mb-3 display-4">Farm Sheep</h1>
+</div>
+
+<h4 class="text-light mb-3">Herd</h4>
+
+<form method="post">
+  <div class="table-responsive text-light">
+    <table id="herdTable" class="table table-striped table-dark table-hover" style="width:100%">
       <thead>
         <tr>
-          <th class="filterable"><div>Tag</div></th>
-          <th class="filterable"><div>Tag Color</div></th>
-          <th class="filterable"><div>State</div></th>
-          <th class="filterable"><div>Gender</div></th>
-          <th class="filterable"><div>Weight (kg)</div></th>
-          <th class="filterable"><div>Birth Date</div></th>
-          <th></th>
+          <th>Id</th>
+          <th>Tag</th>
+          <th>Tag Color</th>
+          <th>State</th>
+          <th>Gender</th>
+          <th>Weight (kg)</th>
+          <th>Birth Date</th>
+          <th>Mother</th>
+          <th>Father</th>
+          <th>Action</th>
         </tr>
       </thead>
-      <tbody>
-        @foreach (var sheep in Model)
-        {
-          <tr>
-            <td>@sheep.TagNumber</td>
-            <td>@sheep.Color.Name</td>
-            <td>@sheep.SheepStatus.Name</td>
-            <td>@sheep.Gender.Type</td>
-            <td>@sheep.Weight</td>
-            <td>@sheep.BirthDate.ToShortDateString()</td>
-            <td>
-              <div class="d-flex align-content-center">
-                <a class="icon-button mr-1 ml-1" asp-action="Details" asp-route-id="@sheep.Id"
-                   data-toggle="tooltip" data-placement="top" title="View">
-                  <i class="material-icons">search</i>
-                </a>
-                <a class="icon-button mr-1 ml-1" asp-action="Edit" asp-route-id="@sheep.Id"
-                   data-toggle="tooltip" data-placement="top" title="Edit">
-                  <i class="material-icons">edit</i>
-                </a>
-                <span data-toggle="tooltip" class="icon-button--delete mr-1 ml-1" data-placement="top" title="Delete">
-                  <button class="icon-button--delete" data-user-id="@sheep.Id"
-                          type="button" data-toggle="modal" data-target="#deleteModal">
-                    <i class="material-icons">delete</i>
-                  </button>
-                </span>
-              </div>
-            </td>
-          </tr>
-        }
-      </tbody>
     </table>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add new sheep</a>
+    <a class="mt-2 btn btn-primary" asp-action="Create">Add sheep</a>
   </div>
-}
-else
-{
-  <div class="alert alert-info">
-    <p>No sheep are currently registered.</p>
-    <a class="mt-2 btn btn-primary" asp-action="Create">Add new sheep</a>
-  </div>
-}
+</form>
+
 
 <partial name="_ModalDelete" />
 
 @section Scripts {
-<script>
-  $(document).ready(function () {
-    appns.sheep.list();
-  });
-</script>
+  <script>
+    $(document).ready(function () {
+      appns.sheep.index();
+    });
+  </script>
 }

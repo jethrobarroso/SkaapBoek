@@ -24,13 +24,19 @@ namespace SkaapBoek.Core
         public DateTime AcquireDate { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal CostPrice { get; set; }
+        public decimal? CostPrice { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal SalePrice { get; set; }
+        public decimal? SalePrice { get; set; }
+
+        [Range(0, 10000)]
+        public int TagColorChangeCount { get; set; }
 
         public int SheepStatusId { get; set; } = 3;
         public SheepStatus SheepStatus { get; set; }
+
+        public int SheepCategoryId { get; set; }
+        public SheepCategory Category { get; set; }
 
         [Required]
         public int GenderId { get; set; }
@@ -42,9 +48,18 @@ namespace SkaapBoek.Core
         public int? FeedId { get; set; }
         public Feed CurrentFeed { get; set; }
 
-        public ICollection<SheepGroup> SheepGroups { get; set; }
-        public ICollection<Relationship> Parents { get; set; }
-        public ICollection<Relationship> Children { get; set; }
+        public int? PenId { get; set; }
+        public Pen Pen { get; set; }
+
+        public int? MotherId { get; set; }
+        public Sheep Mother { get; set; }
+        public ICollection<Sheep> ChildrenOfMother { get; set; }
+
+        public int? FatherId { get; set; }
+        public Sheep Father { get; set; }
+        public ICollection<Sheep> ChildrenOfFather { get; set; }
+
+        public ICollection<GroupedSheep> GroupedSheep { get; set; }
         public ICollection<TaskInstance> TaskInstances { get; set; }
     }
 }

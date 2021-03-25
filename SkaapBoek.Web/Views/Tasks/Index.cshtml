@@ -4,20 +4,22 @@
   ViewData["Title"] = "Index";
 }
 
+<partial name="_UpdateMessage" />
+
 <h1 class="mb-3 text-light">Tasks</h1>
 
 <div class="table-responsive-md text-light">
-  <table id="datatable" class="table table-hover table-dark table-striped">
+  <table id="taskTable" class="table table-hover table-dark table-striped">
     <thead>
       <tr>
         <th class="filterable">
           <div>@Html.DisplayNameFor(model => model.Name)</div>
         </th>
         <th class="filterable">
-          <div>@Html.DisplayNameFor(model => model.DurationDays)</div>
+          <div>@Html.DisplayNameFor(model => model.StartDate)</div>
         </th>
         <th class="filterable">
-          <div>@Html.DisplayNameFor(model => model.StartDate)</div>
+          <div>@Html.DisplayNameFor(model => model.EndDate)</div>
         </th>
         <th class="filterable">
           <div>@Html.DisplayNameFor(model => model.Priority)</div>
@@ -36,10 +38,10 @@
             @Html.DisplayFor(modelItem => item.Name)
           </td>
           <td>
-            @Html.DisplayFor(modelItem => item.DurationDays)
+            @(item.StartDate.ToShortDateString())
           </td>
           <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
+            @item.EndDate
           </td>
           <td>
             @Html.DisplayFor(modelItem => item.Priority.Name)
@@ -79,7 +81,7 @@
 @section Scripts { 
 <script>
   $(function () {
-    appns.tasks.list();
+    appns.tasks.index();
   })
 </script>
 }

@@ -1,0 +1,15 @@
+﻿@model MilsEventModel
+
+<div class="row">
+  <dl class="m-0">
+    <dt class="col-12">Phase instructions:</dt>
+    <dd>
+      <ul>
+        @foreach (var item in Model.Instructions)
+        {
+          <li>@item</li>
+        }
+      </ul>
+    </dd>
+  </dl>
+</div>

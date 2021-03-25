@@ -1,0 +1,185 @@
+﻿@model MilsEventsModel
+
+<div class="text-light">
+  <div class="row">
+
+    <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card event-card-main mt-4">
+        <div class="card-header sticky-taskheader">
+          <h5 class="card-title">Today</h5>
+          <h6 class="card-subtitle text-white-50">Phases starting/ending today.</h6>
+        </div>
+        <div class="card-body p-3">
+          <div id="tasks-today">
+            @foreach (var item in Model.TodaysMilsGroups)
+            {
+              <div data-group-id="@item.GroupId" data-phase-id="@item.CurrentPhaseId"
+                   class="card bg-dark mb-3 card-inner border">
+                <div class="card-body p-3">
+
+                  <dl class="row p-0 m-0">
+                    <dt class="col-4 p-0">Name:</dt>
+                    <dd class="col-8 p-0">@item.GroupName</dd>
+                    <dt class="col-4 p-0">Pen:</dt>
+                    <dd class="col-8 p-0">@item.PenName</dd>
+                    <dt class="col-4 p-0">Starts:</dt>
+                    <dd class="col-8 p-0
+                        @(item.StartDate == DateTime.Today ? "text-success" : "")">
+                      @item.StartDate
+                    </dd>
+                    <dt class="col-4 p-0">Ends:</dt>
+                    <dd class="col-8 p-0
+                        @(item.EndDate == DateTime.Today ? "text-success" : "")">
+                      @item.EndDate
+                    </dd>
+                    <dt class="col-4 p-0">Current Phase:</dt>
+                    <dd class="col-8 p-0">@item.CurrentPhaseActivity</dd>
+                    <dt class="col-4 p-0">Next Phase:</dt>
+                    @if (@item.NextPhaseId == null)
+                    {
+                      <dd class="col-8 p-0">Complete</dd>
+                    }
+                    else
+                    {
+                      <dd class="col-8 p-0">@item.NextPhaseActivity</dd>
+                    }
+                  </dl>
+
+                  <div class="d-flex justify-content-between">
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light mils-info-popover"
+                       role="button" data-toggle="popover" data-trigger="focus" title="Additional Info"
+                       data-placement="bottom">More info</a>
+
+                    @if (item.EndDate.Date == DateTime.Today)
+                    {
+                      <button class="btn btn-primary btn-sm" data-toggle="modal"
+                              data-target="#moveToPhaseModal">
+                        Move to phase
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="alert alert-info m-0"
+                 hidden="@Model.TodaysMilsGroups.Any()">
+              No phase events today.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card event-card-main mt-4">
+        <div class="card-header sticky-taskheader">
+          <h5 class="card-title">Overdue</h5>
+          <h6 class="card-subtitle text-white-50">Groups not moved to the next phase.</h6>
+        </div>
+        <div class="card-body p-3">
+          <div id="tasks-today">
+            @foreach (var item in Model.OverdueMilsGroups)
+            {
+              <div data-group-id="@item.GroupId" data-phase-id="@item.CurrentPhaseId"
+                   class="card bg-dark mb-3 card-inner  border">
+                <div class="card-body p-3">
+
+                  <dl class="row p-0 m-0">
+                    <dt class="col-4 p-0">Name:</dt>
+                    <dd class="col-8 p-0">@item.GroupName</dd>
+                    <dt class="col-4 p-0">Pen:</dt>
+                    <dd class="col-8 p-0">@item.PenName</dd>
+                    <dt class="col-4 p-0">Starts:</dt>
+                    <dd class="col-8 p-0">@item.StartDate</dd>
+                    <dt class="col-4 p-0">Ends:</dt>
+                    <dd class="col-8 p-0">@item.EndDate</dd>
+                    <dt class="col-4 p-0">Current Phase:</dt>
+                    <dd class="col-8 p-0">@item.CurrentPhaseActivity</dd>
+                    <dt class="col-4 p-0">Next Phase:</dt>
+                    @if (@item.NextPhaseId == null)
+                    {
+                      <dd class="col-8 p-0">Complete</dd>
+                    }
+                    else
+                    {
+                      <dd class="col-8 p-0">@item.NextPhaseActivity</dd>
+                    }
+                  </dl>
+
+                  <div class="d-flex justify-content-between">
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light mils-info-popover"
+                       role="button" data-toggle="popover" data-trigger="focus" title="Additional Info"
+                       data-placement="bottom">More info</a>
+
+                    <button class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#moveToPhaseModal">
+                      Move to phase
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="alert alert-info m-0"
+                 hidden="@Model.OverdueMilsGroups.Any()">
+              No overdue group transitions.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card event-card-main mt-4">
+        <div class="card-header sticky-taskheader">
+          <h5 class="card-title">Upcoming</h5>
+          <h6 class="card-subtitle text-white-50">Upcoming phase transitions.</h6>
+        </div>
+        <div class="card-body p-3">
+          <div id="tasks-today">
+            @foreach (var item in Model.UpcomingMilsGroups)
+            {
+              <div data-group-id="@item.GroupId" data-phase-id="@item.CurrentPhaseId"
+                   class="card bg-dark mb-3 card-inner  border">
+                <div class="card-body p-3">
+
+                  <dl class="row p-0 m-0">
+                    <dt class="col-4 p-0">Name:</dt>
+                    <dd class="col-8 p-0">@item.GroupName</dd>
+                    <dt class="col-4 p-0">Pen:</dt>
+                    <dd class="col-8 p-0">@item.PenName</dd>
+                    <dt class="col-4 p-0">Starts:</dt>
+                    <dd class="col-8 p-0">@item.StartDate</dd>
+                    <dt class="col-4 p-0">Ends:</dt>
+                    <dd class="col-8 p-0">@item.EndDate</dd>
+                    <dt class="col-4 p-0">Current Phase:</dt>
+                    <dd class="col-8 p-0">@item.CurrentPhaseActivity</dd>
+                    <dt class="col-4 p-0">Next Phase:</dt>
+                    @if (@item.NextPhaseId == null)
+                    {
+                      <dd class="col-8 p-0">Complete</dd>
+                    }
+                    else
+                    {
+                      <dd class="col-8 p-0">@item.NextPhaseActivity</dd>
+                    }
+                  </dl>
+
+                  <div class="d-flex justify-content-between">
+                    <a tabindex="0" class="btn btn-sm btn-outline-secondary text-light mils-info-popover"
+                       role="button" data-toggle="popover" data-trigger="focus" title="Additional Info"
+                       data-placement="bottom">More info</a>
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="alert alert-info m-0"
+                 hidden="@Model.UpcomingMilsGroups.Any()">
+              No upcoming M.I.L.S events.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

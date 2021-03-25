@@ -6,6 +6,7 @@ namespace SkaapBoek.Core
 {
     public class Priority
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         
         [Required]
