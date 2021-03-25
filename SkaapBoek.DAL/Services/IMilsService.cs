@@ -60,6 +60,7 @@ namespace SkaapBoek.DAL.Services
                 .Include(m => m.Tasks)
                 .Include(m => m.Pen)
                 .Include(m => m.Groups)
+                    .ThenInclude(g => g.Pen)
                 .OrderBy(m => m.PhaseSequence)
                 .AsNoTracking()
                 .ToListAsync();

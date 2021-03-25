@@ -4,25 +4,7 @@
   ViewBag.Title = "Edit Sheep";
 }
 
-@if (TempData["Success"] != null)
-{
-  <div class="alert alert-success alert-dismissible fade show">
-    @TempData["Success"]
-    <button type="button" class="close" data-dismiss="alert">
-      <span>&times;</span>
-    </button>
-  </div>
-}
-
-@if (TempData["Failure"] != null)
-{
-  <div class="alert alert-danger alert-dismissible fade show">
-    @TempData["Failure"]
-    <button type="button" class="close" data-dismiss="alert">
-      <span>&times;</span>
-    </button>
-  </div>
-}
+<partial name="_UpdateMessage" />
 
 <div class="shadow rounded bg-secondary p-1 pl-3 mb-3">
   <h1 class="text-light mb-3 display-4">Edit - @Model.TagNumber</h1>
@@ -38,9 +20,23 @@
         <span asp-validation-for="TagNumber" class="text-danger"></span>
       </div>
       <div class="col-md-6 mb-3">
-        <label asp-for="ColorId"></label>
-        <select asp-for="ColorId" class="form-control" asp-items="Model.Colors"></select>
-        <span asp-validation-for="ColorId" class="text-danger"></span>
+        <div>
+          <label asp-for="ColorId"></label>
+          <div class="input-group">
+            <select asp-for="ColorId" class="form-control" asp-items="Model.Colors"></select>
+            <div class="input-group-append">
+              <span class="input-group-text">Changed: @Model.ColorChangedCount</span>
+              <span class="input-group-text" data-toggle="tooltip" data-placement="bottom"
+                    title="Reset color counter">
+                <a href="#" class="count-reset-icon material-icons text-danger"
+                   data-toggle="modal" data-target="#resetCounterModal">
+                  restart_alt
+                </a>
+              </span>
+            </div>
+          </div>
+          <span asp-validation-for="ColorId" class="text-danger"></span>
+        </div>
       </div>
     </div>
     <div class="form-row">
@@ -150,7 +146,27 @@
   </div>
 </form>
 
-
+<div class="modal fade" id="resetCounterModal" tabindex="-1" aria-labelledby="resetCounterModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reset Color Counter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to reset the color counter for @Model.TagNumber?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <form method="post" asp-action="ResetColorCounter" asp-route-id="@Model.Id">
+          <button type="submit" class="btn btn-primary">Reset</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 @section Scripts{
   <script defer>

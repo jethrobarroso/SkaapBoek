@@ -29,6 +29,9 @@ namespace SkaapBoek.Core
         [Column(TypeName = "decimal(10,2)")]
         public decimal? SalePrice { get; set; }
 
+        [Range(0, 10000)]
+        public int TagColorChangeCount { get; set; }
+
         public int SheepStatusId { get; set; } = 3;
         public SheepStatus SheepStatus { get; set; }
 

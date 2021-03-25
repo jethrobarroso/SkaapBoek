@@ -107,6 +107,7 @@ namespace SkaapBoek.Web
                 app.UseExceptionHandler("/Error");
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHttpsRedirection();
                 app.UseHsts();
             }
             app.UseSwagger();
@@ -115,7 +116,7 @@ namespace SkaapBoek.Web
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Demo API");
             });
 
-            app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

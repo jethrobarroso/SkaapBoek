@@ -153,6 +153,8 @@ namespace SkaapBoek.DAL.Services
             return eventModel;
         }
 
+        //public async Task<>
+
         private async Task<IEnumerable<MilsEventModel>> PopulateMilsEventCollection(IQueryable<Group> groups)
         {
             var maxSequence = await _context.MilsPhaseSet.MaxAsync(p => p.PhaseSequence);

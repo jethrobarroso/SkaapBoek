@@ -21,6 +21,9 @@ namespace SkaapBoek.Web.ViewModels
         public int ColorId { get; set; }
         public SelectList Colors { get; set; }
 
+        [Display(Name = "Color change count")]
+        public int ColorChangedCount { get; set; }
+
         [Display(Name = "Gender")]
         public int GenderId { get; set; }
         public List<Gender> Genders { get; set; }

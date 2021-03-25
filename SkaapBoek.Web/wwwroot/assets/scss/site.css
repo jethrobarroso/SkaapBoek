@@ -183,3 +183,19 @@ body {
 table.dataTable  {
     padding-bottom: 2.5rem !important;
 }
+
+.count-reset-icon {
+    font-size: 32px;
+    line-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: pointer;
+}
+
+    .count-reset-icon:hover {
+        text-decoration: none;
+    }
+
+    .count-reset-icon:active {
+        text-decoration: none;
+    }

@@ -17,15 +17,22 @@
         <a class="nav-link" id="mils-tab" data-toggle="tab"
            href="#milsPage" role="tab" aria-controls="MILS" aria-selected="false">M.I.L.S</a>
       </li>
+      @*<li class="nav-item" role="presentation">
+        <a class="nav-link" id="mils-tab" data-toggle="tab"
+           href="#othersPage" role="tab" aria-controls="Others" aria-selected="false">Other</a>
+      </li>*@
     </ul>
   </div>
   <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="tasksPage" role="tabpanel" aria-labelledby="home-tab">
+    <div class="tab-pane fade show active" id="tasksPage" role="tabpanel" aria-labelledby="tasks-tab">
       <partial name="_TaskEvents" model="Model.TaskEventsModel" />
     </div>
-    <div class="tab-pane fade" id="milsPage" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="tab-pane fade" id="milsPage" role="tabpanel" aria-labelledby="mils-tab">
       <partial name="_MilsEvents" model="Model.MilsEventsModel" />
     </div>
+    @*<div class="tab-pane fade" id="othersPage" role="tabpanel" aria-labelledby="others-tab">
+      other
+    </div>*@
   </div>
 </div>
 

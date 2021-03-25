@@ -41,9 +41,9 @@
   </environment>
 </head>
 <body class="bg-dark">
-  
-   <partial name="_Navbar" />
-  
+
+  <partial name="_Navbar" />
+
   <div class="container">
     <main role="main" class="pb-3">
       @RenderBody()
@@ -52,11 +52,9 @@
 
   <footer class="footer bg-dark text-white-50">
     <div class="container">
-      <div class="row">
-        <div class="col-4">
-          <span>&copy; @DateTime.Now.Year - SkaapBoek</span>
-        </div>
-      </div>
+
+      <span>&copy; @DateTime.Now.Year - SkaapBoek</span>
+
     </div>
   </footer>
   @RenderSection("Scripts", required: false)

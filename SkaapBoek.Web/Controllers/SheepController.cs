@@ -117,6 +117,7 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var model = await PopulateSheepEditViewModel(sheep);
+            model.ColorChangedCount = sheep.TagColorChangeCount;
 
             return View(model);
         }
@@ -168,6 +169,10 @@ namespace SkaapBoek.Web.Controllers
             }
 
             var sheep = await _sheepService.GetById(id);
+
+            if (sheep.Color.Id != model.ColorId)
+                sheep.TagColorChangeCount++;
+
             sheep.AcquireDate = model.AcquireDate;
             sheep.BirthDate = model.BirthDate;
             sheep.GenderId = model.GenderId;
@@ -185,6 +190,24 @@ namespace SkaapBoek.Web.Controllers
             await _sheepService.Update(sheep);
             TempData["Success"] = $"Successfully updated sheep with tag {sheep.TagNumber}";
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetColorCounter(int id)
+        {
+            var sheep = await _sheepService.GetById(id);
+            
+            if(sheep is null)
+            {
+                TempData["Failure"] = "Could not reset color counter.";
+                return RedirectToAction(nameof(Edit), new { id });
+            }
+
+            sheep.TagColorChangeCount = 0;
+            await _sheepService.Update(sheep);
+
+            TempData["Success"] = "Successfully reset color counter.";
+            return RedirectToAction(nameof(Edit), new { id });
         }
 
         [HttpPost]
