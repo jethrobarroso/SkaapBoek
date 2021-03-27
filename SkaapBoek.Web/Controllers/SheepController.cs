@@ -22,12 +22,17 @@ namespace SkaapBoek.Web.Controllers
         private readonly ILogger<SheepController> _logger;
         private readonly ISheepService _sheepService;
         private readonly IPenService _penService;
+        private readonly ITaskService _taskService;
 
-        public SheepController(ILogger<SheepController> logger, ISheepService service, IPenService penService)
+        public SheepController(ILogger<SheepController> logger, 
+            ISheepService service, 
+            IPenService penService,
+            ITaskService taskService)
         {
             _logger = logger;
             _sheepService = service;
             _penService = penService;
+            _taskService = taskService;
         }
 
         [HttpGet]
@@ -245,7 +250,8 @@ namespace SkaapBoek.Web.Controllers
                 Sheep = sheep,
                 Mother = await _sheepService.GetById(sheep.FatherId),
                 Father = await _sheepService.GetById(sheep.MotherId),
-                Children = await _sheepService.GetParentChildren(sheep.Id)
+                Children = await _sheepService.GetParentChildren(sheep.Id),
+                Tasks = await _taskService.GetBySheepId(id)
             };
 
             return View(model);

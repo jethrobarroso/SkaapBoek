@@ -5,9 +5,16 @@
     <dt class="col-12">Phase instructions:</dt>
     <dd>
       <ul>
-        @foreach (var item in Model.Instructions)
+        @if (Model.Instructions.Any())
         {
-          <li>@item</li>
+          @foreach (var item in Model.Instructions)
+          {
+            <li>@item</li>
+          }
+        }
+        else
+        {
+         @:None
         }
       </ul>
     </dd>

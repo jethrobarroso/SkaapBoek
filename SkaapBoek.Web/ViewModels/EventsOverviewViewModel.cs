@@ -12,5 +12,7 @@ namespace SkaapBoek.Web.ViewModels
         public MilsEventsModel MilsEventsModel { get; set; }
         public TaskEventsModel TaskEventsModel { get; set; }
         public MoveToPhaseModel MoveToPhaseModel { get; set; }
+        public RemoveMilsGroupModel RemoveMilsGroupModel { get; set; }
+
     }
 }

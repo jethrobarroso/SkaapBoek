@@ -199,3 +199,12 @@ table.dataTable  {
     .count-reset-icon:active {
         text-decoration: none;
     }
+
+.remove-milsgroup-icon {
+    color: #dc3545;
+    cursor: pointer;
+}
+
+    .remove-milsgroup-icon:hover {
+        color: #a71d2a;
+    }

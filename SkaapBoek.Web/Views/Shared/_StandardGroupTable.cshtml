@@ -1,0 +1,70 @@
+﻿@model GroupTableModel
+
+@if (Model.Groups.Any())
+{
+
+  <div class="pb-5 table-responsive-md text-light">
+    <table class="table table-striped table-dark table-hover">
+      <thead>
+        <tr>
+          <th class="filterable">
+            <div>Name</div>
+          </th>
+          @if (!Model.HideMilsData)
+          {
+            <th class="filterable">
+              <div>Pen</div>
+            </th>
+            <th class="filterable">
+              <div>MILS Phase</div>
+            </th>
+          }
+          <th class="filterable">
+            <div>Phase Start Date</div>
+          </th>
+          <th class="filterable">
+            <div>Phase End Date</div>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model.Groups)
+        {
+          <tr>
+            <td>
+              @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            @if (!Model.HideMilsData)
+            {
+              <td>@(item.Pen?.Name.ToString() ?? "None")</td>
+              <td>@(item.MilsPhase?.Activity ?? "None")</td>
+            }
+            <td>@(item.PhaseStartDate)</td>
+            <td>@(item.PhaseEndDate)</td>
+            <td>
+              <div class="d-flex align-content-center">
+                <a class="icon-button mr-1 ml-1"
+                   asp-controller="Groups" asp-action="Details" asp-route-id="@item.Id"
+                   data-toggle="tooltip" data-placement="top" title="View">
+                  <i class="material-icons">search</i>
+                </a>
+                <a class="icon-button mr-1 ml-1"
+                   asp-controller="Groups" asp-action="Edit" asp-route-id="@item.Id"
+                   data-toggle="tooltip" data-placement="top" title="Edit">
+                  <i class="material-icons">edit</i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+else
+{
+  <div class="alert alert-info">
+    <p>No groups have been assigned to this phase.</p>
+  </div>
+}

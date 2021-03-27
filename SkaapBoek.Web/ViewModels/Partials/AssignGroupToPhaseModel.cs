@@ -14,6 +14,7 @@ namespace SkaapBoek.Web.ViewModels.Partials
         public int PenId { get; set; }
 
         [Required]
+        [Display(Name = "Group")]
         public int GroupId { get; set; }
 
         public SelectList AvailableGroups { get; set; }

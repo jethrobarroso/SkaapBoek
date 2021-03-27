@@ -83,12 +83,8 @@ namespace SkaapBoek.DAL.Services
             var groups = _context.GroupSet
                 .Include(g => g.MilsPhase.Pen)
                 .Include(g => g.MilsPhase.Tasks)
-                .AsNoTracking()
-                .Where(g => g.PhaseStartDate != null && g.PhaseEndDate != null
-                    && ((g.PhaseStartDate.Value.Date <= toDate
-                            && g.PhaseStartDate.Value.Date > _today)
-                        || g.PhaseEndDate.Value.Date <= toDate
-                            && g.PhaseEndDate.Value.Date > _today));
+                .Where(g => g.MilsPhaseId != null)
+                .AsNoTracking();
             return await PopulateMilsEventCollection(groups);
         }
 
@@ -101,8 +97,10 @@ namespace SkaapBoek.DAL.Services
                .Include(g => g.MilsPhase.Pen)
                .Include(g => g.MilsPhase.Tasks)
                .AsNoTracking()
-               .Where(g => g.PhaseStartDate != null && g.PhaseEndDate != null
-                    && (g.PhaseEndDate < today));
+               .Where(g => g.PhaseStartDate != null 
+                   && g.PhaseEndDate != null 
+                   && g.MilsPhaseId != null
+                        && (g.PhaseEndDate < today));
 
             return await PopulateMilsEventCollection(groups);
         }
@@ -113,7 +111,7 @@ namespace SkaapBoek.DAL.Services
                 .Include(g => g.MilsPhase.Pen)
                 .Include(g => g.MilsPhase.Tasks)
                 .AsNoTracking()
-                .Where(g => g.PhaseStartDate != null
+                .Where(g => g.PhaseStartDate != null && g.MilsPhaseId != null
                     && (g.PhaseStartDate == _today || g.PhaseEndDate == _today));
 
             var result = await PopulateMilsEventCollection(groups);

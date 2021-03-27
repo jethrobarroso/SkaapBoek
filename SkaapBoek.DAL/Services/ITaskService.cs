@@ -2,6 +2,7 @@
 using SkaapBoek.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace SkaapBoek.DAL.Services
         Task<IEnumerable<TaskInstance>> GetFullListNoTrack();
         Task<IEnumerable<Priority>> GetPriorities();
         Task<IEnumerable<Priority>> GetStatusList();
+        Task<IEnumerable<TaskInstance>> GetBySheepId(int? id);
     }
 
     public class TaskService : BaseService<TaskInstance>, ITaskService
@@ -45,6 +47,16 @@ namespace SkaapBoek.DAL.Services
                 : Context.TaskInstanceSet.AsNoTracking();
 
             return await query.SingleOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<IEnumerable<TaskInstance>> GetBySheepId(int? id)
+        {
+            return await Context.TaskInstanceSet
+                .Where(t => t.SheepId == id)
+                .Include(t => t.Status)
+                .Include(t => t.Priority)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

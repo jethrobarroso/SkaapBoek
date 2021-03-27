@@ -18,6 +18,7 @@ namespace SkaapBoek.DAL.Services
         Task<IList<Sheep>> GetSelectedSheep(int groupId);
         Task<IEnumerable<Group>> GetNoPhaseGroups();
         Task<IEnumerable<Group>> GetByPhaseId(int phaseId);
+        Task<Group> GetByIdWithSheep(int id, bool track = false);
     }
 
     public class GroupService : BaseService<Group>, IGroupService
@@ -84,7 +85,7 @@ namespace SkaapBoek.DAL.Services
                           from g in jg.DefaultIfEmpty()
                           select s).Distinct()
                           .Where(s => s.GroupedSheep.Count() == 0 ||
-                          !s.GroupedSheep.Any(sg => 
+                          !s.GroupedSheep.Any(sg =>
                             groupId == null ? true : sg.GroupId == groupId.Value))
                           .ToListAsync();
         }
@@ -104,6 +105,22 @@ namespace SkaapBoek.DAL.Services
                     .Include(g => g.MilsPhase)
                     .SingleOrDefaultAsync(g => g.Id == id)
                 : await Context.GroupSet.Include(g => g.MilsPhase)
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(g => g.Id == id);
+        }
+
+        public async Task<Group> GetByIdWithSheep(int id, bool track = false)
+        {
+            return track
+                ? await Context.GroupSet
+                    .Include(g => g.MilsPhase)
+                    .Include(g => g.GroupedSheep)
+                        .ThenInclude(g => g.Sheep)
+                    .SingleOrDefaultAsync(g => g.Id == id)
+                : await Context.GroupSet.Include(g => g.MilsPhase)
+                    .Include(g => g.MilsPhase)
+                    .Include(g => g.GroupedSheep)
+                        .ThenInclude(g => g.Sheep)
                     .AsNoTracking()
                     .SingleOrDefaultAsync(g => g.Id == id);
         }

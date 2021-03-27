@@ -151,15 +151,16 @@ namespace SkaapBoek.Web.Controllers
                     group.GroupedSheep.Add(new GroupedSheep { GroupId = id, SheepId = i });
                 }
             }
-
+            
             try
             {
                 await _groupService.Update(group);
+                await _penService.AssignPenToSheep(group.PenId, model.SelectedSheepIds);
             }
             catch (DbUpdateException e)
             {
                 _logger.LogError($"Error updating group with ID = {id}\nException Message - {e.Message}");
-                return View("Error");
+                throw;
             }
 
             TempData["Success"] = $"Successfully updated group.";

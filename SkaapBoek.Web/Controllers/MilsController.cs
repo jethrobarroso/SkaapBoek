@@ -167,7 +167,7 @@ namespace SkaapBoek.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AssignGroup(AssignGroupToPhaseModel model)
         {
-            var group = await _groupService.GetByIdLite(model.GroupId, true);
+            var group = await _groupService.GetByIdWithSheep(model.GroupId, true);
 
             if(group is null)
             {
@@ -181,6 +181,12 @@ namespace SkaapBoek.Web.Controllers
             group.PhaseStartDate = model.PhaseStartDate;
             group.PhaseEndDate = model.PhaseStartDate.Value.AddDays(days);
             group.PenId = model.PenId;
+            
+            foreach (var sheep in group.GroupedSheep)
+            {
+                sheep.Sheep.PenId = model.PenId;
+            }
+
             await _groupService.Update(group);
             TempData["Success"] = $"Successfully queued group to phase.";
             return RedirectToAction(nameof(EditPhase), new { id = model.MilsPhaseId });
@@ -194,7 +200,7 @@ namespace SkaapBoek.Web.Controllers
                 ViewBag.ErrorMessage = "Bad request. No group ID specified.";
                 return View("BadRequest");
             }
-            var group = await _groupService.GetByIdLite(id.Value);
+            var group = await _groupService.GetByIdWithSheep(id.Value);
             if (group is null)
             {
                 ViewBag.ErrorMessage = $"Phase group with ID = {id} not found";
@@ -203,6 +209,10 @@ namespace SkaapBoek.Web.Controllers
             group.MilsPhaseId = null;
             group.PhaseStartDate = null;
             group.PhaseEndDate = null;
+            foreach (var sheep in group.GroupedSheep)
+            {
+                sheep.Sheep.PenId = null;
+            }
             await _groupService.Update(group);
             TempData["Success"] = "Successfully removed group from phase.";
             return RedirectToAction(nameof(EditPhase), new { id = phaseId });
@@ -216,6 +226,7 @@ namespace SkaapBoek.Web.Controllers
                 ViewBag.ErrorMessage = "Bad request. No phase ID specified.";
                 return View("BadRequest");
             }
+
             await _milsService.Delete(id.Value);
             TempData["Success"] = "Successfully deleted phase.";
             return RedirectToAction(nameof(Index));
@@ -243,7 +254,7 @@ namespace SkaapBoek.Web.Controllers
                 Groups = phase.Groups,
                 HideDeleteAction = true
             };
-            return PartialView("_GroupTable", model);
+            return PartialView("_StandardGroupTable", model);
         }
 
         [HttpGet]
@@ -277,7 +288,7 @@ namespace SkaapBoek.Web.Controllers
         [HttpPut]
         public async Task<IActionResult> MoveGroupToPhase(MoveToPhaseModel model)
         {
-            var group = await _groupService.GetByIdLite(model.GroupId, true);
+            var group = await _groupService.GetByIdWithSheep(model.GroupId, true);
             var phase = await _milsService.GetById(model.PhaseId, false);
 
             if (group is null)
@@ -288,15 +299,20 @@ namespace SkaapBoek.Web.Controllers
             group.PhaseEndDate = group.PhaseStartDate.Value.AddDays(phase.Days);
             group.PenId = phase.PenId;
 
+            foreach (var sheep in group.GroupedSheep)
+            {
+                sheep.Sheep.PenId = phase.PenId;
+            }
+
             await _groupService.Update(group);
 
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> RemoveGroupFromMils(MoveToPhaseModel model)
+        [HttpPost]
+        public async Task<IActionResult> RemoveGroupFromMils(RemoveMilsGroupModel model)
         {
-            var group = await _groupService.GetByIdLite(model.GroupId, true);
+            var group = await _groupService.GetByIdWithSheep(model.GroupIdToRemove, true);
 
             if (group is null)
                 return BadRequest();
@@ -304,7 +320,12 @@ namespace SkaapBoek.Web.Controllers
             group.MilsPhaseId = null;
             group.PhaseStartDate = null;
             group.PhaseEndDate = null;
-            group.PenId = null;
+            group.PenId = model.PenIdToMoveGroup;
+
+            foreach (var sheep in group.GroupedSheep)
+            {
+                sheep.Sheep.PenId = model.PenIdToMoveGroup;
+            }
 
             await _groupService.Update(group);
 

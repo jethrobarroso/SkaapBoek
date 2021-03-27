@@ -23,12 +23,16 @@
         @if (Model.Sheep != null)
         {
           <dt class="col-sm-3">Assigned sheep:</dt>
-          <dd class="col-sm-9">@Model.Sheep.TagNumber</dd>
+          <dd class="col-sm-9">
+            <a asp-controller="Sheep" asp-action="Details" asp-route-id="@Model.SheepId">@Model.Sheep.TagNumber</a>
+          </dd>
         }
         @if (Model.Group != null)
         {
           <dt class="col-sm-3">Assigned Group:</dt>
-          <dd class="col-sm-9">@Model.Group.Name</dd>
+          <dd class="col-sm-9">
+            <a asp-controller="Groups" asp-action="Details" asp-route-id="@Model.GroupId">@Model.Group.Name</a>
+          </dd>
         }
       </dl>
     </div>

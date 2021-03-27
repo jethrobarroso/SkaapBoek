@@ -66,6 +66,7 @@ namespace SkaapBoek.Web.Controllers
                 };
 
                 await _penService.Add(enc);
+                await _penService.AssignPenToSheep(enc.Id, model.SheepIds);
                 TempData["Success"] = $"Successfully added pen.";
                 return RedirectToAction(nameof(Index));
             }
@@ -131,6 +132,7 @@ namespace SkaapBoek.Web.Controllers
                 enc.ContainedSheep = await _sheepService.GetSheepByIds(model.SheepIds);
 
                 await _penService.Update(enc);
+                await _penService.AssignPenToSheep(enc.Id, model.SheepIds);
                 TempData["Success"] = $"Successfully updated pen";
                 return RedirectToAction(nameof(Index));
             }

@@ -47,6 +47,7 @@ namespace SkaapBoek.Web.Controllers.Api
                     .Include(s => s.Category)
                     .Include(s => s.Mother)
                     .Include(s => s.Father)
+                    .Include(s => s.Pen)
                     .AsNoTracking();
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
@@ -57,6 +58,8 @@ namespace SkaapBoek.Web.Controllers.Api
                     sheepData = sheepData.Where(m => m.TagNumber.Contains(searchValue)
                                         || m.Color.Name.Contains(searchValue)
                                         || m.Gender.Type.Contains(searchValue)
+                                        || m.Pen.Name.Contains(searchValue)
+                                        || m.Weight.ToString().Contains(searchValue)
                                         || m.Mother.TagNumber.Contains(searchValue)
                                         || m.Father.TagNumber.Contains(searchValue)
                                         || m.SheepStatus.Name.Contains(searchValue));

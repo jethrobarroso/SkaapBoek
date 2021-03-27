@@ -85,7 +85,8 @@
                     <thead>
                       <tr>
                         <th class="filterable">Name</th>
-                        <th class="filterable">Pen</th>
+                        <th class="filterable">Start</th>
+                        <th class="filterable">End</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -94,7 +95,8 @@
                       {
                         <tr>
                           <td>@group.Name</td>
-                          <td>@(group.Pen?.Name.ToString() ?? "None")</td>
+                          <td>@group.PhaseStartDate</td>
+                          <td>@group.PhaseEndDate</td>
                           <td>
                             <div class="d-flex align-content-center">
                               <a class="icon-button mr-1 ml-1" asp-controller="Groups"
@@ -125,7 +127,7 @@
 
             <a class="btn btn-primary mt-3" data-toggle="modal"
                onclick="appns.mils.assignGroup(@phases[i].Id, @phases[i].PenId)"
-               data-target="#assignGroupModal">Enqueue group</a>
+               data-target="#assignGroupModal">Assign group</a>
           </div>
         </div>
       </div>

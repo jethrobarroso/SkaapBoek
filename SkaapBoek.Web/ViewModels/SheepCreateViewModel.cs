@@ -62,11 +62,11 @@ namespace SkaapBoek.Web.ViewModels
         public int? FeedId { get; set; }
         public SelectList FeedList { get; set; }
 
-        [Display(Name = "Mother")]
+        [Display(Name = "Dam")]
         public int? MotherId { get; set; }
         public SelectList Ewes { get; set; }
 
-        [Display(Name = "Father")]
+        [Display(Name = "Sire")]
         public int? FatherId { get; set; }
         public SelectList Rams { get; set; }
     }

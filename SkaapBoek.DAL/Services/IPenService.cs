@@ -10,6 +10,7 @@ namespace SkaapBoek.DAL.Services
 {
     public interface IPenService : IDataService<Pen>
     {
+        Task<int> AssignPenToSheep(int? penId, int[] sheepIds);
         Task<IEnumerable<Pen>> GetAllNoTrack();
         Task<IEnumerable<Group>> GetAvailableGroups();
         Task<IEnumerable<Sheep>> GetAvailableSheep();
@@ -49,6 +50,19 @@ namespace SkaapBoek.DAL.Services
                 .Where(p => p.MilsPhase == null || p.MilsPhase.Id == phaseId)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<int> AssignPenToSheep(int? penId, int[] sheepIds)
+        {
+            var sheepList = Context.SheepSet
+                .Where(s => sheepIds.Contains(s.Id));
+
+            foreach(var sheep in sheepList)
+            {
+                sheep.PenId = penId;
+            }
+
+            return await Context.SaveChangesAsync();
         }
 
         public async Task<Pen> GetByIdFullNoTrack(int id)

@@ -34,7 +34,6 @@ export function overview() {
     const moveToPhaseForm = body.querySelector('#moveToPhaseModal form');
     const groupIdInput = moveToPhaseForm.querySelector('#GroupId');
     const moveGroupSubmitBtn = body.querySelector('#moveGroupBtn');
-    const removeGroupSubmitBtn = body.querySelector('#removeGroupBtn');
 
     body.querySelectorAll('[data-target="#moveToPhaseModal"]').forEach(submitBtn => {
         submitBtn.addEventListener('click', () => {
@@ -57,6 +56,48 @@ export function overview() {
             .catch(error => {
             console.error('Error: ', error);
         })
+    });
+
+    const removeGroupSubmitBtn = body.querySelector('#removeGroupBtn');
+    const removeGroupForm = body.querySelector('#removeMilsGroupForm');
+    const removeGroupIdInput = removeGroupForm.querySelector('#GroupIdToRemove');
+
+    body.querySelectorAll('[data-target="#removeMilsGroupModal"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            removeGroupIdInput.value = btn.closest('[data-group-id]').dataset.groupId;
+        });
+    });
+
+    removeGroupSubmitBtn.addEventListener('click', e => {
+        removeGroupIdInput.value = body.querySelector('#GroupIdToRemove').value;
+    })
+
+    removeGroupSubmitBtn.addEventListener('click', e => {
+        let formData = new FormData(removeGroupForm);
+        fetch('/Mils/RemoveGroupFromMils', {
+            method: 'POST',
+            body: formData
+        })
+            .then(reponse => {
+                if (reponse.ok) {
+                    let groupId = formData.get('GroupIdToRemove');
+                    let cardToRemove = body.querySelector(`[data-group-id="${groupId}"]`);
+                    $('#removeMilsGroupModal').modal('toggle');
+                    removeEventCard(cardToRemove)
+                }
+                else {
+                    throw new Error('Could not remove group from process.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    })
+
+    $('#PenIdToMoveGroup').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select pen"
     });
 }
 

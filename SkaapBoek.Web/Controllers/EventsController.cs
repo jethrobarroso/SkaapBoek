@@ -17,14 +17,17 @@ namespace SkaapBoek.Web.Controllers
         private readonly IEventService _eventService;
         private readonly ITaskService _taskService;
         private readonly IMilsService _milsService;
+        private readonly IPenService _penService;
 
         public EventsController(IEventService eventService, 
             ITaskService taskService,
-            IMilsService milsService)
+            IMilsService milsService,
+            IPenService penService)
         {
             _eventService = eventService;
             _taskService = taskService;
             _milsService = milsService;
+            _penService = penService;
         }
 
         public async Task<IActionResult> Overview()
@@ -33,8 +36,11 @@ namespace SkaapBoek.Web.Controllers
             {
                 MilsEventsModel = new MilsEventsModel(),
                 TaskEventsModel = new TaskEventsModel(),
-                MoveToPhaseModel = new MoveToPhaseModel()
+                MoveToPhaseModel = new MoveToPhaseModel(),
+                RemoveMilsGroupModel = new RemoveMilsGroupModel()
             };
+
+            model.RemoveMilsGroupModel.Pens = new SelectList(await _penService.GetPens(), "Id", "Name");
 
             model.TaskEventsModel.TodaysTasks = await _eventService.GetTasksDueToday();
             model.TaskEventsModel.OverdueTasks = await _eventService.GetOverdueTasks();
