@@ -2,6 +2,7 @@
 using SkaapBoek.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,11 @@ namespace SkaapBoek.DAL.Services
 
         public async Task<int> AssignPenToSheep(int? penId, int[] sheepIds)
         {
+            if (sheepIds == null)
+            {
+                return 0;
+            }
+
             var sheepList = Context.SheepSet
                 .Where(s => sheepIds.Contains(s.Id));
 

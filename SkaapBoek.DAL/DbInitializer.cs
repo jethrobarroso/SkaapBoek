@@ -32,12 +32,21 @@ namespace SkaapBoek.DAL
                     Email = "rudolf@a-i-solutions.co.za"
                 };
 
+                var corne = new IdentityUser
+                {
+                    UserName = "corne@threei.co.za",
+                    Email = "corne@threei.co.za"
+                };
+
                 var result = userManager.CreateAsync(adminuser, "4nqrFWHKwx9$KtlJE").Result;
                 var result2 = userManager.CreateAsync(rud, "Rud&Jet123").Result;
+                var result3 = userManager.CreateAsync(corne, "tjd0sIEfW*7!ji").Result;
                 if (result.Succeeded)
                     _ = userManager.AddToRoleAsync(adminuser, "admin").Result;
                 if (result2.Succeeded)
-                    _ = userManager.AddToRoleAsync(adminuser, "admin").Result;
+                    _ = userManager.AddToRoleAsync(rud, "admin").Result;
+                if (result3.Succeeded)
+                    _ = userManager.AddToRoleAsync(corne, "admin").Result;
             }
 
             if (userManager.FindByEmailAsync("rudolf@a-i-solutions.co.za").Result == null)
